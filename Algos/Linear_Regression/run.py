@@ -11,12 +11,15 @@ from Algos.utils.preprocess import process_function
 from Algos.utils.utils import get_nD_regression_data
 
 def simulate(run, plt, inputs: dict):
-    st_plot = st.empty()
+    st_error, st_plot = st.empty(), st.empty()
+
     st_theta = st.empty()
     min_X, max_X = inputs["X"][:, 0].min(), inputs["X"][:, 0].max()
     n, d = inputs["X"].shape
 
-    for epoch, theta in enumerate(run(inputs)):
+    errors = []
+    epochs = []
+    for epoch, (theta, error) in enumerate(run(inputs)):
         st_theta.write(f"$\\hat{{y}}={' + '.join(['{:.2f}'.format(theta_i[0]) + f'x_{i}' for i, theta_i in enumerate(theta)]).replace('x_0', '')}$")
         if d == 1:
             new_fig: Figure = plotly_plot([min_X, max_X], [theta[0][0] + theta[1][0] * min_X, theta[0][0] + theta[1][0] * max_X],
@@ -26,7 +29,41 @@ def simulate(run, plt, inputs: dict):
                                           do_not_change_fig=True,
                                           title=f"Linear Regression (epoch: {epoch})")
             st_plot.plotly_chart(new_fig)
-            time.sleep(1/2)
+        elif d == 2:
+            description = {
+                "title": {
+                    "main": f"Linear Regression (epoch: {epoch})",
+                    "x": "x1",
+                    "y": "x2",
+                    "z": "y"
+                },
+                "label": {
+                    "main": "",
+                },
+                "hovertemplate": "(x1, x1): (%{x}, %{y})<br>f(%{x}, %{y}): %{z}"
+            }
+            min_X2, max_X2 = inputs["X"][:, 1].min(), inputs["X"][:, 1].max()
+            new_fig: Figure = mesh3d([min_X, min_X, max_X, max_X],
+                                     [min_X2, max_X2, min_X2, max_X2],
+                                     [
+                                         theta[0][0] + theta[1][0] * min_X + theta[2][0] * min_X2,
+                                         theta[0][0] + theta[1][0] * min_X + theta[2][0] * max_X2,
+                                         theta[0][0] + theta[1][0] * max_X + theta[2][0] * min_X2,
+                                         theta[0][0] + theta[1][0] * max_X + theta[2][0] * max_X2,
+                                     ],
+                                     description,
+                                     fig=plt,
+                                     opacity=0.9)
+            st_plot.plotly_chart(new_fig)
+
+        errors.append(error)
+        epochs.append(epoch)
+        st_error.plotly_chart(plotly_plot(epochs, errors,
+                                          mode="lines+markers",
+                                          x_title="epochs",
+                                          y_title="error",
+                                          title="Error Chart"))
+        time.sleep(1/4)
 
 def get_all_inputs() -> Dict[str, Union[str, int, float]]:
     """
@@ -42,14 +79,19 @@ def get_all_inputs() -> Dict[str, Union[str, int, float]]:
     st_noise.markdown(f"$\\mathcal{{N}}(\\mu= {mean}, \\sigma^2={std}^2)$")
     st.sidebar.write("### Linear Regression Parameters")
     f: str = st.sidebar.text_input("function f(X)", "2*x1 + 1")
-    st_n, st_epochs, st_lr = st.sidebar.beta_columns([1, 1, 1])
+    st_n, st_lr = st.sidebar.beta_columns([1, 1])
     n: int = st_n.slider("N", 10, 1000, 100, 10)
-    epochs: int = st_epochs.slider("epochs", 1, 1000, 100, 10)
     lr: float = st_lr.slider("Learning Rate", 0.0, 0.05, 0.01, 0.005)
-    st_n, st_epochs, st_lr = st.sidebar.beta_columns([1, 1, 1])
+    st_n, st_lr = st.sidebar.beta_columns([1, 1])
     st_n.success(f"$N:{n}$")
-    st_epochs.success(f"$epochs:{epochs}$")
     st_lr.success(f"$lr:{lr}$")
+
+    st_epochs, st_epsilon = st.sidebar.beta_columns([1, 1])
+    epochs: int = st_epochs.slider("epochs", 1, 100, 50, 10)
+    epsilon: float = st_epsilon.slider("Epsilon", 0.001, 0.1, 0.05, 0.001)
+    st_epochs, st_epsilon = st.sidebar.beta_columns([1, 1])
+    st_epochs.success(f"epochs$:{epochs}$")
+    st_epsilon.success(f"$\\epsilon:{epsilon}$")
     with st.sidebar.beta_expander("How to get (n) dimensional data"):
         st.write(f"""
         To get $n$ dimensional data just add more features in the functions,    
@@ -70,6 +112,7 @@ def get_all_inputs() -> Dict[str, Union[str, int, float]]:
         "seed": seed,
         "epochs": epochs,
         "lr": lr,
+        "epsilon": epsilon,
     }
     return d
 

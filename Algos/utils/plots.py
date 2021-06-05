@@ -74,7 +74,10 @@ def mesh3d(x, y, z,
     """
 
     if fig is None:
-        fig = go.Figure()
+        fig: Figure = go.Figure()
+    else:
+        fig: Figure = go.Figure(fig)
+
     fig.add_trace(go.Mesh3d(x=x, y=y, z=z,
                              name=description["label"]["main"],
                              hovertemplate=description["hovertemplate"],
@@ -87,4 +90,3 @@ def mesh3d(x, y, z,
                           title=description["title"]["main"])
     fig.update_layout(showlegend=False if isMobile else True)
     return fig
-

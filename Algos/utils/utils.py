@@ -25,3 +25,6 @@ def get_nD_regression_data(f,
     y: np.ndarray = f(*X.T).reshape(n, 1)
     noise: np.ndarray = np.random.normal(mean, std, (n, 1))
     return X, y + noise
+
+def get_MSE_error(y: np.ndarray, y_pred: np.ndarray):
+    return ((y - y_pred)**2).sum()/len(y)
