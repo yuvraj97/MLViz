@@ -5,8 +5,8 @@ def get_nD_regression_data(f,
                            n=10,
                            mean=0,
                            std=1,
-                           coordinates_lim=(-10, 10)
-                           ):
+                           coordinates_lim=(-10, 10),
+                           seed=None):
 
     """
     :param f: function (example: lambda x1, x2: x1 + 2 * x2 + 5)
@@ -16,6 +16,9 @@ def get_nD_regression_data(f,
     :param coordinates_lim: Tuple[int, int] (limit of out coordinates)
     :return: np.ndarray (n x d)
     """
+
+    if seed != -1: np.random.seed(seed)
+    else: np.random.seed()
 
     dim: int = len(inspect.getfullargspec(f).args)
     X: np.ndarray = np.random.uniform(coordinates_lim[0], coordinates_lim[1], (n, dim))
