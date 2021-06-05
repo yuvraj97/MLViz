@@ -5,7 +5,7 @@ def get_nD_regression_data(f,
                            n=10,
                            mean=0,
                            std=1,
-                           coordinates_lim=(0, 10)
+                           coordinates_lim=(-10, 10)
                            ):
 
     """

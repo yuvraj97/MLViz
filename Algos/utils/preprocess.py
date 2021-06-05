@@ -26,4 +26,7 @@ def process_function(s: str):
         if 'x' == e[0]:
             args.add(e)
     args = sorted(args)
-    return eval(f"lambda {', '.join(args)}: {s}")
+    try:
+        return eval(f"lambda {', '.join(args)}: {s}")
+    except:
+        return False
