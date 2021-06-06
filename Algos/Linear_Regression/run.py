@@ -22,7 +22,8 @@ def step(run, plt, inputs):
     :return: None
     """
 
-    st_theta, st_error, st_plot = st.empty(), st.empty(), st.empty()
+    st_theta, st_error, st_plot = st.sidebar.empty(), st.empty(), st.empty()
+    st_theta_completed = st.empty()
 
     min_X, max_X = inputs["X"][:, 0].min(), inputs["X"][:, 0].max()
     n, d = inputs["X"].shape
@@ -36,13 +37,12 @@ def step(run, plt, inputs):
     if "step_i" not in state["main"]["lr"]:
         state["main"]["lr"]["step_i"] = 0
 
-    if st.button("Step"):
+    if inputs["step_button"]:
 
         (theta, error) = steps[state["main"]["lr"]["step_i"]]
 
         epoch = len(state["main"]["lr"]["epochs"]) + 1
-        st_theta.write(
-            f"$\\hat{{y}}={' + '.join(['{:.2f}'.format(theta_i[0]) + f'x_{i}' for i, theta_i in enumerate(theta)]).replace('x_0', '')}$")
+
         if d == 1:
             new_fig: Figure = plotly_plot([min_X, max_X],
                                           [theta[0][0] + theta[1][0] * min_X, theta[0][0] + theta[1][0] * max_X],
@@ -83,8 +83,22 @@ def step(run, plt, inputs):
             state["main"]["lr"]["step_i"] += 1
             state["main"]["lr"]["errors"].append(error)
             state["main"]["lr"]["epochs"].append(epoch)
+            st_theta.info(
+                f"$\\hat{{y}}={' + '.join(['{:.2f}'.format(theta_i[0]) + f'x_{i}' for i, theta_i in enumerate(theta)]).replace('x_0', '')}$"
+            )
         else:
-            st.success(f"Algo Completed 😊")
+            st_theta.success(
+                f"""
+                Algo Completed 😊     
+                $\\hat{{y}}={' + '.join(['{:.2f}'.format(theta_i[0]) + f'x_{i}' for i, theta_i in enumerate(theta)]).replace('x_0', '')}$
+                """
+            )
+            st_theta_completed.success(
+                f"""
+                Algo Completed 😊     
+                $\\hat{{y}}={' + '.join(['{:.2f}'.format(theta_i[0]) + f'x_{i}' for i, theta_i in enumerate(theta)]).replace('x_0', '')}$
+                """
+            )
         st_error.plotly_chart(plotly_plot(state["main"]["lr"]["epochs"],
                                           state["main"]["lr"]["errors"],
                                           mode="lines+markers",
@@ -103,15 +117,16 @@ def simulate(run, plt, inputs: dict):
     :return: None
     """
 
-    st_theta, st_error, st_plot = st.empty(), st.empty(), st.empty()
-
+    st_theta, st_error, st_plot = st.sidebar.empty(), st.empty(), st.empty()
+    st_theta_completed = st.empty()
+    
     min_X, max_X = inputs["X"][:, 0].min(), inputs["X"][:, 0].max()
     n, d = inputs["X"].shape
 
     errors = []
     epochs = []
     for epoch, (theta, error) in enumerate(run(inputs)):
-        st_theta.write(f"$\\hat{{y}}={' + '.join(['{:.2f}'.format(theta_i[0]) + f'x_{i}' for i, theta_i in enumerate(theta)]).replace('x_0', '')}$")
+        st_theta.info(f"$\\hat{{y}}={' + '.join(['{:.2f}'.format(theta_i[0]) + f'x_{i}' for i, theta_i in enumerate(theta)]).replace('x_0', '')}$")
         if d == 1:
             new_fig: Figure = plotly_plot([min_X, max_X], [theta[0][0] + theta[1][0] * min_X, theta[0][0] + theta[1][0] * max_X],
                                           fig=plt,
@@ -156,6 +171,20 @@ def simulate(run, plt, inputs: dict):
                                           title="Error Chart"))
         time.sleep(1/4)
 
+    st_theta.success(
+        f"""
+        Algo Completed 😊     
+        $\\hat{{y}}={' + '.join(['{:.2f}'.format(theta_i[0]) + f'x_{i}' for i, theta_i in enumerate(theta)]).replace('x_0', '')}$
+        """
+    )
+    st_theta_completed.success(
+        f"""
+        Algo Completed 😊     
+        $\\hat{{y}}={' + '.join(['{:.2f}'.format(theta_i[0]) + f'x_{i}' for i, theta_i in enumerate(theta)]).replace('x_0', '')}$
+        """
+    )
+
+
 def get_all_inputs() -> Dict[str, Union[str, int, float]]:
 
     """
@@ -189,6 +218,33 @@ def get_all_inputs() -> Dict[str, Union[str, int, float]]:
     st_epochs.success(f"epochs$:{epochs}$")
     st_epsilon.success(f"$\\epsilon:{epsilon}$")
 
+    lr_method: str = st.sidebar.radio("Choose method", ["Implementation From Scratch", "PyTorch Implementation"])
+    sim_method: str = st.sidebar.radio("", ["Simulate", "Manually Increment Steps"], key="Algos-LR-Sim-Step")
+
+    sim_button, step_button = None, None
+    if sim_method == "Simulate":
+        sim_button = st.sidebar.button("Run Simulation")
+    else:
+        step_button = st.sidebar.button("Step")
+
+    d = {
+        "function": f,
+        "n": n,
+        "mean": mean,
+        "std": std,
+        "seed": seed,
+        "epochs": epochs,
+        "lr": lr,
+        "epsilon": epsilon,
+        "lr_method": lr_method,
+        "sim_method": sim_method,
+        "sim_button": sim_button,
+        "step_button": step_button
+    }
+    return d
+
+def sidebar_footer():
+    st.sidebar.write("-----")
     with st.sidebar.beta_expander("How to get (n) dimensional data"):
         st.write(f"""
         To get $n$ dimensional data just add more features in the functions,    
@@ -201,17 +257,6 @@ def get_all_inputs() -> Dict[str, Union[str, int, float]]:
 
         """)
 
-    d = {
-        "function": f,
-        "n": n,
-        "mean": mean,
-        "std": std,
-        "seed": seed,
-        "epochs": epochs,
-        "lr": lr,
-        "epsilon": epsilon,
-    }
-    return d
 
 def run() -> None:
     """
@@ -281,20 +326,17 @@ def run() -> None:
     else:
         plt = None
 
-    st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
-    option: str = st.radio("Choose method", ["Implementation From Scratch", "PyTorch Implementation"])
+    # st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
 
     inputs["X"], inputs["y"] = X, y
-    if option == "Implementation From Scratch":
+    if inputs["lr_method"] == "Implementation From Scratch":
         from Algos.Linear_Regression.simulation.scratch_sim import run
     else:
         from Algos.Linear_Regression.simulation.pytorch_sim import run
 
-    option: str = st.radio("", ["Simulate", "Manually Increment Steps"], key="Algos-LR-Sim-Step")
-
-    if option == "Simulate" and st.button("Run Simulation"):
+    if inputs["sim_method"] == "Simulate" and inputs["sim_button"]:
         simulate(run, plt, inputs)
-    if option == "Manually Increment Steps":
+    if inputs["sim_method"] == "Manually Increment Steps":
         step(run, plt, inputs)
 
     f: TextIO = open("./Algos/Linear_Regression/code/scratch_code.py", "r")
@@ -310,3 +352,5 @@ def run() -> None:
 
     with st.beta_expander("PyTorch Implementation"):
         st.code(code)
+
+    sidebar_footer()
