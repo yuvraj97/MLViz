@@ -1,12 +1,18 @@
 from typing import List
 import streamlit as st
 
+from utils import state
+
+
 def main():
 
     """
     This is the entry point of our project
     :return: None
     """
+
+    if state["main"] is None:
+        state["main"] = {}
 
     options: List[str] = [
         "Linear Regression"

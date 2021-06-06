@@ -24,7 +24,7 @@ def run(inputs: Dict[str, Union[str, int, float, np.ndarray]]):
 
     prev_error = np.inf
     theta: np.ndarray = np.zeros((d, 1))  # d x 1
-    for epoch in range(epochs):
+    for epoch in range(epochs + 1):
         grad = X.T @ (X @ theta - y)  # (d x n) * ((n x d) * (d x 1) - (n x 1))
         theta = theta - learning_rate * grad / n  # d x 1
         error = get_MSE_error(y, X @ theta)

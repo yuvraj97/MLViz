@@ -9,11 +9,102 @@ import time
 from Algos.utils.plots import plotly_plot, mesh3d
 from Algos.utils.preprocess import process_function
 from Algos.utils.utils import get_nD_regression_data
+from utils import state
+
+def step(run, plt, inputs):
+
+    """
+    It will plot Linear Regression Step by Step
+
+    :param run: function
+    :param plt: Figure
+    :param inputs: dict
+    :return: None
+    """
+
+    st_theta, st_error, st_plot = st.empty(), st.empty(), st.empty()
+
+    min_X, max_X = inputs["X"][:, 0].min(), inputs["X"][:, 0].max()
+    n, d = inputs["X"].shape
+
+    if "errors" not in state["main"]["lr"]:
+        state["main"]["lr"]["errors"] = []
+    if "epochs" not in state["main"]["lr"]:
+        state["main"]["lr"]["epochs"] = []
+
+    steps = [(theta, error) for theta, error in run(inputs)]
+    if "step_i" not in state["main"]["lr"]:
+        state["main"]["lr"]["step_i"] = 0
+
+    if st.button("Step"):
+
+        (theta, error) = steps[state["main"]["lr"]["step_i"]]
+
+        epoch = len(state["main"]["lr"]["epochs"]) + 1
+        st_theta.write(
+            f"$\\hat{{y}}={' + '.join(['{:.2f}'.format(theta_i[0]) + f'x_{i}' for i, theta_i in enumerate(theta)]).replace('x_0', '')}$")
+        if d == 1:
+            new_fig: Figure = plotly_plot([min_X, max_X],
+                                          [theta[0][0] + theta[1][0] * min_X, theta[0][0] + theta[1][0] * max_X],
+                                          fig=plt,
+                                          mode="lines",
+                                          color="blue",
+                                          do_not_change_fig=True,
+                                          title=f"Linear Regression (epoch: {epoch})")
+            st_plot.plotly_chart(new_fig)
+        elif d == 2:
+            description = {
+                "title": {
+                    "main": f"Linear Regression (epoch: {epoch})",
+                    "x": "x1",
+                    "y": "x2",
+                    "z": "y"
+                },
+                "label": {
+                    "main": "",
+                },
+                "hovertemplate": "(x1, x1): (%{x}, %{y})<br>f(%{x}, %{y}): %{z}"
+            }
+            min_X2, max_X2 = inputs["X"][:, 1].min(), inputs["X"][:, 1].max()
+            new_fig: Figure = mesh3d([min_X, min_X, max_X, max_X],
+                                     [min_X2, max_X2, min_X2, max_X2],
+                                     [
+                                         theta[0][0] + theta[1][0] * min_X + theta[2][0] * min_X2,
+                                         theta[0][0] + theta[1][0] * min_X + theta[2][0] * max_X2,
+                                         theta[0][0] + theta[1][0] * max_X + theta[2][0] * min_X2,
+                                         theta[0][0] + theta[1][0] * max_X + theta[2][0] * max_X2,
+                                     ],
+                                     description,
+                                     fig=plt,
+                                     opacity=0.9)
+            st_plot.plotly_chart(new_fig)
+
+        if state["main"]["lr"]["step_i"] < len(steps) - 1:
+            state["main"]["lr"]["step_i"] += 1
+            state["main"]["lr"]["errors"].append(error)
+            state["main"]["lr"]["epochs"].append(epoch)
+        else:
+            st.success(f"Algo Completed 😊")
+        st_error.plotly_chart(plotly_plot(state["main"]["lr"]["epochs"],
+                                          state["main"]["lr"]["errors"],
+                                          mode="lines+markers",
+                                          x_title="epochs",
+                                          y_title="error",
+                                          title="Error Chart"))
 
 def simulate(run, plt, inputs: dict):
-    st_error, st_plot = st.empty(), st.empty()
 
-    st_theta = st.empty()
+    """
+    It will Simulate Linear Regression plot
+
+    :param run: function
+    :param plt: Figure
+    :param inputs: dict
+    :return: None
+    """
+
+    st_theta, st_error, st_plot = st.empty(), st.empty(), st.empty()
+
     min_X, max_X = inputs["X"][:, 0].min(), inputs["X"][:, 0].max()
     n, d = inputs["X"].shape
 
@@ -66,20 +157,25 @@ def simulate(run, plt, inputs: dict):
         time.sleep(1/4)
 
 def get_all_inputs() -> Dict[str, Union[str, int, float]]:
+
     """
     Here we get all inputs from user
     :return: Dict[str, Union[str, int, float]]
     """
+
     seed: int = st.sidebar.number_input("Enter seed (-1 mean seed is disabled)", -1, 1000, 0, 1)
+
     st.sidebar.write("### Gaussian Noise")
     st_noise = st.sidebar.empty()
     st_mean, st_std = st.sidebar.beta_columns([1, 1])
     mean: float = st_mean.slider("Mean", -100.0, 100.0, 0.0, 10.0)
     std: float = st_std.slider("Standard deviation", 0.0, 100.0, 1.0, 1.0)
     st_noise.markdown(f"$\\mathcal{{N}}(\\mu= {mean}, \\sigma^2={std}^2)$")
+
     st.sidebar.write("### Linear Regression Parameters")
     f: str = st.sidebar.text_input("function f(X)", "2*x1 + 1")
     st_n, st_lr = st.sidebar.beta_columns([1, 1])
+
     n: int = st_n.slider("N", 10, 1000, 100, 10)
     lr: float = st_lr.slider("Learning Rate", 0.0, 0.05, 0.01, 0.005)
     st_n, st_lr = st.sidebar.beta_columns([1, 1])
@@ -92,6 +188,7 @@ def get_all_inputs() -> Dict[str, Union[str, int, float]]:
     st_epochs, st_epsilon = st.sidebar.beta_columns([1, 1])
     st_epochs.success(f"epochs$:{epochs}$")
     st_epsilon.success(f"$\\epsilon:{epsilon}$")
+
     with st.sidebar.beta_expander("How to get (n) dimensional data"):
         st.write(f"""
         To get $n$ dimensional data just add more features in the functions,    
@@ -121,6 +218,9 @@ def run() -> None:
     Here we run the Linear Regression Simulation
     :return: None
     """
+
+    if "lr" not in state["main"]:
+        state["main"]["lr"] = {}
 
     inputs: Dict[str, Union[str, int, float]] = get_all_inputs()
     f = process_function(inputs["function"])  # a lambda function
@@ -186,21 +286,25 @@ def run() -> None:
 
     inputs["X"], inputs["y"] = X, y
     if option == "Implementation From Scratch":
-        from Algos.Linear_Regression.scratch_sim import run
+        from Algos.Linear_Regression.simulation.scratch_sim import run
     else:
-        from Algos.Linear_Regression.pytorch_sim import run
+        from Algos.Linear_Regression.simulation.pytorch_sim import run
 
-    if st.button("Simulate"):
+    option: str = st.radio("", ["Simulate", "Manually Increment Steps"], key="Algos-LR-Sim-Step")
+
+    if option == "Simulate" and st.button("Run Simulation"):
         simulate(run, plt, inputs)
+    if option == "Manually Increment Steps":
+        step(run, plt, inputs)
 
-    f: TextIO = open("./Algos/Linear_Regression/scratch_code.py", "r")
+    f: TextIO = open("./Algos/Linear_Regression/code/scratch_code.py", "r")
     code: str = f.read()
     f.close()
 
     with st.beta_expander("Implementation From Scratch"):
         st.code(code)
 
-    f: TextIO = open("./Algos/Linear_Regression/pytorch_code.py", "r")
+    f: TextIO = open("./Algos/Linear_Regression/code/pytorch_code.py", "r")
     code: str = f.read()
     f.close()
 
