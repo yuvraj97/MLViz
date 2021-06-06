@@ -1,8 +1,6 @@
 from typing import List
 import streamlit as st
-
-from utils import state
-
+import SessionState
 
 def main():
 
@@ -18,14 +16,20 @@ def main():
         "Linear Regression"
     ]
 
-    option: str = st.selectbox("", options, index=0)
+    st_selectbox, st_reset = st.beta_columns([9, 1])
+    option: str = st_selectbox.selectbox("", options, index=0)
+    if st_reset.button("🔄", help="Reset Variables"):
+        state["main"] = {}
+
     if option not in "Linear Regression":
         return
 
     exec(f"from Algos.{option.replace(' ', '_')}.run import run")
-    exec("run()")
+    exec("run(state)")
 
 if __name__ == '__main__':
+
+    state = SessionState.get_state()
 
     st.set_page_config(layout='centered', initial_sidebar_state='expanded')
     st.markdown("""<style>.css-1aumxhk{padding:0 0}.streamlit-expanderContent{margin-bottom:30px}.css-hx4lkt{padding:2rem 1rem 3rem}.streamlit-expanderHeader{border-block-color:#d2d2d2}.streamlit-expanderHeader:hover{border-block-color:#0073b1}.streamlit-expanderContent{border-block-color:#d2d2d2}</style>""", unsafe_allow_html=True)

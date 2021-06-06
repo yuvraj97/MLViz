@@ -5,185 +5,9 @@ from numpy import ndarray
 from pandas import DataFrame
 from plotly.graph_objs import Figure
 import pandas as pd
-import time
 from Algos.utils.plots import plotly_plot, mesh3d
 from Algos.utils.preprocess import process_function
 from Algos.utils.utils import get_nD_regression_data
-from utils import state
-
-def step(run, plt, inputs):
-
-    """
-    It will plot Linear Regression Step by Step
-
-    :param run: function
-    :param plt: Figure
-    :param inputs: dict
-    :return: None
-    """
-
-    st_theta, st_error, st_plot = st.sidebar.empty(), st.empty(), st.empty()
-    st_theta_completed = st.empty()
-
-    min_X, max_X = inputs["X"][:, 0].min(), inputs["X"][:, 0].max()
-    n, d = inputs["X"].shape
-
-    if "errors" not in state["main"]["lr"]:
-        state["main"]["lr"]["errors"] = []
-    if "epochs" not in state["main"]["lr"]:
-        state["main"]["lr"]["epochs"] = []
-
-    steps = [(theta, error) for theta, error in run(inputs)]
-    if "step_i" not in state["main"]["lr"]:
-        state["main"]["lr"]["step_i"] = 0
-
-    if inputs["step_button"]:
-
-        (theta, error) = steps[state["main"]["lr"]["step_i"]]
-
-        epoch = len(state["main"]["lr"]["epochs"]) + 1
-
-        if d == 1:
-            new_fig: Figure = plotly_plot([min_X, max_X],
-                                          [theta[0][0] + theta[1][0] * min_X, theta[0][0] + theta[1][0] * max_X],
-                                          fig=plt,
-                                          mode="lines",
-                                          color="blue",
-                                          do_not_change_fig=True,
-                                          title=f"Linear Regression (epoch: {epoch})")
-            st_plot.plotly_chart(new_fig)
-        elif d == 2:
-            description = {
-                "title": {
-                    "main": f"Linear Regression (epoch: {epoch})",
-                    "x": "x1",
-                    "y": "x2",
-                    "z": "y"
-                },
-                "label": {
-                    "main": "",
-                },
-                "hovertemplate": "(x1, x1): (%{x}, %{y})<br>f(%{x}, %{y}): %{z}"
-            }
-            min_X2, max_X2 = inputs["X"][:, 1].min(), inputs["X"][:, 1].max()
-            new_fig: Figure = mesh3d([min_X, min_X, max_X, max_X],
-                                     [min_X2, max_X2, min_X2, max_X2],
-                                     [
-                                         theta[0][0] + theta[1][0] * min_X + theta[2][0] * min_X2,
-                                         theta[0][0] + theta[1][0] * min_X + theta[2][0] * max_X2,
-                                         theta[0][0] + theta[1][0] * max_X + theta[2][0] * min_X2,
-                                         theta[0][0] + theta[1][0] * max_X + theta[2][0] * max_X2,
-                                     ],
-                                     description,
-                                     fig=plt,
-                                     opacity=0.9)
-            st_plot.plotly_chart(new_fig)
-
-        if state["main"]["lr"]["step_i"] < len(steps) - 1:
-            state["main"]["lr"]["step_i"] += 1
-            state["main"]["lr"]["errors"].append(error)
-            state["main"]["lr"]["epochs"].append(epoch)
-            st_theta.info(
-                f"$\\hat{{y}}={' + '.join(['{:.2f}'.format(theta_i[0]) + f'x_{i}' for i, theta_i in enumerate(theta)]).replace('x_0', '')}$"
-            )
-        else:
-            st_theta.success(
-                f"""
-                Algo Completed 😊     
-                $\\hat{{y}}={' + '.join(['{:.2f}'.format(theta_i[0]) + f'x_{i}' for i, theta_i in enumerate(theta)]).replace('x_0', '')}$
-                """
-            )
-            st_theta_completed.success(
-                f"""
-                Algo Completed 😊     
-                $\\hat{{y}}={' + '.join(['{:.2f}'.format(theta_i[0]) + f'x_{i}' for i, theta_i in enumerate(theta)]).replace('x_0', '')}$
-                """
-            )
-        st_error.plotly_chart(plotly_plot(state["main"]["lr"]["epochs"],
-                                          state["main"]["lr"]["errors"],
-                                          mode="lines+markers",
-                                          x_title="epochs",
-                                          y_title="error",
-                                          title="Error Chart"))
-
-def simulate(run, plt, inputs: dict):
-
-    """
-    It will Simulate Linear Regression plot
-
-    :param run: function
-    :param plt: Figure
-    :param inputs: dict
-    :return: None
-    """
-
-    st_theta, st_error, st_plot = st.sidebar.empty(), st.empty(), st.empty()
-    st_theta_completed = st.empty()
-    
-    min_X, max_X = inputs["X"][:, 0].min(), inputs["X"][:, 0].max()
-    n, d = inputs["X"].shape
-
-    errors = []
-    epochs = []
-    for epoch, (theta, error) in enumerate(run(inputs)):
-        st_theta.info(f"$\\hat{{y}}={' + '.join(['{:.2f}'.format(theta_i[0]) + f'x_{i}' for i, theta_i in enumerate(theta)]).replace('x_0', '')}$")
-        if d == 1:
-            new_fig: Figure = plotly_plot([min_X, max_X], [theta[0][0] + theta[1][0] * min_X, theta[0][0] + theta[1][0] * max_X],
-                                          fig=plt,
-                                          mode="lines",
-                                          color="blue",
-                                          do_not_change_fig=True,
-                                          title=f"Linear Regression (epoch: {epoch})")
-            st_plot.plotly_chart(new_fig)
-        elif d == 2:
-            description = {
-                "title": {
-                    "main": f"Linear Regression (epoch: {epoch})",
-                    "x": "x1",
-                    "y": "x2",
-                    "z": "y"
-                },
-                "label": {
-                    "main": "",
-                },
-                "hovertemplate": "(x1, x1): (%{x}, %{y})<br>f(%{x}, %{y}): %{z}"
-            }
-            min_X2, max_X2 = inputs["X"][:, 1].min(), inputs["X"][:, 1].max()
-            new_fig: Figure = mesh3d([min_X, min_X, max_X, max_X],
-                                     [min_X2, max_X2, min_X2, max_X2],
-                                     [
-                                         theta[0][0] + theta[1][0] * min_X + theta[2][0] * min_X2,
-                                         theta[0][0] + theta[1][0] * min_X + theta[2][0] * max_X2,
-                                         theta[0][0] + theta[1][0] * max_X + theta[2][0] * min_X2,
-                                         theta[0][0] + theta[1][0] * max_X + theta[2][0] * max_X2,
-                                     ],
-                                     description,
-                                     fig=plt,
-                                     opacity=0.9)
-            st_plot.plotly_chart(new_fig)
-
-        errors.append(error)
-        epochs.append(epoch)
-        st_error.plotly_chart(plotly_plot(epochs, errors,
-                                          mode="lines+markers",
-                                          x_title="epochs",
-                                          y_title="error",
-                                          title="Error Chart"))
-        time.sleep(1/4)
-
-    st_theta.success(
-        f"""
-        Algo Completed 😊     
-        $\\hat{{y}}={' + '.join(['{:.2f}'.format(theta_i[0]) + f'x_{i}' for i, theta_i in enumerate(theta)]).replace('x_0', '')}$
-        """
-    )
-    st_theta_completed.success(
-        f"""
-        Algo Completed 😊     
-        $\\hat{{y}}={' + '.join(['{:.2f}'.format(theta_i[0]) + f'x_{i}' for i, theta_i in enumerate(theta)]).replace('x_0', '')}$
-        """
-    )
-
 
 def get_all_inputs() -> Dict[str, Union[str, int, float]]:
 
@@ -217,6 +41,8 @@ def get_all_inputs() -> Dict[str, Union[str, int, float]]:
     st_epochs, st_epsilon = st.sidebar.beta_columns([1, 1])
     st_epochs.success(f"epochs$:{epochs}$")
     st_epsilon.success(f"$\\epsilon:{epsilon}$")
+
+    st.sidebar.write("-----")
 
     lr_method: str = st.sidebar.radio("Choose method", ["Implementation From Scratch", "PyTorch Implementation"])
     sim_method: str = st.sidebar.radio("", ["Simulate", "Manually Increment Steps"], key="Algos-LR-Sim-Step")
@@ -257,8 +83,7 @@ def sidebar_footer():
 
         """)
 
-
-def run() -> None:
+def run(state) -> None:
     """
     Here we run the Linear Regression Simulation
     :return: None
@@ -328,16 +153,25 @@ def run() -> None:
 
     # st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
 
+    st.warning("All controls are in left control panel")
+
     inputs["X"], inputs["y"] = X, y
     if inputs["lr_method"] == "Implementation From Scratch":
-        from Algos.Linear_Regression.simulation.scratch_sim import run
+        import Algos.Linear_Regression.simulate_algo.scratch_sim as method
     else:
-        from Algos.Linear_Regression.simulation.pytorch_sim import run
+        import Algos.Linear_Regression.simulate_algo.pytorch_sim as method
+
+    if inputs["sim_method"] == "Simulate":
+        import Algos.Linear_Regression.simulation.auto_simulation as simulation
+    else:
+        import Algos.Linear_Regression.simulation.iterative_simulation as simulation
 
     if inputs["sim_method"] == "Simulate" and inputs["sim_button"]:
-        simulate(run, plt, inputs)
+        simulation.run(method.run, plt, inputs)
     if inputs["sim_method"] == "Manually Increment Steps":
-        step(run, plt, inputs)
+        simulation.run(state, method.run, plt, inputs)
+
+    st.write("-----")
 
     f: TextIO = open("./Algos/Linear_Regression/code/scratch_code.py", "r")
     code: str = f.read()
