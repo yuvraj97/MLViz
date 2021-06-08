@@ -9,8 +9,8 @@ from Algos.utils.plots import plotly_plot, mesh3d
 from Algos.utils.preprocess import process_function
 from Algos.utils.utils import get_nD_regression_data
 
-def get_all_inputs() -> Dict[str, Union[str, int, float]]:
 
+def get_all_inputs() -> Dict[str, Union[str, int, float]]:
     """
     Here we get all inputs from user
     :return: Dict[str, Union[str, int, float]]
@@ -69,6 +69,7 @@ def get_all_inputs() -> Dict[str, Union[str, int, float]]:
     }
     return d
 
+
 def sidebar_footer():
     st.sidebar.write("-----")
     with st.sidebar.beta_expander("How to get (n) dimensional data"):
@@ -82,6 +83,7 @@ def sidebar_footer():
         and so on ...
 
         """)
+
 
 def run(state) -> None:
     """
@@ -113,7 +115,7 @@ def run(state) -> None:
     st_X, st_y = st.beta_columns([d if d < 4 else 3, 1])
     with st_X:
         df: DataFrame = pd.DataFrame(data=X,
-                                     columns=[f"x{i+1}" for i in range(d)])
+                                     columns=[f"x{i + 1}" for i in range(d)])
         df.index += 1
         st.write(f"$\\text{{Features}}\\quad \\mathbb{{X}}_{{{n}\\times{d}}}$")
         st.write(df)
@@ -185,6 +187,13 @@ def run(state) -> None:
     f.close()
 
     with st.beta_expander("PyTorch Implementation"):
+        st.code(code)
+
+    f: TextIO = open("./Algos/Linear_Regression/code/pytorch_code_v2.py", "r")
+    code: str = f.read()
+    f.close()
+
+    with st.beta_expander("PyTorch Implementation using Sequential module"):
         st.code(code)
 
     sidebar_footer()

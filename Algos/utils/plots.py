@@ -1,6 +1,7 @@
 import plotly.graph_objects as go
 from plotly.graph_objs import Figure
 
+
 def plotly_plot(x=None, y=None,
                 hovertemplate=None,
                 legend="",
@@ -13,7 +14,6 @@ def plotly_plot(x=None, y=None,
                 do_not_change_fig=False,
                 marker_size=None,
                 remove_grid=False):
-
     if fig is None:
         fig: Figure = go.Figure()
     if do_not_change_fig:
@@ -52,12 +52,13 @@ def plotly_plot(x=None, y=None,
         )
     return fig
 
+
 def mesh3d(x, y, z,
-                   description: dict,
-                   fig: Figure = None,
-                   colorscale='Viridis',
-                   opacity=0.5,
-                   isMobile: bool = False) -> Figure:
+           description: dict,
+           fig: Figure = None,
+           colorscale='Viridis',
+           opacity=0.5,
+           isMobile: bool = False) -> Figure:
     """
     description={
         "title": {
@@ -79,10 +80,10 @@ def mesh3d(x, y, z,
         fig: Figure = go.Figure(fig)
 
     fig.add_trace(go.Mesh3d(x=x, y=y, z=z,
-                             name=description["label"]["main"],
-                             hovertemplate=description["hovertemplate"],
-                             colorscale=colorscale,
-                             opacity=opacity))
+                            name=description["label"]["main"],
+                            hovertemplate=description["hovertemplate"],
+                            colorscale=colorscale,
+                            opacity=opacity))
     if "title" in description:
         fig.update_layout(scene=dict(xaxis_title=description["title"]["x"],
                                      yaxis_title=description["title"]["y"],

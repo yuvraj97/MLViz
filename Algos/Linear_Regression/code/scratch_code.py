@@ -1,10 +1,10 @@
 import numpy as np
 
+
 def run(X: np.ndarray,
         y: np.ndarray,
         learning_rate: float = 0.01,
         epochs: int = 100):
-
     """
     :param np.ndarray X: n x d matrix
     :param np.ndarray y: d x 1 matrix

@@ -2,8 +2,8 @@ from typing import Union, Dict
 import numpy as np
 from Algos.utils.utils import get_MSE_error
 
-def run(inputs: Dict[str, Union[str, int, float, np.ndarray]]):
 
+def run(inputs: Dict[str, Union[str, int, float, np.ndarray]]):
     """
     :param inputs: Dict[str, Union[str, int, float]]
 
@@ -28,7 +28,7 @@ def run(inputs: Dict[str, Union[str, int, float, np.ndarray]]):
         grad = X.T @ (X @ theta - y)  # (d x n) * ((n x d) * (d x 1) - (n x 1))
         theta = theta - learning_rate * grad / n  # d x 1
         error = get_MSE_error(y, X @ theta)
-        if prev_error - error  < inputs["epsilon"]:
+        if prev_error - error < inputs["epsilon"]:
             break
         prev_error = error
         yield theta, error

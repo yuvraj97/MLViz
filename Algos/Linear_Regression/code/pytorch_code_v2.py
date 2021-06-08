@@ -4,16 +4,12 @@ from torch.optim import SGD
 import numpy as np
 from torch import Tensor
 
-
-class LinearRegression(nn.Module):
-
-    def __init__(self, input_dim, output_dim):
-        super(LinearRegression, self).__init__()
-        self.linear = nn.Linear(input_dim, output_dim)
-
-    def forward(self, x):
-        return self.linear(x)
-
+"""
+In above example creating such a simple a separate class "LinearRegression" seems an overkill,
+So we can use "Sequential" module from "torch.nn".
+Example:
+model = nn.Sequential(nn.Linear(n_input, n_outputs)).to(device)
+"""
 
 def run(X: np.ndarray,
         y: np.ndarray,
@@ -35,7 +31,7 @@ def run(X: np.ndarray,
     y: Tensor = torch.as_tensor(y).float().to(device)
 
     prev_loss = np.inf
-    model = LinearRegression(d, 1).to(device)
+    model = nn.Sequential(nn.Linear(d, 1)).to(device)
     criterion = nn.MSELoss()
     optimizer = SGD(model.parameters(), lr=learning_rate)
 
