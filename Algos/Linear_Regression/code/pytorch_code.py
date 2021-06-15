@@ -53,7 +53,7 @@ def run(X: np.ndarray,
             print(f"epoch: {epoch}, loss: {loss.item()}")
 
         with torch.no_grad():
-            if prev_loss - loss.item() < epsilon:
+            if 0 <= prev_loss - loss.item() <= epsilon:
                 break
             prev_loss = loss.item()
 

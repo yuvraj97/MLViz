@@ -5,14 +5,12 @@ from Algos.utils.utils import get_MSE_error
 
 def run(inputs: Dict[str, Union[str, int, float, np.ndarray]]):
     """
-    :param inputs: Dict[str, Union[str, int, float]]
-
-    inputs: {
-        "n": int
-        "epochs": int
-        "lr": float
-        "X": numpy.ndarray  # n x d
-        "y": numpy.ndarray  # n x 1
+    :param inputs: Dict[str, Union[str, int, float]] (template): {
+        "X": numpy.ndarray,  # n x d
+        "y": numpy.ndarray,  # n x 1
+        "lr": float,
+        "epochs": int,
+        "epsilon": float,
     }
 
     :return theta numpy.ndarray  # d x 1 matrix
@@ -28,7 +26,7 @@ def run(inputs: Dict[str, Union[str, int, float, np.ndarray]]):
         grad = X.T @ (X @ theta - y)  # (d x n) * ((n x d) * (d x 1) - (n x 1))
         theta = theta - learning_rate * grad / n  # d x 1
         error = get_MSE_error(y, X @ theta)
-        if prev_error - error < inputs["epsilon"]:
+        if 0 <= prev_error - error <= inputs["epsilon"]:
             break
         prev_error = error
         yield theta, error

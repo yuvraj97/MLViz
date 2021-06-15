@@ -11,6 +11,7 @@ Example:
 model = nn.Sequential(nn.Linear(n_input, n_outputs)).to(device)
 """
 
+
 def run(X: np.ndarray,
         y: np.ndarray,
         learning_rate: float = 0.01,
@@ -32,7 +33,7 @@ def run(X: np.ndarray,
 
     prev_loss = np.inf
     model = nn.Sequential(nn.Linear(d, 1)).to(device)
-    criterion = nn.MSELoss()
+    criterion = nn.MSELoss().to(device)
     optimizer = SGD(model.parameters(), lr=learning_rate)
 
     for epoch in range(epochs):
@@ -49,7 +50,7 @@ def run(X: np.ndarray,
             print(f"epoch: {epoch}, loss: {loss.item()}")
 
         with torch.no_grad():
-            if prev_loss - loss.item() < epsilon:
+            if 0 <= prev_loss - loss.item() <= epsilon:
                 break
             prev_loss = loss.item()
 
