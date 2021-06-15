@@ -23,7 +23,27 @@ def run(f, plt, inputs: dict):
     errors = []
     epochs = []
     for epoch, (theta, error) in enumerate(f(inputs)):
-        st_theta.info(f"$\\hat{{y}}={' + '.join(['{:.2f}'.format(theta_i[0]) + f'x_{i}' for i, theta_i in enumerate(theta)]).replace('x_0', '')}$")
+        if "normalization_params" not in inputs:
+            st_theta.info(f"""
+            $\\hat{{y}}={' + '.join(
+                ['{:.2f}'.format(theta_i[0]) + f'x_{i}' for i, theta_i in enumerate(theta)]
+            ).replace('x_0', '')}$
+            """)
+        else:
+            norm_mean, norm_std = inputs["normalization_params"]
+            st_theta.info(f"""
+            **For Normalized Data:**    
+            $\\hat{{y}}={' + '.join(
+                ['{:.2f}'.format(theta_i[0]) + f'x_{i}' for i, theta_i in enumerate(theta)]
+            ).replace('x_0', '')}$    
+            **For Non Normalized Data:**    
+            $\\hat{{y}}={' + '.join(
+                ['{:.2f}'.format(
+                    theta_i[0] * norm_std if i != 0 else theta_i[0] * norm_std + norm_mean
+                ) + f'x_{i}' for i, theta_i in enumerate(theta)]
+            ).replace('x_0', '')}$            
+            """)
+
         if d == 1:
             new_fig: Figure = plotly_plot([min_X, max_X], [theta[0][0] + theta[1][0] * min_X, theta[0][0] + theta[1][0] * max_X],
                                           fig=plt,
@@ -68,15 +88,47 @@ def run(f, plt, inputs: dict):
                                           title="Error Chart"))
         time.sleep(1/4)
 
-    st_theta.success(
-        f"""
-        Algo Completed 😊     
-        $\\hat{{y}}={' + '.join(['{:.2f}'.format(theta_i[0]) + f'x_{i}' for i, theta_i in enumerate(theta)]).replace('x_0', '')}$
-        """
-    )
-    st_theta_completed.success(
-        f"""
-        Algo Completed 😊     
-        $\\hat{{y}}={' + '.join(['{:.2f}'.format(theta_i[0]) + f'x_{i}' for i, theta_i in enumerate(theta)]).replace('x_0', '')}$
-        """
-    )
+    if "normalization_params" not in inputs:
+        st_theta.success(f"""
+        Algo Completed 😊    
+        $\\hat{{y}}={' + '.join(
+            ['{:.2f}'.format(theta_i[0]) + f'x_{i}' for i, theta_i in enumerate(theta)]
+        ).replace('x_0', '')}$
+        """)
+
+        st_theta_completed.success(f"""
+        Algo Completed 😊    
+        $\\hat{{y}}={' + '.join(
+            ['{:.2f}'.format(theta_i[0]) + f'x_{i}' for i, theta_i in enumerate(theta)]
+        ).replace('x_0', '')}$
+        """)
+
+    else:
+        norm_mean, norm_std = inputs["normalization_params"]
+        st_theta.success(f"""
+        Algo Completed 😊    
+        **For Normalized Data:**    
+        $\\hat{{y}}={' + '.join(
+            ['{:.2f}'.format(theta_i[0]) + f'x_{i}' for i, theta_i in enumerate(theta)]
+        ).replace('x_0', '')}$    
+        **For Non Normalized Data:**    
+        $\\hat{{y}}={' + '.join(
+            ['{:.2f}'.format(
+                theta_i[0] * norm_std if i != 0 else theta_i[0] * norm_std + norm_mean
+            ) + f'x_{i}' for i, theta_i in enumerate(theta)]
+        ).replace('x_0', '')}$            
+        """)
+
+        st_theta_completed.success(f"""
+        Algo Completed 😊    
+        **For Normalized Data:**    
+        $\\hat{{y}}={' + '.join(
+            ['{:.2f}'.format(theta_i[0]) + f'x_{i}' for i, theta_i in enumerate(theta)]
+        ).replace('x_0', '')}$    
+        **For Non Normalized Data:**    
+        $\\hat{{y}}={' + '.join(
+            ['{:.2f}'.format(
+                theta_i[0] * norm_std if i != 0 else theta_i[0] * norm_std + norm_mean
+            ) + f'x_{i}' for i, theta_i in enumerate(theta)]
+        ).replace('x_0', '')}$            
+        """)

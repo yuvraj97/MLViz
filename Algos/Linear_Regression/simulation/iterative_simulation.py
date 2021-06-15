@@ -77,22 +77,75 @@ def run(state, f, plt, inputs):
             state["main"]["lr"]["step_i"] += 1
             state["main"]["lr"]["errors"].append(error)
             state["main"]["lr"]["epochs"].append(epoch)
-            st_theta.info(
-                f"$\\hat{{y}}={' + '.join(['{:.2f}'.format(theta_i[0]) + f'x_{i}' for i, theta_i in enumerate(theta)]).replace('x_0', '')}$"
-            )
+
+            if "normalization_params" not in inputs:
+                st_theta.info(f"""
+                $\\hat{{y}}={' + '.join(
+                    ['{:.2f}'.format(theta_i[0]) + f'x_{i}' for i, theta_i in enumerate(theta)]
+                ).replace('x_0', '')}$
+                """)
+            else:
+                norm_mean, norm_std = inputs["normalization_params"]
+                st_theta.info(f"""
+                **For Normalized Data:**    
+                $\\hat{{y}}={' + '.join(
+                    ['{:.2f}'.format(theta_i[0]) + f'x_{i}' for i, theta_i in enumerate(theta)]
+                ).replace('x_0', '')}$    
+                **For Non Normalized Data:**    
+                $\\hat{{y}}={' + '.join(
+                    ['{:.2f}'.format(
+                        theta_i[0] * norm_std if i != 0 else theta_i[0] * norm_std + norm_mean
+                    ) + f'x_{i}' for i, theta_i in enumerate(theta)]
+                ).replace('x_0', '')}$            
+                """)
+
+
         else:
-            st_theta.success(
-                f"""
-                Algo Completed 😊     
-                $\\hat{{y}}={' + '.join(['{:.2f}'.format(theta_i[0]) + f'x_{i}' for i, theta_i in enumerate(theta)]).replace('x_0', '')}$
-                """
-            )
-            st_theta_completed.success(
-                f"""
-                Algo Completed 😊     
-                $\\hat{{y}}={' + '.join(['{:.2f}'.format(theta_i[0]) + f'x_{i}' for i, theta_i in enumerate(theta)]).replace('x_0', '')}$
-                """
-            )
+            if "normalization_params" not in inputs:
+                st_theta.success(f"""
+                Algo Completed 😊    
+                $\\hat{{y}}={' + '.join(
+                    ['{:.2f}'.format(theta_i[0]) + f'x_{i}' for i, theta_i in enumerate(theta)]
+                ).replace('x_0', '')}$
+                """)
+
+                st_theta_completed.success(f"""
+                Algo Completed 😊    
+                $\\hat{{y}}={' + '.join(
+                    ['{:.2f}'.format(theta_i[0]) + f'x_{i}' for i, theta_i in enumerate(theta)]
+                ).replace('x_0', '')}$
+                """)
+
+            else:
+                norm_mean, norm_std = inputs["normalization_params"]
+                st_theta.success(f"""
+                Algo Completed 😊    
+                **For Normalized Data:**    
+                $\\hat{{y}}={' + '.join(
+                    ['{:.2f}'.format(theta_i[0]) + f'x_{i}' for i, theta_i in enumerate(theta)]
+                ).replace('x_0', '')}$    
+                **For Non Normalized Data:**    
+                $\\hat{{y}}={' + '.join(
+                    ['{:.2f}'.format(
+                        theta_i[0] * norm_std if i != 0 else theta_i[0] * norm_std + norm_mean
+                    ) + f'x_{i}' for i, theta_i in enumerate(theta)]
+                ).replace('x_0', '')}$            
+                """)
+
+                st_theta_completed.success(f"""
+                Algo Completed 😊    
+                **For Normalized Data:**    
+                $\\hat{{y}}={' + '.join(
+                    ['{:.2f}'.format(theta_i[0]) + f'x_{i}' for i, theta_i in enumerate(theta)]
+                ).replace('x_0', '')}$    
+                **For Non Normalized Data:**    
+                $\\hat{{y}}={' + '.join(
+                    ['{:.2f}'.format(
+                        theta_i[0] * norm_std if i != 0 else theta_i[0] * norm_std + norm_mean
+                    ) + f'x_{i}' for i, theta_i in enumerate(theta)]
+                ).replace('x_0', '')}$            
+                """)
+
         st_error.plotly_chart(plotly_plot(state["main"]["lr"]["epochs"],
                                           state["main"]["lr"]["errors"],
                                           mode="lines+markers",

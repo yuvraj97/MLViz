@@ -1,5 +1,7 @@
 import inspect
 from typing import TextIO, Dict, Union
+
+import numpy as np
 import streamlit as st
 from numpy import ndarray
 from pandas import DataFrame
@@ -35,6 +37,8 @@ def get_all_inputs() -> Dict[str, Union[str, int, float]]:
     f: str = st.sidebar.text_input("function f(X)", "2*x1 + 1")
     st_n, st_lr = st.sidebar.beta_columns([1, 1])
 
+    # do_normalization = st.sidebar.checkbox("Normalize the Data")
+
     n: int = st_n.slider("N", 10, 1000, 100, 10)
     lr: float = st_lr.slider("Learning Rate", 0.0, 0.05, 0.01, 0.005)
     st_n, st_lr = st.sidebar.beta_columns([1, 1])
@@ -62,6 +66,7 @@ def get_all_inputs() -> Dict[str, Union[str, int, float]]:
     d = {
         "method": method,
         "function": f,
+        # "do_normalization": do_normalization,
         "n": n,
         "mean": mean,
         "std": std,
@@ -132,7 +137,7 @@ def run(state) -> None:
     if "lr" not in state["main"]:
         state["main"]["lr"] = {}
 
-    inputs: Dict[str, Union[str, int, float]] = get_all_inputs()
+    inputs: Dict[str, Union[str, int, float, tuple]] = get_all_inputs()
     f = process_function(inputs["function"])  # a lambda function
 
     if f is False:
@@ -157,10 +162,23 @@ def run(state) -> None:
                                      columns=[f"x{i + 1}" for i in range(d)])
         df.index += 1
         st.write(f"$\\text{{Features}}\\quad \\mathbb{{X}}_{{{n}\\times{d}}}$")
-        st.write("$\\quad$")
+        # st.write("$\\quad$")
+
+        # Normalization
+        if st.checkbox("Normalize the Data", True):
+            norm_mean, norm_std = y.mean(), y.std()
+            inputs["normalization_params"] = (norm_mean, norm_std)
+            y = (y - norm_mean) / norm_std
+
         st.write(df)
     with st_y:
-        df: DataFrame = pd.DataFrame(data=y, columns=["y"])
+        if "normalization_params" not in inputs:
+            df: DataFrame = pd.DataFrame(data=y, columns=["y"])
+        else:
+            (norm_mean, norm_std) = inputs["normalization_params"]
+            __y = np.hstack((y * norm_std + norm_mean, y))
+            df: DataFrame = pd.DataFrame(data=__y, columns=["y", "y_normalize"])
+
         df.index += 1
         st.write(f"$y={inputs['function']}$")
         st.write(f"$+ \\mathcal{{N}}({inputs['mean']}, {inputs['std']}^2)$")
