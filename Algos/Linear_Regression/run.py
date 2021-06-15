@@ -16,6 +16,12 @@ def get_all_inputs() -> Dict[str, Union[str, int, float]]:
     :return: Dict[str, Union[str, int, float]]
     """
 
+    method: str = st.selectbox("Which method you want to use", [
+        "Batch Gradient Descent",
+        "Mini Batch Gradient Descent",
+        "Stochastic Gradient Descent",
+    ])
+
     seed: int = st.sidebar.number_input("Enter seed (-1 mean seed is disabled)", -1, 1000, 0, 1)
 
     st.sidebar.write("### Gaussian Noise")
@@ -54,6 +60,7 @@ def get_all_inputs() -> Dict[str, Union[str, int, float]]:
         step_button = st.sidebar.button("Step")
 
     d = {
+        "method": method,
         "function": f,
         "n": n,
         "mean": mean,
@@ -85,6 +92,37 @@ def sidebar_footer():
         """)
 
 
+def display_raw_code(method):
+
+    if method == "Batch Gradient Descent":
+        f: TextIO = open("./Algos/Linear_Regression/code/scratch_code.py", "r")
+        code: str = f.read()
+        f.close()
+
+        with st.beta_expander("Implementation From Scratch"):
+            st.code(code)
+
+        f: TextIO = open("./Algos/Linear_Regression/code/pytorch_code.py", "r")
+        code: str = f.read()
+        f.close()
+
+        with st.beta_expander("PyTorch Implementation"):
+            st.code(code)
+
+        f: TextIO = open("./Algos/Linear_Regression/code/pytorch_code_v2.py", "r")
+        code: str = f.read()
+        f.close()
+
+        with st.beta_expander("PyTorch Implementation using Sequential module"):
+            st.code(code)
+
+    elif method == "Mini Batch Gradient Descent":
+        pass
+
+    elif method == "Stochastic Gradient Descent":
+        pass
+
+
 def run(state) -> None:
     """
     Here we run the Linear Regression Simulation
@@ -112,17 +150,20 @@ def run(state) -> None:
     X, y = get_nD_regression_data(f, n=inputs["n"], mean=inputs["mean"], std=inputs["std"], seed=inputs["seed"])
     n, d = X.shape
 
+    st.write("# Data")
     st_X, st_y = st.beta_columns([d if d < 4 else 3, 1])
     with st_X:
         df: DataFrame = pd.DataFrame(data=X,
                                      columns=[f"x{i + 1}" for i in range(d)])
         df.index += 1
         st.write(f"$\\text{{Features}}\\quad \\mathbb{{X}}_{{{n}\\times{d}}}$")
+        st.write("$\\quad$")
         st.write(df)
     with st_y:
         df: DataFrame = pd.DataFrame(data=y, columns=["y"])
         df.index += 1
         st.write(f"$y={inputs['function']}$")
+        st.write(f"$+ \\mathcal{{N}}({inputs['mean']}, {inputs['std']}^2)$")
         st.write(df)
 
     plt: Union[Figure, None]
@@ -175,25 +216,6 @@ def run(state) -> None:
 
     st.write("-----")
 
-    f: TextIO = open("./Algos/Linear_Regression/code/scratch_code.py", "r")
-    code: str = f.read()
-    f.close()
-
-    with st.beta_expander("Implementation From Scratch"):
-        st.code(code)
-
-    f: TextIO = open("./Algos/Linear_Regression/code/pytorch_code.py", "r")
-    code: str = f.read()
-    f.close()
-
-    with st.beta_expander("PyTorch Implementation"):
-        st.code(code)
-
-    f: TextIO = open("./Algos/Linear_Regression/code/pytorch_code_v2.py", "r")
-    code: str = f.read()
-    f.close()
-
-    with st.beta_expander("PyTorch Implementation using Sequential module"):
-        st.code(code)
+    display_raw_code(inputs["method"])
 
     sidebar_footer()
