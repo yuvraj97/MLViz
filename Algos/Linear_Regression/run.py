@@ -244,7 +244,12 @@ def run(state) -> None:
         else:  # "Stochastic Gradient Descent"
             pass
     else:
-        import Algos.Linear_Regression.simulate_algo.pytorch_sim as method
+        if inputs["method"] == "Batch Gradient Descent":
+            import Algos.Linear_Regression.simulate_algo.pytorch_sim as method
+        elif inputs["method"] == "Mini Batch Gradient Descent":
+            import Algos.Linear_Regression.simulate_algo.pytorch_sim_mini_batch as method
+        else:  # "Stochastic Gradient Descent"
+            pass
 
     if inputs["sim_method"] == "Simulate":
         import Algos.Linear_Regression.simulation.auto_simulation as simulation
