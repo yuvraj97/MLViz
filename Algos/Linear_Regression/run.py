@@ -230,7 +230,12 @@ def run(state) -> None:
 
     inputs["X"], inputs["y"] = X, y
     if inputs["lr_method"] == "Implementation From Scratch":
-        import Algos.Linear_Regression.simulate_algo.scratch_sim as method
+        if inputs["method"] == "Batch Gradient Descent":
+            import Algos.Linear_Regression.simulate_algo.scratch_sim as method
+        elif inputs["method"] == "Mini Batch Gradient Descent":
+            import Algos.Linear_Regression.simulate_algo.scratch_sim_mini_batch as method
+        else:  # "Stochastic Gradient Descent"
+            pass
     else:
         import Algos.Linear_Regression.simulate_algo.pytorch_sim as method
 
