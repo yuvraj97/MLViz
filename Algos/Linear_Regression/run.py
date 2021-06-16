@@ -136,6 +136,13 @@ def display_raw_code(method):
         with st.beta_expander("Implementation from scratch"):
             st.code(code)
 
+        f: TextIO = open("./Algos/Linear_Regression/code/pytorch_code_mini_batch.py", "r")
+        code: str = f.read()
+        f.close()
+
+        with st.beta_expander("PyTorch Implementation"):
+            st.code(code)
+
     elif method == "Stochastic Gradient Descent":
         pass
 
