@@ -52,6 +52,10 @@ def get_all_inputs() -> Dict[str, Union[str, int, float]]:
     st_epochs.success(f"epochs$:{epochs}$")
     st_epsilon.success(f"$\\epsilon:{epsilon}$")
 
+    batch_size = None
+    if method == "Mini Batch Gradient Descent":
+        batch_size = st.sidebar.number_input("Batch size", 1, n, 10, 1)
+
     st.sidebar.write("-----")
 
     lr_method: str = st.sidebar.radio("Choose method", ["Implementation From Scratch", "PyTorch Implementation"])
@@ -74,11 +78,13 @@ def get_all_inputs() -> Dict[str, Union[str, int, float]]:
         "epochs": epochs,
         "lr": lr,
         "epsilon": epsilon,
+        "batch_size": batch_size,
         "lr_method": lr_method,
         "sim_method": sim_method,
         "sim_button": sim_button,
         "step_button": step_button
     }
+
     return d
 
 
@@ -122,7 +128,13 @@ def display_raw_code(method):
             st.code(code)
 
     elif method == "Mini Batch Gradient Descent":
-        pass
+
+        f: TextIO = open("./Algos/Linear_Regression/code/scratch_mini_batch_code.py", "r")
+        code: str = f.read()
+        f.close()
+
+        with st.beta_expander("Implementation from scratch"):
+            st.code(code)
 
     elif method == "Stochastic Gradient Descent":
         pass
