@@ -45,12 +45,18 @@ def run(f, plt, inputs: dict):
             """)
 
         if d == 1:
-            new_fig: Figure = plotly_plot([min_X, max_X], [theta[0][0] + theta[1][0] * min_X, theta[0][0] + theta[1][0] * max_X],
-                                          fig=plt,
-                                          mode="lines",
-                                          color="blue",
-                                          do_not_change_fig=True,
-                                          title=f"Linear Regression (epoch: {epoch})")
+            new_fig: Figure = plotly_plot(
+                [min_X, max_X],
+                [
+                    theta[0][0] + theta[1][0] * min_X,
+                    theta[0][0] + theta[1][0] * max_X
+                ],
+                fig=plt,
+                mode="lines",
+                color="blue",
+                do_not_change_fig=True,
+                title=f"Linear Regression (epoch: {epoch})"
+            )
             st_plot.plotly_chart(new_fig)
         elif d == 2:
             description = {
@@ -66,26 +72,32 @@ def run(f, plt, inputs: dict):
                 "hovertemplate": "(x1, x1): (%{x}, %{y})<br>f(%{x}, %{y}): %{z}"
             }
             min_X2, max_X2 = inputs["X"][:, 1].min(), inputs["X"][:, 1].max()
-            new_fig: Figure = mesh3d([min_X, min_X, max_X, max_X],
-                                     [min_X2, max_X2, min_X2, max_X2],
-                                     [
-                                         theta[0][0] + theta[1][0] * min_X + theta[2][0] * min_X2,
-                                         theta[0][0] + theta[1][0] * min_X + theta[2][0] * max_X2,
-                                         theta[0][0] + theta[1][0] * max_X + theta[2][0] * min_X2,
-                                         theta[0][0] + theta[1][0] * max_X + theta[2][0] * max_X2,
-                                     ],
-                                     description,
-                                     fig=plt,
-                                     opacity=0.9)
+            new_fig: Figure = mesh3d(
+                [min_X, min_X, max_X, max_X],
+                [min_X2, max_X2, min_X2, max_X2],
+                [
+                    theta[0][0] + theta[1][0] * min_X + theta[2][0] * min_X2,
+                    theta[0][0] + theta[1][0] * min_X + theta[2][0] * max_X2,
+                    theta[0][0] + theta[1][0] * max_X + theta[2][0] * min_X2,
+                    theta[0][0] + theta[1][0] * max_X + theta[2][0] * max_X2,
+                ],
+                description,
+                fig=plt,
+                opacity=0.9
+            )
             st_plot.plotly_chart(new_fig)
 
         errors.append(error)
         epochs.append(epoch)
-        st_error.plotly_chart(plotly_plot(epochs, errors,
-                                          mode="lines+markers",
-                                          x_title="epochs",
-                                          y_title="error",
-                                          title="Error Chart"))
+        st_error.plotly_chart(
+            plotly_plot(
+                epochs, errors,
+                mode="lines+markers",
+                x_title="epochs",
+                y_title="error",
+                title="Error Chart"
+            )
+        )
         time.sleep(1/4)
 
     if "normalization_params" not in inputs:

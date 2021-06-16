@@ -3,9 +3,6 @@ import torch
 import torch.nn as nn
 from torch.optim import SGD
 import numpy as np
-from torch import Tensor
-
-from Algos.utils.utils import get_MSE_error
 
 
 def run(inputs: Dict[str, Union[str, int, float, np.ndarray]]):
