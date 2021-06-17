@@ -1,4 +1,5 @@
 import inspect
+from typing import List
 import numpy as np
 
 
@@ -36,6 +37,8 @@ def get_MSE_error(y: np.ndarray, y_pred: np.ndarray):
 
 def get_nD_classification_data(
         n_classes: int,
+        classes_proportions: List[float],
+        n_features: int,
         n=100,
         mean=0,
         std=1,
@@ -47,6 +50,7 @@ def get_nD_classification_data(
             Number of class,
             example for n_classes: 2 there will be two classes +ve and -ve
         )
+    :param classes_proportions: List[float] (proportion for each class)
     :param n: int (number of data points)
     :param mean: float (mean of Gaussian noise)
     :param std: float (standard deviation of Gaussian noise)
@@ -60,28 +64,31 @@ def get_nD_classification_data(
     else:
         np.random.seed()
 
-    K = 2
-
+    n_counts = [int(proportion * n) for proportion in classes_proportions]
+    n = sum(n_counts)
     l, h = coordinates_lim
+
     zs = []
 
     # First let's get the centroids of all classes
     for class_label in range(n_classes):
-        z_ds = np.random.uniform(low=l, high=h, size=2)
+        z_ds = np.random.uniform(low=l, high=h, size=n_features)
         zs.append(z_ds)
 
     # Now lt's get coordinated for each dimension
     zs = np.array(zs).T
-    coordinates, labels = np.zeros((n * n_classes, 2)), np.empty(n * n_classes)
-    for ith_dimension in range(2):
+    coordinates, labels = np.zeros((n, n_features)), np.empty(n)
+    for ith_dimension in range(n_features):
 
         # It will iteratively give coordinates for nth class for ith_dimension
         for class_label in range(n_classes):
             coordinates[
-                class_label * n: (class_label + 1) * n, ith_dimension
-            ] = zs[ith_dimension][class_label] + np.random.normal(mean, std, n)
+                class_label * n_counts[class_label]: (class_label + 1) * n_counts[class_label], ith_dimension
+            ] = zs[ith_dimension][class_label] + np.random.normal(mean, std, n_counts[class_label])
 
-            labels[class_label * n: (class_label + 1) * n] = class_label
+            labels[
+                class_label * n_counts[class_label]: (class_label + 1) * n_counts[class_label]
+            ] = class_label
 
     # It will return an array like [0, 1, 2,....., n-1]
     # np.random.shuffle(idx)
