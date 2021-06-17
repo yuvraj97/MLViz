@@ -48,11 +48,11 @@ def run(inputs: Dict[str, Union[str, int, float, np.ndarray]]):
             grad = X_batch.T @ (X_batch @ theta - y_batch)  # (d x B) * ((B x d) * (d x 1) - (B x 1))
             theta = theta - learning_rate * grad / batch_size  # d x 1
 
-            error = get_MSE_error(y_batch, X_batch @ theta)
-            if 0 <= prev_error - error <= inputs["epsilon"]:
-                return theta
-            prev_error = error
+        error = get_MSE_error(y, X @ theta)
+        if 0 <= prev_error - error <= inputs["epsilon"]:
+            return theta
+        prev_error = error
 
-            yield theta, error
+        yield theta, error
 
     return theta  # d x 1

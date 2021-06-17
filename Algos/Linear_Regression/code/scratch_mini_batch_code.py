@@ -41,9 +41,9 @@ def run(X: np.ndarray,
             grad = X_batch.T @ (X_batch @ theta - y_batch)  # (d x B) * ((B x d) * (d x 1) - (B x 1))
             theta = theta - learning_rate * grad / batch_size  # d x 1
 
-            loss = ((y_batch - X_batch @ theta) ** 2).sum() / batch_size
-            if 0 <= prev_loss - loss <= epsilon:
-                return theta
-            prev_loss = loss.item()
+        loss = ((y - X @ theta) ** 2).sum() / batch_size
+        if 0 <= prev_loss - loss <= epsilon:
+            return theta
+        prev_loss = loss.item()
 
     return theta  # d x 1

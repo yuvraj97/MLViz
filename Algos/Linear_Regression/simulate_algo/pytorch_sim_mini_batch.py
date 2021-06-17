@@ -5,6 +5,8 @@ from torch.optim import SGD
 import numpy as np
 from torch import Tensor
 
+from Algos.utils.utils import get_MSE_error
+
 
 class Dataset:
     def __init__(self, X: np.ndarray, y: np.ndarray):
@@ -42,6 +44,8 @@ def run(inputs: Dict[str, Union[str, int, float, np.ndarray]]):
     n, d = X.shape
 
     dataset = Dataset(X, y)
+    X = torch.from_numpy(X).float().to(dataset.device)
+    y = torch.from_numpy(y).float().to(dataset.device)
     prev_loss = np.inf
     model = nn.Sequential(nn.Linear(d, 1)).to(dataset.device)
     criterion = nn.MSELoss().to(dataset.device)
@@ -58,17 +62,21 @@ def run(inputs: Dict[str, Union[str, int, float, np.ndarray]]):
             optimizer.step()
             optimizer.zero_grad()
 
-            with torch.no_grad():
-                params = model.state_dict()
-                keys = list(params.keys())
-                theta = np.hstack(
-                    (params[keys[1]].cpu().numpy(), params[keys[0]].cpu().numpy()[0])
-                ).reshape((d + 1, 1))
-                if 0 <= prev_loss - loss.item() <= inputs["epsilon"]:
-                    return theta
-                prev_loss = loss.item()
+        with torch.no_grad():
+            outputs = model(X)
+            loss = criterion(outputs, y)
 
-                yield theta, loss.item()
+            params = model.state_dict()
+            keys = list(params.keys())
+            theta = np.vstack(
+                (params[keys[1]].cpu().numpy(), params[keys[0]].cpu().numpy())
+            )
+
+            if 0 <= prev_loss - loss.item() <= inputs["epsilon"]:
+                return theta
+            prev_loss = loss.item()
+
+            yield theta, loss.item()
 
     with torch.no_grad():
         params = model.state_dict()

@@ -39,6 +39,9 @@ def run(X: np.ndarray,
     n, d = X.shape
 
     dataset = Dataset(X, y)
+    X = torch.from_numpy(X).float().to(dataset.device)
+    y = torch.from_numpy(y).float().to(dataset.device)
+
     prev_loss = np.inf
     model = nn.Sequential(nn.Linear(d, 1)).to(dataset.device)
     criterion = nn.MSELoss().to(dataset.device)
@@ -58,14 +61,16 @@ def run(X: np.ndarray,
             if batch_i + epoch * batch_size % 50 == 0:
                 print(f"epoch: {batch_i + epoch * batch_size}, loss: {loss.item()}")
 
-            with torch.no_grad():
-                if 0 <= prev_loss - loss.item() <= epsilon:
-                    params = model.state_dict()
-                    keys = list(params.keys())
-                    return np.vstack(
-                        (params[keys[1]].cpu().numpy(), params[keys[0]].cpu().numpy())
-                    )
-                prev_loss = loss.item()
+        with torch.no_grad():
+            outputs = model(X)
+            loss = criterion(outputs, y)
+            if 0 <= prev_loss - loss.item() <= epsilon:
+                params = model.state_dict()
+                keys = list(params.keys())
+                return np.vstack(
+                    (params[keys[1]].cpu().numpy(), params[keys[0]].cpu().numpy())
+                )
+            prev_loss = loss.item()
 
     with torch.no_grad():
         params = model.state_dict()
