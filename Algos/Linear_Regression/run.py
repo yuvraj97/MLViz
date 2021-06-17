@@ -20,8 +20,7 @@ def get_all_inputs() -> Dict[str, Union[str, int, float]]:
 
     method: str = st.selectbox("Which method you want to use", [
         "Batch Gradient Descent",
-        "Mini Batch Gradient Descent",
-        "Stochastic Gradient Descent",
+        "Mini Batch Gradient Descent"
     ])
 
     seed: int = st.sidebar.number_input("Enter seed (-1 mean seed is disabled)", -1, 1000, 0, 1)
@@ -143,9 +142,6 @@ def display_raw_code(method):
         with st.beta_expander("PyTorch Implementation"):
             st.code(code)
 
-    elif method == "Stochastic Gradient Descent":
-        pass
-
 
 def run(state) -> None:
     """
@@ -239,17 +235,13 @@ def run(state) -> None:
     if inputs["lr_method"] == "Implementation From Scratch":
         if inputs["method"] == "Batch Gradient Descent":
             import Algos.Linear_Regression.simulate_algo.scratch_sim as method
-        elif inputs["method"] == "Mini Batch Gradient Descent":
+        else:
             import Algos.Linear_Regression.simulate_algo.scratch_sim_mini_batch as method
-        else:  # "Stochastic Gradient Descent"
-            pass
     else:
         if inputs["method"] == "Batch Gradient Descent":
             import Algos.Linear_Regression.simulate_algo.pytorch_sim as method
-        elif inputs["method"] == "Mini Batch Gradient Descent":
+        else:
             import Algos.Linear_Regression.simulate_algo.pytorch_sim_mini_batch as method
-        else:  # "Stochastic Gradient Descent"
-            pass
 
     if inputs["sim_method"] == "Simulate":
         import Algos.Linear_Regression.simulation.auto_simulation as simulation
