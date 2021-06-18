@@ -7,7 +7,7 @@ from Algos.utils.plots import plotly_plot, mesh3d, surface3D
 def run(f, plt, inputs: dict):
 
     """
-    It will Simulate Linear Regression plot
+    It will Simulate Logistic Regression plot
 
     :param f: function (It will iteratively give us the parameters)
     :param plt: Figure (It contains our data points)
