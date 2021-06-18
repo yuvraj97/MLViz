@@ -93,13 +93,13 @@ def get_nD_classification_data(
 
     # It will return an array like [0, 1, 2,....., n-1]
     # np.random.shuffle(idx)
-    return np.array(coordinates), np.array(labels)
+    return np.array(coordinates), np.array(labels).reshape((n, 1))
 
 
 def split_features(features, labels):
-    data = defaultdict(lambda : [])
+    data = defaultdict(lambda: [])
     for idx, label in enumerate(labels):
-        data[label].append(features[idx])
+        data[label.item()].append(features[idx])
     for label in data:
         data[label] = np.array(data[label])
     return data

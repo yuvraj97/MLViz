@@ -16,8 +16,8 @@ def get_all_inputs() -> Dict[str, Union[str, int, float, List[float]]]:
     """
 
     method: str = st.selectbox("Which method you want to use", [
-        "Batch Gradient Descent",
-        "Mini Batch Gradient Descent"
+        "Batch Gradient Ascent",
+        "Mini Batch Gradient Ascent"
     ])
 
     seed: int = st.sidebar.number_input("Enter seed (-1 mean seed is disabled)", -1, 1000, 0, 1)
@@ -79,7 +79,7 @@ def get_all_inputs() -> Dict[str, Union[str, int, float, List[float]]]:
 
     st_n, st_lr = st.sidebar.beta_columns([1, 1])
     n: int = st_n.slider("N", 10, 1000, 100, 10)
-    lr: float = st_lr.slider("Learning Rate", 0.0, 0.05, 0.01, 0.005)
+    lr: float = st_lr.slider("Learning Rate", 0.1, 10.00, 0.5, 0.1)
     st_n, st_lr = st.sidebar.beta_columns([1, 1])
     st_n.success(f"$N:{n}$")
     st_lr.success(f"$lr:{lr}$")
@@ -92,7 +92,7 @@ def get_all_inputs() -> Dict[str, Union[str, int, float, List[float]]]:
     st_epsilon.success(f"$\\epsilon:{epsilon}$")
 
     batch_size = None
-    if method == "Mini Batch Gradient Descent":
+    if method == "Mini Batch Gradient Ascent":
         batch_size = st.sidebar.number_input("Batch size", 1, n, 10, 1)
 
     st.sidebar.write("-----")
@@ -131,19 +131,19 @@ def get_all_inputs() -> Dict[str, Union[str, int, float, List[float]]]:
 
 def display_raw_code(method):
 
-    if method == "Batch Gradient Descent":
+    if method == "Batch Gradient Ascent":
         f: TextIO = open("./Algos/Logistic_Regression/code/scratch_code.py", "r")
         code: str = f.read()
         f.close()
 
-        with st.beta_expander("Implementation From Scratch"):
+        with st.beta_expander("Implementation From Scratch (Gradient Ascent)"):
             st.code(code)
 
         f: TextIO = open("./Algos/Logistic_Regression/code/pytorch_code.py", "r")
         code: str = f.read()
         f.close()
 
-        with st.beta_expander("PyTorch Implementation"):
+        with st.beta_expander("PyTorch Implementation (Gradient Descent)"):
             st.code(code)
 
 
@@ -194,3 +194,13 @@ def run(state) -> None:
     st.warning("All controls are in left control panel")
 
     display_raw_code(inputs["method"])
+
+    inputs["X"], inputs["y"] = X, y
+    if inputs["lr_method"] == "Implementation From Scratch":
+        if inputs["method"] == "Batch Gradient Ascent":
+            import Algos.Logistic_Regression.simulate_algo.scratch_sim as method
+    if inputs["sim_method"] == "Simulate":
+        import Algos.Logistic_Regression.simulation.auto_simulation as simulation
+    if inputs["sim_method"] == "Simulate" and inputs["sim_button"]:
+        simulation.run(method.run, plt, inputs)
+
