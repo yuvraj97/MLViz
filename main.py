@@ -19,7 +19,7 @@ def main():
 
     st_selectbox, st_reset = st.beta_columns([9, 1])
     option: str = st_selectbox.selectbox("", options, index=0)
-    if st_reset.button("🔄", help="Reset Variables"):
+    if st_reset.button("🔄", help="Reset Variables (Necessary to reset Manually Increment Steps)"):
         state["main"] = {}
 
     if option not in options:

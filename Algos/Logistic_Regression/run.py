@@ -169,6 +169,9 @@ def run(state) -> None:
     :return: None
     """
 
+    if "lr" not in state["main"]:
+        state["main"]["lr"] = {}
+
     inputs: Dict[str, Union[str, int, float, tuple, List[float]]] = get_all_inputs()
 
     if inputs["n"] * inputs["n_features"] > 1000:
@@ -219,8 +222,7 @@ def run(state) -> None:
         if inputs["method"] == "Batch Gradient Ascent":
             import Algos.Logistic_Regression.simulate_algo.scratch_sim as method
         else:
-            import Algos.Logistic_Regression.simulate_algo.pytorch_sim as method
-
+            import Algos.Logistic_Regression.simulate_algo.scratch_sim_mini_batch as method
     else:
         if inputs["method"] == "Batch Gradient Ascent":
             import Algos.Logistic_Regression.simulate_algo.pytorch_sim as method
@@ -229,5 +231,11 @@ def run(state) -> None:
 
     if inputs["sim_method"] == "Simulate":
         import Algos.Logistic_Regression.simulation.auto_simulation as simulation
+    else:
+        import Algos.Logistic_Regression.simulation.iterative_simulation as simulation
+
     if inputs["sim_method"] == "Simulate" and inputs["sim_button"]:
         simulation.run(method.run, plt, inputs)
+    if inputs["sim_method"] == "Manually Increment Steps":
+        simulation.run(state, method.run, plt, inputs)
+
