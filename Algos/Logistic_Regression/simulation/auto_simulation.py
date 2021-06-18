@@ -24,9 +24,10 @@ def run(f, plt, inputs: dict):
     epochs = []
     for epoch, (theta, error) in enumerate(f(inputs)):
         st_theta.info(f"""
-        $\\hat{{y}}={' + '.join(
+        **Decision boundary**:    
+        ${' + '.join(
             ['{:.2f}'.format(theta_i[0]) + f'x_{i}' for i, theta_i in enumerate(theta)]
-        ).replace('x_0', '')}$
+        ).replace('x_0', '')}=0$
         """)
 
         if d == 2:
@@ -39,7 +40,7 @@ def run(f, plt, inputs: dict):
                 ],
                 fig=plt,
                 mode="lines",
-                color="blue",
+                color="green",
                 do_not_change_fig=True,
                 title=f"Logistic Regression (epoch: {epoch})"
             )
@@ -96,9 +97,10 @@ def run(f, plt, inputs: dict):
 
     s = f"""
     Algo Completed 😊    
-    $\\hat{{y}}={' + '.join(
+    **Decision boundary**:    
+    ${' + '.join(
         ['{:.2f}'.format(theta_i[0]) + f'x_{i}' for i, theta_i in enumerate(theta)]
-    ).replace('x_0', '')}$
+    ).replace('x_0', '')}=0$
     """
 
     st_theta.success(s)

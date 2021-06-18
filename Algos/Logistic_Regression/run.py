@@ -31,15 +31,16 @@ def get_all_inputs() -> Dict[str, Union[str, int, float, List[float]]]:
 
     st.sidebar.write("### Logistic Regression Parameters")
 
-    st_n_classes, st_n_features = st.sidebar.beta_columns([1, 1])
-    n_classes: int = st_n_classes.number_input(
-        "Number of classes",
-        min_value=2,
-        max_value=100,
-        value=2,
-        step=1)
+    # st_n_classes, st_n_features = st.sidebar.beta_columns([1, 1])
+    n_classes = 2
+    # n_classes: int = st_n_classes.number_input(
+    #     "Number of classes",
+    #     min_value=2,
+    #     max_value=100,
+    #     value=2,
+    #     step=1)
 
-    n_features: int = st_n_features.number_input(
+    n_features: int = st.sidebar.number_input(
         "Number of Features",
         min_value=1,
         max_value=100,
@@ -56,7 +57,7 @@ def get_all_inputs() -> Dict[str, Union[str, int, float, List[float]]]:
             classes_proportions.append(
                 float(
                     st_classes_proportions[j][i].text_input(
-                        f"C{3 * j + i + 1}",
+                        f"Class: {3 * j + i + 1}",
                         "{:.3f}".format(1/n_classes),
                         key=f"proportions-{j}-{i}"
                     )
@@ -66,7 +67,7 @@ def get_all_inputs() -> Dict[str, Union[str, int, float, List[float]]]:
         classes_proportions.append(
             float(
                 st_classes_proportions[-1][i].text_input(
-                    f"C{j * 3 + i + 1}",
+                    f"Class: {j * 3 + i + 1}",
                     "{:.3f}".format(1 / n_classes),
                     key=f"proportions-{-1}-{i}"
                 )
