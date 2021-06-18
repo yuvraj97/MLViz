@@ -13,7 +13,8 @@ def main():
         state["main"] = {}
 
     options: List[str] = [
-        "Linear Regression"
+        "Linear Regression",
+        "Logistic Regression"
     ]
 
     st_selectbox, st_reset = st.beta_columns([9, 1])
@@ -21,7 +22,7 @@ def main():
     if st_reset.button("🔄", help="Reset Variables"):
         state["main"] = {}
 
-    if option not in "Linear Regression":
+    if option not in options:
         return
 
     exec(f"from Algos.{option.replace(' ', '_')}.run import run")

@@ -2,7 +2,9 @@ from typing import Dict, Union, List
 import streamlit as st
 from numpy import ndarray
 from pandas import DataFrame
+from plotly.graph_objs import Figure
 import pandas as pd
+from Algos.utils.plots import plot_classification_data
 from Algos.utils.utils import get_nD_classification_data
 import math
 
@@ -24,7 +26,7 @@ def get_all_inputs() -> Dict[str, Union[str, int, float, List[float]]]:
     st_noise = st.sidebar.empty()
     st_mean, st_std = st.sidebar.beta_columns([1, 1])
     mean: float = st_mean.slider("Mean", -100.0, 100.0, 0.0, 10.0)
-    std: float = st_std.slider("Standard deviation", 0.0, 100.0, 1.0, 1.0)
+    std: float = st_std.slider("Standard deviation", 0.0, 5.0, 1.0, 0.1)
     st_noise.markdown(f"$\\mathcal{{N}}(\\mu= {mean}, \\sigma^2={std}^2)$")
 
     st.sidebar.write("### Logistic Regression Parameters")
@@ -148,8 +150,8 @@ def run(state) -> None:
         n=inputs["n"],
         mean=inputs["mean"],
         std=inputs["std"],
-        seed=inputs["seed"])
-
+        seed=inputs["seed"]
+    )
     n, d = X.shape
 
     st.write("# Data")
@@ -165,3 +167,8 @@ def run(state) -> None:
         df.index += 1
         st.write(f"**Class Labels**")
         st.write(df)
+
+    plt: Union[Figure, None]
+    if inputs["n_features"] in [2, 3]:
+        plt = plot_classification_data(X, y, x_title="Feature 1", y_title="Feature 2", z_title="Feature 3", title="Data")
+        st.plotly_chart(plt)
