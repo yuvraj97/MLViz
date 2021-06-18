@@ -17,13 +17,13 @@ def run(X: np.ndarray,
 
     n, d = X.shape
     theta: np.ndarray = np.zeros((d, 1))
-    prev_loss = np.inf
+    prev_loss = -np.inf
     for epoch in range(epochs):
-        h_theta: float = 1 / (1 + np.exp(-X @ theta))
-        theta = theta + learning_rate * X.T @ (y - h_theta)
+        h_theta: np.ndarray = 1 / (1 + np.exp(-X @ theta))
+        theta = theta + learning_rate * X.T @ (y - h_theta) / n
 
-        loss = ((y - X @ theta) ** 2).sum() / n
-        if 0 <= prev_loss - loss <= epsilon:
+        loss = np.mean(y * np.log(h_theta) + (1 - y) * np.log(1 - h_theta))
+        if 0 <= loss - prev_loss <= epsilon:
             return theta  # d x 1
         prev_loss = loss.item()
 
