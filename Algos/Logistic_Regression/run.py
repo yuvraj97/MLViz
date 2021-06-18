@@ -147,6 +147,21 @@ def display_raw_code(method):
         with st.beta_expander("PyTorch Implementation (Gradient Descent)"):
             st.code(code)
 
+    if method == "Mini Batch Gradient Ascent":
+        f: TextIO = open("./Algos/Logistic_Regression/code/scratch_mini_batch_code.py", "r")
+        code: str = f.read()
+        f.close()
+
+        with st.beta_expander("Implementation From Scratch (Gradient Ascent)"):
+            st.code(code)
+
+        f: TextIO = open("./Algos/Logistic_Regression/code/pytorch_code_mini_batch.py", "r")
+        code: str = f.read()
+        f.close()
+
+        with st.beta_expander("PyTorch Implementation (Gradient Descent)"):
+            st.code(code)
+
 
 def run(state) -> None:
     """
