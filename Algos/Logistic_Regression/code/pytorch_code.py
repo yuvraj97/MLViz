@@ -37,7 +37,7 @@ def run(X: np.ndarray,
 
     prev_loss = np.inf
     model = LogisticRegression(n_features, 1).to(device)
-    criterion = nn.BCELoss()
+    criterion = nn.BCELoss().to(device)
     optimizer = SGD(model.parameters(), lr=learning_rate)
 
     for epoch in range(epochs):
