@@ -218,9 +218,15 @@ def run(state) -> None:
     if inputs["lr_method"] == "Implementation From Scratch":
         if inputs["method"] == "Batch Gradient Ascent":
             import Algos.Logistic_Regression.simulate_algo.scratch_sim as method
+        else:
+            import Algos.Logistic_Regression.simulate_algo.pytorch_sim as method
+
     else:
         if inputs["method"] == "Batch Gradient Ascent":
             import Algos.Logistic_Regression.simulate_algo.pytorch_sim as method
+        else:
+            import Algos.Logistic_Regression.simulate_algo.pytorch_sim_mini_batch as method
+
     if inputs["sim_method"] == "Simulate":
         import Algos.Logistic_Regression.simulation.auto_simulation as simulation
     if inputs["sim_method"] == "Simulate" and inputs["sim_button"]:
