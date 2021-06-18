@@ -139,6 +139,13 @@ def display_raw_code(method):
         with st.beta_expander("Implementation From Scratch"):
             st.code(code)
 
+        f: TextIO = open("./Algos/Logistic_Regression/code/pytorch_code.py", "r")
+        code: str = f.read()
+        f.close()
+
+        with st.beta_expander("PyTorch Implementation"):
+            st.code(code)
+
 
 def run(state) -> None:
     """
