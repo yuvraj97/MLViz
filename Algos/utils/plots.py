@@ -139,3 +139,30 @@ def mesh3d(x, y, z,
                           title=description["title"]["main"])
     fig.update_layout(showlegend=False if isMobile else True)
     return fig
+
+def surface3D(
+        x, y, z,
+        description: dict,
+        fig: Figure = None,
+    ):
+
+    if fig is None:
+        fig: Figure = go.Figure()
+    else:
+        fig: Figure = go.Figure(fig)
+
+    fig.add_trace(go.Surface(
+        x=x, y=y, z=z,
+        name=description["label"]["main"],
+        hovertemplate=description["hovertemplate"]
+    ))
+
+    if "title" in description:
+        fig.update_layout(
+            scene=dict(
+                xaxis_title=description["title"]["x"],
+                yaxis_title=description["title"]["y"],
+                zaxis_title=description["title"]["z"]),
+            title=description["title"]["main"]
+        )
+    return fig
