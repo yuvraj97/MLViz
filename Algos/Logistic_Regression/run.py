@@ -1,4 +1,4 @@
-from typing import Dict, Union, List
+from typing import TextIO, Dict, Union, List
 import streamlit as st
 from numpy import ndarray
 from pandas import DataFrame
@@ -34,7 +34,7 @@ def get_all_inputs() -> Dict[str, Union[str, int, float, List[float]]]:
     st_n_classes, st_n_features = st.sidebar.beta_columns([1, 1])
     n_classes: int = st_n_classes.number_input(
         "Number of classes",
-        min_value=1,
+        min_value=2,
         max_value=100,
         value=2,
         step=1)
@@ -129,6 +129,17 @@ def get_all_inputs() -> Dict[str, Union[str, int, float, List[float]]]:
     return d
 
 
+def display_raw_code(method):
+
+    if method == "Batch Gradient Descent":
+        f: TextIO = open("./Algos/Logistic_Regression/code/scratch_code.py", "r")
+        code: str = f.read()
+        f.close()
+
+        with st.beta_expander("Implementation From Scratch"):
+            st.code(code)
+
+
 def run(state) -> None:
     """
     Here we run the Logistic Regression Simulation
@@ -168,7 +179,11 @@ def run(state) -> None:
         st.write(f"**Class Labels**")
         st.write(df)
 
-    plt: Union[Figure, None]
+    plt: Union[Figure, None] = None
     if inputs["n_features"] in [2, 3]:
         plt = plot_classification_data(X, y, x_title="Feature 1", y_title="Feature 2", z_title="Feature 3", title="Data")
         st.plotly_chart(plt)
+
+    st.warning("All controls are in left control panel")
+
+    display_raw_code(inputs["method"])
