@@ -59,7 +59,6 @@ def run(inputs: Dict[str, Union[str, int, float, np.ndarray]]):
                 [parameter.item() for parameter in params[0][0]]
             )
             theta = np.array(params_L).reshape((n_features + 1, 1))
-            print(loss.item())
             yield theta, loss.item()
 
     with torch.no_grad():

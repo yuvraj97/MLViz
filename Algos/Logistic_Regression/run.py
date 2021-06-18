@@ -189,7 +189,10 @@ def run(state) -> None:
 
     plt: Union[Figure, None] = None
     if inputs["n_features"] in [2, 3]:
-        plt = plot_classification_data(X, y, x_title="Feature 1", y_title="Feature 2", z_title="Feature 3", title="Data")
+        plt = plot_classification_data(
+            X, y, title="Data",
+            x_title="Feature 1", y_title="Feature 2", z_title="Feature 3"
+        )
         st.plotly_chart(plt)
 
     st.warning("All controls are in left control panel")
@@ -207,4 +210,3 @@ def run(state) -> None:
         import Algos.Logistic_Regression.simulation.auto_simulation as simulation
     if inputs["sim_method"] == "Simulate" and inputs["sim_button"]:
         simulation.run(method.run, plt, inputs)
-

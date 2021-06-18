@@ -47,7 +47,6 @@ def run(f, plt, inputs: dict):
             st_plot.plotly_chart(new_fig)
 
         elif d == 3:
-            print("d==3")
             min_X1, max_X1 = inputs["X"][:, 0].min(), inputs["X"][:, 0].max()
             min_X2, max_X2 = inputs["X"][:, 1].min(), inputs["X"][:, 1].max()
             description = {
