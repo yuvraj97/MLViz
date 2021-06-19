@@ -73,10 +73,15 @@ def plot_classification_data(
         title,
         x_title,
         y_title,
+        fig=None,
         z_title=None):
 
+    if fig is None:
+        fig: Figure = go.Figure()
+    else:
+        fig: Figure = go.Figure(fig)
+
     data = split_features(features, labels)
-    fig: Figure = go.Figure()
     colors = ["red", "blue", "yellow", "green", "orange", "grey", "purple", "teal"]
 
     for idx, label in enumerate(data):

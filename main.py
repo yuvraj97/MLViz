@@ -14,7 +14,8 @@ def main():
 
     options: List[str] = [
         "Linear Regression",
-        "Logistic Regression"
+        "Logistic Regression",
+        "K Means Clustering"
     ]
 
     st_selectbox, st_reset = st.beta_columns([9, 1])
