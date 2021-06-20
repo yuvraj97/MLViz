@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from Fun_Projects.Linear_Algebra_Transformation.Plot2DVectors import Plot2DVectors as vt2D
+from Fun_Projects.Linear_Transformation.Plot2DVectors import Plot2DVectors as vt2D
 
 class Transform2D:
     """

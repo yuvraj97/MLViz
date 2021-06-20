@@ -2,9 +2,9 @@ from typing import Union, Dict, List
 import numpy as np
 import streamlit as st
 
-from Fun_Projects.Linear_Algebra_Transformation.Plot2DVectors import Plot2DVectors
-from Fun_Projects.Linear_Algebra_Transformation.Transform2D import Transform2D
-from Fun_Projects.Linear_Algebra_Transformation.utils import str2matrix, validate_equation, str2vec, vec2str
+from Fun_Projects.Linear_Transformation.Plot2DVectors import Plot2DVectors
+from Fun_Projects.Linear_Transformation.Transform2D import Transform2D
+from Fun_Projects.Linear_Transformation.utils import str2matrix, validate_equation, str2vec, vec2str
 
 
 def get_inputs(state):
@@ -39,7 +39,7 @@ def get_inputs(state):
         d = st_d.slider('D', d - 10, d + 10, d, 0.1)
         matrix[0][0], matrix[0][1], matrix[1][0], matrix[1][1] = a, b, c, d
 
-    equation = st.sidebar.text_input("Enter Equation", value="sqrt(9+x^2)")
+    equation = st.sidebar.text_input("Enter Equation", value="sqrt(9-x^2)")
     equation, isValid = validate_equation(equation)
     supported_f_str = """
     Here it support most of the function, like:    
