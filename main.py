@@ -13,21 +13,38 @@ def main():
         state["main"] = {}
 
     options: List[str] = [
+        "Visualize Algorithms",
+        "Fun Projects"
+    ]
+
+    projects: List[str] = [
+        "Linear Algebra Transformation"
+    ]
+
+    algorithms: List[str] = [
+        "Home",
         "Linear Regression",
         "Logistic Regression",
         "K Means Clustering"
     ]
 
-    st_selectbox, st_reset = st.beta_columns([9, 1])
-    option: str = st_selectbox.selectbox("", options, index=0)
+    st_options, st_proj_algo, st_reset = st.beta_columns([4.5, 4.5, 1])
+
     if st_reset.button("🔄", help="Reset Variables (Necessary to reset Manually Increment Steps)"):
         state["main"] = {}
 
-    if option not in options:
-        return
+    option: str = st_options.selectbox("Algos/Projects", options, index=0)
+    if option == "Visualize Algorithms":
+        proj_algo: str = st_proj_algo.selectbox("Algorithms", algorithms, index=0)
+    else:
+        proj_algo: str = st_proj_algo.selectbox("Fun Projects", projects, index=0)
 
-    exec(f"from Algos.{option.replace(' ', '_')}.run import run")
-    exec("run(state)")
+    if option == "Visualize Algorithms":
+        exec(f"from Algos.{proj_algo.replace(' ', '_')}.run import run")
+        exec("run(state)")
+    else:
+        exec(f"from Fun_Projects.{proj_algo.replace(' ', '_')}.run import run")
+        exec("run(state)")
 
 
 if __name__ == '__main__':
