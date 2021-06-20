@@ -43,8 +43,10 @@ def validate_equation(equation: str):
             return None, False
         idx += 1
 
-    return "".join(result).replace("^", "**"), True
-
+    try:
+        return eval(f'lambda x: {"".join(result).replace("^", "**")}'), True
+    except:
+        return None, False
 
 def str2vec(s: str):
     allowed = {',', '-', '.'}

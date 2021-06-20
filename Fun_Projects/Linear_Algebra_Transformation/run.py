@@ -1,7 +1,9 @@
-from typing import Union, Dict
+from typing import Union, Dict, List
 import numpy as np
 import streamlit as st
 
+from Fun_Projects.Linear_Algebra_Transformation.Plot2DVectors import Plot2DVectors
+from Fun_Projects.Linear_Algebra_Transformation.Transform2D import Transform2D
 from Fun_Projects.Linear_Algebra_Transformation.utils import str2matrix, validate_equation, str2vec, vec2str
 
 
@@ -59,6 +61,15 @@ def get_inputs(state):
     with st.sidebar.beta_expander("Allowed Functions"):
         st.success(supported_f_str)
 
+    count = st.sidebar.number_input("Specify number of data points", value=30)
+    if st.sidebar.checkbox("Manually Specify Range", value=True):
+        range_, status = str2vec(st.sidebar.text_input('Syntax(without quotes): "A, B" or "[A, B]"', value="[-3, 3]"))
+        if status is False:
+            st.error('Invalid syntax')
+            return None
+    else:
+        range_ = (-3, 3)
+
     st.sidebar.write("## Vectors")
     vectors = np.array([[1.0, 0.0], [0.0, 1.0]]) if "vectors" not in state["main"]["la-tf"] else \
         state["main"]["la-tf"]["vectors"]
@@ -92,7 +103,10 @@ def get_inputs(state):
     if is_rerun_require: st.experimental_rerun()
     return {
         "matrix": matrix,
-        "equation": equation
+        "equation": equation,
+        "vectors": vectors,
+        "count": count,
+        "range": range_
     }
 
 def run(state):
@@ -100,7 +114,7 @@ def run(state):
     if "la-tf" not in state["main"]:
         state["main"]["la-tf"] = {}
 
-    inputs: Dict[str, Union[np.ndarray]] = get_inputs(state)
+    inputs: Dict[str, Union[np.ndarray, int, List[int]]] = get_inputs(state)
     if inputs is None: return
     matrix: np.ndarray = inputs["matrix"]
 
@@ -114,3 +128,12 @@ def run(state):
      {c} & {d}
     \\end{{bmatrix}}
     ''')
+
+    st.write("# Vectors")
+    tf2D = Transform2D(matrix)
+    tf2D.add_vectors(inputs["vectors"])
+    tf2D.add_equation(inputs["equation"], x_range=inputs["range"], count=inputs["count"])
+    fig_orig, fig_tf, fig_combine = tf2D.fig()
+    st.pyplot(fig_combine)
+    st.pyplot(fig_orig)
+    st.pyplot(fig_tf)
