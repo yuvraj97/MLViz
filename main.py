@@ -61,6 +61,7 @@ if __name__ == '__main__':
 
     main()
 
+    st.sidebar.write("-----")
     st.sidebar.markdown("### Developer")
     st.sidebar.markdown("""
     LinkedIn: <a rel='noreferrer' target='_blank' href="https://www.linkedin.com/in/yuvraj97/">yuvraj97</a><br>
