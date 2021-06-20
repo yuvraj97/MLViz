@@ -7,9 +7,9 @@ from numpy import ndarray
 from pandas import DataFrame
 from plotly.graph_objs import Figure
 import pandas as pd
-from Algos.utils.plots import plotly_plot, mesh3d
-from Algos.utils.preprocess import process_function
-from Algos.utils.utils import get_nD_regression_data
+from utils.plots import plotly_plot, mesh3d
+from utils.preprocess import process_function
+from utils.utils import get_nD_regression_data
 
 
 def get_all_inputs() -> Dict[str, Union[str, int, float]]:

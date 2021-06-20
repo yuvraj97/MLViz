@@ -1,6 +1,6 @@
 import streamlit as st
 from plotly.graph_objs import Figure
-from Algos.utils.plots import plotly_plot, mesh3d, surface3D
+from utils.plots import plotly_plot, surface3D
 
 
 def run(state, f, plt, inputs):

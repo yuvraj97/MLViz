@@ -1,6 +1,6 @@
 from typing import Union, Dict
 import numpy as np
-from Algos.utils.utils import get_MSE_error
+from utils.utils import get_MSE_error
 
 
 class Dataset:

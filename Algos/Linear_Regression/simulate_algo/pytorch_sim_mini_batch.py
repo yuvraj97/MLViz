@@ -5,8 +5,6 @@ from torch.optim import SGD
 import numpy as np
 from torch import Tensor
 
-from Algos.utils.utils import get_MSE_error
-
 
 class Dataset:
     def __init__(self, X: np.ndarray, y: np.ndarray):

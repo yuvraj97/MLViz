@@ -1,7 +1,7 @@
 import plotly.graph_objects as go
 from plotly.graph_objs import Figure
 
-from Algos.utils.utils import split_features
+from utils.utils import split_features
 
 
 def plotly_plot(x=None, y=None, z=None,
