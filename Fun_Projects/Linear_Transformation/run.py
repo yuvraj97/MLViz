@@ -278,7 +278,8 @@ def run(state):
         matrix: np.ndarray = inputs["matrix"]
         st.write("# Vectors")
         tf2D = Transform2D(matrix)
-        tf2D.add_vectors(inputs["vectors"])
+        if len(inputs["vectors"]) != 0:
+            tf2D.add_vectors(inputs["vectors"])
         tf2D.add_equation(inputs["equation"], x_range=inputs["range"], count=inputs["count"])
         fig_orig, fig_tf, fig_combine = tf2D.fig()
         st.pyplot(fig_combine)
@@ -290,7 +291,8 @@ def run(state):
         matrix: np.ndarray = inputs["matrix"]
         st.write("# Vectors")
         tf3D = Transform3D(matrix)
-        tf3D.add_vectors(inputs["vectors"])
+        if len(inputs["vectors"]) != 0:
+            tf3D.add_vectors(inputs["vectors"])
         tf3D.add_equation(inputs["equation"], x_range=inputs["range"], y_range=inputs["range"], count=inputs["count"])
         fig_combine = tf3D.fig_combine()
         st.plotly_chart(fig_combine)

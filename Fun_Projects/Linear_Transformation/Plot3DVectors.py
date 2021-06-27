@@ -28,7 +28,7 @@ class Plot3DVectors:
         self._fig_list_: List[Union[Scatter3d, Surface]] = []
 
     def add_vectors(self, vectors: np.ndarray, color="blue", legend="", showlegend=True):
-        self.set_axes_limit(vectors[0], vectors[1], vectors[2])
+        self.set_axes_limit(*vectors.T)
         line_vectors: np.ndarray = np.zeros(shape=(3, len(vectors) * 3))
         for i in range(1, line_vectors.shape[1]):
             if i % 3 == 1:
