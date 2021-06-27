@@ -2,9 +2,6 @@ import streamlit as st
 
 
 def run(state):
-    st.info("""
-    Here you can see some of my little projects.
-    """)
 
     st.write("# Fun Projects")
     st.success("""
@@ -44,3 +41,20 @@ def run(state):
         
         It uses **K-Means Clustering** algorithm to achieve it.
         """)
+
+    st.success("""
+        **Digits Classification**     
+        - Draw a digit from $0$ to $9$.
+        - Then this program will predict that digit.
+        - Uses **Neural Networks** to achieve it.
+        """)
+
+    with st.beta_expander("Read More"):
+        st.write("""
+        Here I used the [MNIST](http://yann.lecun.com/exdb/mnist/) dataset to train a
+        **Neural Network** (with $2$ hidden layers).  
+        Which then is used to predict the digit you draw in the canvas.  
+        
+        Source code is available to you.
+        """)
+

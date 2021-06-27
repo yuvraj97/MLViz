@@ -20,7 +20,8 @@ def main():
     projects: List[str] = [
         "Introduction",
         "Linear Transformation",
-        "n color"
+        "n color",
+        "Digits Classification"
     ]
 
     algorithms: List[str] = [
