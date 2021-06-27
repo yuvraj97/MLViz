@@ -71,7 +71,7 @@ def get_2D_inputs(state):
     with st.sidebar.beta_expander("Allowed Functions"):
         st.success(supported_f_str)
 
-    count = st.sidebar.number_input("Specify number of data points", value=30)
+    count = st.sidebar.number_input("Number of data points", min_value=1, max_value=100,  value=30, step=1)
     if st.sidebar.checkbox("Manually Specify Range", value=True):
         range_, status = str2vec(st.sidebar.text_input('Syntax(without quotes): "A, B" or "[A, B]"', value="[-3, 3]"))
         if status is False:
@@ -208,7 +208,7 @@ def get_3D_inputs(state):
 
     st_opacity, st_count = st.sidebar.beta_columns([1, 2])
     opacity = st_opacity.slider('Opacity', 0.2, 1.0, 0.6, 0.05)
-    count = st_count.number_input("Number of data points", value=30)
+    count = st_count.number_input("Number of data points", min_value=1, max_value=50,  value=30, step=1)
     if st.sidebar.checkbox("Manually Specify Range", value=True):
         range_, status = str2vec(st.sidebar.text_input('Syntax(without quotes): "A, B" or "[A, B]"', value="[-3, 3]"))
         if status is False:
@@ -256,6 +256,7 @@ def get_3D_inputs(state):
         "equation": equation,
         "vectors": vectors,
         "count": count,
+        "opacity": opacity,
         "range": range_
     }
 
@@ -293,7 +294,10 @@ def run(state):
         tf3D = Transform3D(matrix)
         if len(inputs["vectors"]) != 0:
             tf3D.add_vectors(inputs["vectors"])
-        tf3D.add_equation(inputs["equation"], x_range=inputs["range"], y_range=inputs["range"], count=inputs["count"])
+        tf3D.add_equation(
+            inputs["equation"],
+            x_range=inputs["range"], y_range=inputs["range"],
+            count=inputs["count"], opacity=inputs["opacity"])
         fig_combine = tf3D.fig_combine()
         st.plotly_chart(fig_combine)
         if st.checkbox("Plot Side by Side", True):
