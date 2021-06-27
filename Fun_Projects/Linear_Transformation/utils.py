@@ -20,7 +20,7 @@ def str2matrix(s: str) -> Tuple[Union[np.ndarray, None], bool]:
 
 def validate_equation(equation: str):
     equation = equation.lower().replace("[", "(").replace("]", ")")
-    allowed_symbols = {'x', '+', '-', '*', '/', '^', '(', ')', ' '}
+    allowed_symbols = {'x', 'y', '+', '-', '*', '/', '^', '(', ')', ' '}
     result, idx = [], 0
     while idx < len(equation):
         char = equation[idx]
@@ -44,7 +44,9 @@ def validate_equation(equation: str):
         idx += 1
 
     try:
-        return eval(f'lambda x: {"".join(result).replace("^", "**")}'), True
+        args = "x, y" if "y" in result else "x"
+        print(f'lambda {args}: {"".join(result).replace("^", "**")}')
+        return eval(f'lambda {args}: {"".join(result).replace("^", "**")}'), True
     except:
         return None, False
 
