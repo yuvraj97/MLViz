@@ -19,7 +19,8 @@ def main():
 
     projects: List[str] = [
         "Introduction",
-        "Linear Transformation"
+        "Linear Transformation",
+        "n color"
     ]
 
     algorithms: List[str] = [

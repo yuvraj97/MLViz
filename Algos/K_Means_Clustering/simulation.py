@@ -62,7 +62,7 @@ def kMean(K: int,
 
             if i % (n // 30) == 0:
                 time.sleep(delay/1000)
-                yield labels
+                yield labels, (centroids, (_ * n + i)/(max_epochs * n))
 
         if NEW_COST == OLD_COST:
             break

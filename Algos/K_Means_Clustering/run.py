@@ -147,7 +147,7 @@ def run(state):
                 """
         with st.spinner(msg):
             st_labels, plot = st.empty(), st.empty()
-            for labels in kMean(K, X, max_epochs=10, delay=delay, seed=inputs["seed"]):
+            for labels, _ in kMean(K, X, max_epochs=10, delay=delay, seed=inputs["seed"]):
                 fig = plot_classification_data(
                     X, labels, title="K-Means-Clustering",
                     x_title="Feature 1", y_title="Feature 2", z_title="Feature 3"
