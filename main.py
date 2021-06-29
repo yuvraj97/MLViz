@@ -21,7 +21,8 @@ def main():
         "Introduction",
         "Linear Transformation",
         "n color",
-        "Digits Classification"
+        "Digits Classification",
+        "Slicing STL"
     ]
 
     algorithms: List[str] = [

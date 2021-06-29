@@ -58,3 +58,20 @@ def run(state):
         Source code is available to you.
         """)
 
+    st.success("""
+        **Slicing STL**     
+        - Give a **STL** file as input.
+        - Then this program will create the **slices** of that STL file.
+        - Then it finds the **sub cycles** in the corresponding slice.
+        """)
+
+    with st.beta_expander("Read More"):
+        st.write("""
+        In simple words **STL**(Standard Triangle Language) file stores information about **3D models**.  
+        This format describes only the surface geometry of a three-dimensional object
+        without any representation of **color**, **texture** or other common model attributes.
+          
+        Here this program take a binary representation of STL file as input.   
+        Then it slice that STL object along z-axis, plot those slices.    
+        Then it find the sub cycles in the corresponding slice, and plot those cycles. 
+        """)
