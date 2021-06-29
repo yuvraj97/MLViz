@@ -124,17 +124,26 @@ def run(state):
         plt.scatter(xs, ys, c='y')
         plt.plot(xs, ys, c='b')
         plt.title(f"z_height: {z_height}")
-        figures.append(fig)
+        figures.append((len(xs), z_height, fig))
         allowed_zs.append(z_height)
 
-    for fig1, fig2 in zip(figures[::2], figures[1::2]):
+    if len(figures) > 10:
+        st.warning("""
+        There are too many **slices** to plot so we are plotting most relevant **slices**.
+        """)
+        figures.sort(key=lambda ele: ele[0])
+        figures.reverse()
+        figures = figures[0:10]
+        figures.sort(key=lambda ele: ele[1])
+
+    for (_, _, fig1), (_, _, fig2) in zip(figures[::2], figures[1::2]):
         st_fig1, st_fig2 = st.beta_columns([1, 1])
         st_fig1.pyplot(fig1)
         st_fig2.pyplot(fig2)
 
     if len(figures) % 2 != 0:
         st_fig1, st_fig2 = st.beta_columns([1, 1])
-        st_fig1.pyplot(figures[-1])
+        st_fig1.pyplot(figures[-1][2])
 
     sub_cycle_title = st.empty()
     z_height = st.selectbox("Select z-height to get the sub cycles", allowed_zs)
@@ -158,6 +167,12 @@ def run(state):
         figures.append((len(xs), fig))
     figures.sort(key=lambda ele: ele[0])
     figures.reverse()
+
+    if len(figures) > 10:
+        st.warning("""
+        There are too many **sub cycles** to plot so we are plotting most relevant **sub cycles**.
+        """)
+        figures = figures[0:10]
 
     for (_, fig1), (_, fig2) in zip(figures[::2], figures[1::2]):
         st_fig1, st_fig2 = st.beta_columns([1, 1])
