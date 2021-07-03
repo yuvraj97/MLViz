@@ -8,3 +8,5 @@ torchvision==0.9.1
 torch==1.8.1
 Pillow==8.2.0
 numpy_stl==2.16.0
+pdfminer
+nltk

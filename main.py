@@ -19,6 +19,7 @@ def main():
 
     projects: List[str] = [
         "Introduction",
+        "Research Paper Summarizer",
         "Linear Transformation",
         "n color",
         "Digits Classification",
@@ -61,7 +62,10 @@ if __name__ == '__main__':
         unsafe_allow_html=True
     )
 
-    main()
+    try:
+        main()
+    except:
+        st.error("Something went wrong!")
 
     st.sidebar.write("-----")
     st.sidebar.markdown("### Developer")

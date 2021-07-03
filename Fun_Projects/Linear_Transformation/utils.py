@@ -45,7 +45,6 @@ def validate_equation(equation: str):
 
     try:
         args = "x, y" if "y" in result else "x"
-        print(f'lambda {args}: {"".join(result).replace("^", "**")}')
         return eval(f'lambda {args}: {"".join(result).replace("^", "**")}'), True
     except:
         return None, False

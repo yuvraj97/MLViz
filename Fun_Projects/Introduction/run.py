@@ -25,6 +25,25 @@ def run(state):
         And you can visualize the **transformed** version of that **mathematical function** and those **vectors** 
         """)
 
+    st.success("""
+    **Research Paper Summarizer**     
+    - Give a **Research Paper** (PDF) as input.
+    - Then this program will fetch the top **k** most important **sentences** from that research paper
+    while maintaining a **maximum distance between sentences**.
+    - It will also generate the summary of the **Research Paper** (PDF) in **k** sentences.
+    - **Statistics + Dynamic Programming**.
+    """)
+
+    with st.beta_expander("Read More"):
+        st.write("""
+        Here you can input any **research paper** and 
+        this program will fetch the top **k** most important **sentences** from that research paper.  
+        So you can quickly see what the research paper is about.   
+        
+        Most interesting part of this program is the variable **D**.  
+        **D**: Maximum distance between sentences.   
+        You can specify that how far those **k** most important **sentences** should be.
+        """)
 
     st.success("""
     **n color**     
