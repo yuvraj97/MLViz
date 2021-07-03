@@ -3,28 +3,6 @@ import streamlit as st
 
 def run(state):
 
-    st.write("# Fun Projects")
-    st.success("""
-    **Linear Transformation**     
-    - Visualize **3D** Linear Transformation
-    - Visualize **2D** Linear Transformation   
-    """)
-
-    with st.beta_expander("Read More"):
-        st.write("""
-        Here we specify,   
-        - **Transformation matrix**  
-        - A **mathematical function**, like:  
-            - $z = \\sqrt{9 - (x^2 + y^2)}$   
-            - $z = \\sin(x) * \\cos(y)$   
-            - $z = \\log(x) + e^{y}$
-               
-            Here we support most of the mathematical functions
-        - Some **vectors**
-        
-        And you can visualize the **transformed** version of that **mathematical function** and those **vectors** 
-        """)
-
     st.success("""
     **Research Paper Summarizer**     
     - Give a **Research Paper** (PDF) as input.
@@ -43,6 +21,28 @@ def run(state):
         Most interesting part of this program is the variable **D**.  
         **D**: Maximum distance between sentences.   
         You can specify that how far those **k** most important **sentences** should be.
+        """)
+
+    st.write("# Fun Projects")
+    st.success("""
+    **Linear Transformation**     
+    - Visualize **3D** Linear Transformation
+    - Visualize **2D** Linear Transformation   
+    """)
+
+    with st.beta_expander("Read More"):
+        st.write("""
+        Here we specify,   
+        - **Transformation matrix**  
+        - A **mathematical function**, like:  
+            - $z = \\sqrt{9 - (x^2 + y^2)}$   
+            - $z = \\sin(x) * \\cos(y)$   
+            - $z = \\log(x) + e^{y}$
+
+            Here we support most of the mathematical functions
+        - Some **vectors**
+
+        And you can visualize the **transformed** version of that **mathematical function** and those **vectors** 
         """)
 
     st.success("""
