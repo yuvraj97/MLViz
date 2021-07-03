@@ -3,6 +3,7 @@ import streamlit as st
 
 def run(state):
 
+    st.write("# Fun Projects")
     st.success("""
     **Research Paper Summarizer**     
     - Give a **Research Paper** (PDF) as input.
@@ -23,7 +24,6 @@ def run(state):
         You can specify that how far those **k** most important **sentences** should be.
         """)
 
-    st.write("# Fun Projects")
     st.success("""
     **Linear Transformation**     
     - Visualize **3D** Linear Transformation
