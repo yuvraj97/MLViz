@@ -2,6 +2,15 @@ import streamlit as st
 
 
 def run(state):
+
+    st.write("---")
+
+    st.markdown(
+        "![Yuvraj's GitHub stats](https://github-readme-stats.vercel.app/api?username=yuvraj97&show_icons=true&theme"
+        "=radical&include_all_commits=true&count_private=true)",
+        unsafe_allow_html=True
+    )
+
     st.info("""
     Here you can see **visualization of some ML algorithms**, and some **fun projects**.  
     You can see the **source code** of each section, and use the **left control panel** to interact with algorithm.

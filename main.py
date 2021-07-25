@@ -68,9 +68,22 @@ if __name__ == '__main__':
         st.error("Something went wrong!")
 
     st.sidebar.write("-----")
-    st.sidebar.markdown("### Developer")
+    st.sidebar.write("""
+    If you like this project, <br> then give it a ⭐ on [GitHub](https://github.com/yuvraj97/MLViz)
+    <iframe 
+        src="https://ghbtns.com/github-btn.html?user=yuvraj97&repo=MLViz&type=star&count=true&size=large" 
+        frameborder="0" scrolling="0" width="170" height="30" title="GitHub">
+    </iframe>""", unsafe_allow_html=True)
+
+    st.sidebar.markdown("## Connect")
+    st.sidebar.write("""
+    <iframe 
+        src="https://ghbtns.com/github-btn.html?user=yuvraj97&type=follow&count=true&size=large" 
+        frameborder="0" scrolling="0" width="250" height="30" title="GitHub">
+    </iframe>""", unsafe_allow_html=True)
     st.sidebar.markdown("""
-    LinkedIn: <a rel='noreferrer' target='_blank' href="https://www.linkedin.com/in/yuvraj97/">yuvraj97</a><br>
-    Github: <a rel='noreferrer' target='_blank' href="https://github.com/yuvraj97/">yuvraj97</a><br>
-    Email: <a rel='noreferrer' target='_blank' href="mailto:yuvraj@quantml.org">yuvraj@quantml.org</a><br>
+    [Donate Here if you like this project](http://www.quantml.org/donate)    
+    LinkedIn: [yuvraj97](https://www.linkedin.com/in/yuvraj97/)    
+    Github: [yuvraj97](https://github.com/yuvraj97/)    
+    Email: [yuvraj@quantml.org](mailto:yuvraj@quantml.org)
     """, unsafe_allow_html=True)
