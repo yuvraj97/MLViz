@@ -3,8 +3,8 @@ import streamlit as st
 from plotly.graph_objs import Figure
 from utils.plots import plotly_plot, mesh3d
 
-def run(f, plt, inputs: dict):
 
+def run(f, plt, inputs: dict):
     """
     It will Simulate Linear Regression plot
 
@@ -98,7 +98,7 @@ def run(f, plt, inputs: dict):
                 title="Error Chart"
             )
         )
-        time.sleep(1/4)
+        time.sleep(1 / 4)
 
     if "normalization_params" not in inputs:
 

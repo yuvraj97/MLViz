@@ -3,12 +3,11 @@ from plotly.graph_objs import Figure
 from utils.plots import plotly_plot, surface3D
 
 
-def run(state, f, plt, inputs):
+def run(f, plt, inputs):
 
     """
     It will plot Linear Regression Step by Step
 
-    :param state: dict (current state of the program)
     :param f: function (It will iteratively give us the parameters)
     :param plt: Figure (It contains our data points)
     :param inputs: dict
@@ -20,22 +19,24 @@ def run(state, f, plt, inputs):
 
     n, d = inputs["X"].shape
 
-    if "errors" not in state["main"]["lr"]:
-        state["main"]["lr"]["errors"] = []
-    if "epochs" not in state["main"]["lr"]:
-        state["main"]["lr"]["epochs"] = []
+    if "errors" not in st.session_state["Logistic Regression"]:
+        st.session_state["Logistic Regression"]["errors"] = []
+    if "epochs" not in st.session_state["Logistic Regression"]:
+        st.session_state["Logistic Regression"]["epochs"] = []
 
-    if "steps" not in state["main"]["lr"]:
-        state["main"]["lr"]["steps"] = [(theta, error) for theta, error in f(inputs)]
+    if "steps" not in st.session_state["Logistic Regression"]:
+        st.session_state["Logistic Regression"]["steps"] = [(theta, error) for theta, error in f(inputs)]
 
-    if "step_i" not in state["main"]["lr"]:
-        state["main"]["lr"]["step_i"] = 0
+    if "step_i" not in st.session_state["Logistic Regression"]:
+        st.session_state["Logistic Regression"]["step_i"] = 0
 
     if inputs["step_button"]:
 
-        (theta, error) = state["main"]["lr"]["steps"][state["main"]["lr"]["step_i"]]
+        (theta, error) = st.session_state["Logistic Regression"]["steps"][
+            st.session_state["Logistic Regression"]["step_i"]
+        ]
 
-        epoch = len(state["main"]["lr"]["epochs"]) + 1
+        epoch = len(st.session_state["Logistic Regression"]["epochs"]) + 1
 
         if d == 2:
             min_X, max_X = inputs["X"][:, 0].min(), inputs["X"][:, 0].max()
@@ -87,10 +88,10 @@ def run(state, f, plt, inputs):
             )
             st_plot.plotly_chart(new_fig)
 
-        if state["main"]["lr"]["step_i"] < len(state["main"]["lr"]["steps"]) - 1:
-            state["main"]["lr"]["step_i"] += 1
-            state["main"]["lr"]["errors"].append(error)
-            state["main"]["lr"]["epochs"].append(epoch)
+        if st.session_state["Logistic Regression"]["step_i"] < len(st.session_state["Logistic Regression"]["steps"]) - 1:
+            st.session_state["Logistic Regression"]["step_i"] += 1
+            st.session_state["Logistic Regression"]["errors"].append(error)
+            st.session_state["Logistic Regression"]["epochs"].append(epoch)
 
             st_theta.info(f"""
             **Decision boundary**:    
@@ -112,8 +113,8 @@ def run(state, f, plt, inputs):
 
         st_error.plotly_chart(
             plotly_plot(
-                state["main"]["lr"]["epochs"],
-                state["main"]["lr"]["errors"],
+                st.session_state["Logistic Regression"]["epochs"],
+                st.session_state["Logistic Regression"]["errors"],
                 mode="lines+markers",
                 x_title="epochs",
                 y_title="error",

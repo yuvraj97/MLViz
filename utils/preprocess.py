@@ -1,5 +1,4 @@
 def process_function(s: str):
-
     """
     Here we take a function expression as input then first we validate it
     then we return a lambda function corresponding to that expression
@@ -28,5 +27,6 @@ def process_function(s: str):
     args = sorted(args)
     try:
         return eval(f"lambda {', '.join(args)}: {s}")
-    except:
+    except Exception as e:
+        print(e)
         return False

@@ -67,6 +67,7 @@ def plotly_plot(x=None, y=None, z=None,
         )
     return fig
 
+
 def plot_classification_data(
         features,
         labels,
@@ -75,7 +76,6 @@ def plot_classification_data(
         y_title,
         fig=None,
         z_title=None):
-
     if fig is None:
         fig: Figure = go.Figure()
     else:
@@ -145,12 +145,12 @@ def mesh3d(x, y, z,
     fig.update_layout(showlegend=False if isMobile else True)
     return fig
 
+
 def surface3D(
         x, y, z,
         description: dict,
         fig: Figure = None,
-    ):
-
+):
     if fig is None:
         fig: Figure = go.Figure()
     else:

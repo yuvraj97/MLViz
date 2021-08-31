@@ -163,14 +163,14 @@ def display_raw_code(method):
             st.code(code)
 
 
-def run(state) -> None:
+def run() -> None:
     """
     Here we run the Logistic Regression Simulation
     :return: None
     """
 
-    if "lr" not in state["main"]:
-        state["main"]["lr"] = {}
+    if "Logistic Regression" not in st.session_state:
+        st.session_state["Logistic Regression"] = {}
 
     inputs: Dict[str, Union[str, int, float, tuple, List[float]]] = get_all_inputs()
 
@@ -237,5 +237,4 @@ def run(state) -> None:
     if inputs["sim_method"] == "Simulate" and inputs["sim_button"]:
         simulation.run(method.run, plt, inputs)
     if inputs["sim_method"] == "Manually Increment Steps":
-        simulation.run(state, method.run, plt, inputs)
-
+        simulation.run(method.run, plt, inputs)

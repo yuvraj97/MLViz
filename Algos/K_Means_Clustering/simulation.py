@@ -1,6 +1,7 @@
 import numpy as np
 import time
 
+
 def kMean(K: int,
           data: np.ndarray,
           max_epochs=10,

@@ -52,6 +52,7 @@ def get_nD_classification_data(
             example for n_classes: 2 there will be two classes +ve and -ve
         )
     :param classes_proportions: List[float] (proportion for each class)
+    :param n_features: int (number of features)
     :param n: int (number of data points)
     :param mean: float (mean of Gaussian noise)
     :param std: float (standard deviation of Gaussian noise)

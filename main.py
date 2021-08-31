@@ -1,6 +1,10 @@
 from typing import List
 import streamlit as st
-import SessionState
+
+
+def reset_session():
+    for key in st.session_state.keys():
+        del st.session_state[key]
 
 
 def main():
@@ -8,9 +12,6 @@ def main():
     This is the entry point of our project
     :return: None
     """
-
-    if state["main"] is None:
-        state["main"] = {}
 
     algorithms: List[str] = [
         "Introduction",
@@ -22,15 +23,14 @@ def main():
     st_algo, st_reset = st.beta_columns([9, 1])
 
     if st_reset.button("🔄", help="Reset Variables (Necessary to reset Manually Increment Steps)"):
-        state["main"] = {}
+        reset_session()
 
     algorithm: str = st_algo.selectbox("Algorithms", algorithms, index=0)
 
-    exec(f"from Algos.{algorithm.replace(' ', '_')}.run import run;run(state)")
+    exec(f"from Algos.{algorithm.replace(' ', '_')}.run import run;run()")
 
 
 if __name__ == '__main__':
-    state = SessionState.get_state()
 
     st.set_page_config(layout='centered', initial_sidebar_state='expanded')
     st.sidebar.markdown(
@@ -43,7 +43,8 @@ if __name__ == '__main__':
 
     try:
         main()
-    except:
+    except Exception as e:
+        print(e)
         st.error("Something went wrong!")
 
     st.sidebar.write("-----")

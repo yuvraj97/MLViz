@@ -1,7 +1,7 @@
 import streamlit as st
 
 
-def run(state):
+def run():
 
     st.write("---")
 

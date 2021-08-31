@@ -143,14 +143,14 @@ def display_raw_code(method):
             st.code(code)
 
 
-def run(state) -> None:
+def run() -> None:
     """
     Here we run the Linear Regression Simulation
     :return: None
     """
 
-    if "lr" not in state["main"]:
-        state["main"]["lr"] = {}
+    if "Linear Regression" not in st.session_state:
+        st.session_state["Linear Regression"] = {}
 
     inputs: Dict[str, Union[str, int, float, tuple]] = get_all_inputs()
     f = process_function(inputs["function"])  # a lambda function
@@ -251,7 +251,7 @@ def run(state) -> None:
     if inputs["sim_method"] == "Simulate" and inputs["sim_button"]:
         simulation.run(method.run, plt, inputs)
     if inputs["sim_method"] == "Manually Increment Steps":
-        simulation.run(state, method.run, plt, inputs)
+        simulation.run(method.run, plt, inputs)
 
     st.write("-----")
 

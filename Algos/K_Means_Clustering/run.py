@@ -93,7 +93,7 @@ def get_all_inputs() -> Dict[str, Union[int, float, List[float]]]:
     return d
 
 
-def run(state):
+def run():
 
     inputs: Dict[str, Union[int, float, List[float]]] = get_all_inputs()
 
@@ -121,9 +121,8 @@ def run(state):
     st.write(f"$\\text{{Features}}\\quad \\mathbb{{X}}_{{{n}\\times{d}}}$")
     st.write(df)
 
-    plt: Union[Figure, None] = None
     if inputs["n_features"] in [2, 3]:
-        plt = plot_classification_data(
+        plt: Figure = plot_classification_data(
             X, y, title="",
             x_title="Feature 1", y_title="Feature 2", z_title="Feature 3"
         )

@@ -20,6 +20,7 @@ class Dataset:
                 self.y[round_i * batch_size: (round_i + 1) * batch_size]
             ]
 
+
 def run(X: np.ndarray,
         y: np.ndarray,
         learning_rate: float = 0.01,
