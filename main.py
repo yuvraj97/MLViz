@@ -12,20 +12,6 @@ def main():
     if state["main"] is None:
         state["main"] = {}
 
-    options: List[str] = [
-        "Visualize Algorithms",
-        "Fun Projects"
-    ]
-
-    projects: List[str] = [
-        "Introduction",
-        "Research Paper Summarizer",
-        "Linear Transformation",
-        "n color",
-        "Digits Classification",
-        "Slicing STL"
-    ]
-
     algorithms: List[str] = [
         "Introduction",
         "Linear Regression",
@@ -33,21 +19,14 @@ def main():
         "K Means Clustering"
     ]
 
-    st_options, st_proj_algo, st_reset = st.beta_columns([4.5, 4.5, 1])
+    st_algo, st_reset = st.beta_columns([9, 1])
 
     if st_reset.button("🔄", help="Reset Variables (Necessary to reset Manually Increment Steps)"):
         state["main"] = {}
 
-    option: str = st_options.selectbox("Algos/Projects", options, index=0)
-    if option == "Visualize Algorithms":
-        proj_algo: str = st_proj_algo.selectbox("Algorithms", algorithms, index=0)
-    else:
-        proj_algo: str = st_proj_algo.selectbox("Fun Projects", projects, index=0)
+    algorithm: str = st_algo.selectbox("Algorithms", algorithms, index=0)
 
-    if option == "Visualize Algorithms":
-        exec(f"from Algos.{proj_algo.replace(' ', '_')}.run import run;run(state)")
-    else:
-        exec(f"from Fun_Projects.{proj_algo.replace(' ', '_')}.run import run;run(state)")
+    exec(f"from Algos.{algorithm.replace(' ', '_')}.run import run;run(state)")
 
 
 if __name__ == '__main__':

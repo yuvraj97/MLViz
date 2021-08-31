@@ -1,12 +1,5 @@
-pandas==1.2.4
-matplotlib==3.3.4
-plotly==4.14.3
-streamlit_drawable_canvas==0.8.0
-streamlit==0.82.0
-numpy==1.19.5
-torchvision==0.9.1
-torch==1.8.1
-Pillow==8.2.0
-numpy_stl==2.16.0
-pdfminer
-nltk
+streamlit==0.85.1
+torch==1.9.0
+numpy==1.21.0
+pandas==1.3.1
+plotly==5.3.0
