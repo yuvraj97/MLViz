@@ -155,7 +155,7 @@ def run() -> None:
     inputs: Dict[str, Union[str, int, float, tuple]] = get_all_inputs()
     f = process_function(inputs["function"])  # a lambda function
 
-    if f is False:
+    if f is None:
         st.error("Incorrect format for function")
         return
 
