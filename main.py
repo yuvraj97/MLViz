@@ -1,3 +1,4 @@
+import traceback
 from typing import List
 import streamlit as st
 
@@ -25,7 +26,18 @@ def main():
     if st_reset.button("🔄", help="Reset Variables (Necessary to reset Manually Increment Steps)"):
         reset_session()
 
-    algorithm: str = st_algo.selectbox("Algorithms", algorithms, index=0)
+    if "algorithm" in st.session_state:
+        prev_idx = st.session_state["algorithm"]
+    else:
+        params = st.experimental_get_query_params()
+        prev_idx = algorithms.index(params["algorithm"][0]) if "algorithm" in params else 0
+
+    algorithm: str = st_algo.selectbox("Algorithms", algorithms, index=prev_idx)
+    chosen_idx = algorithms.index(algorithm)
+    if prev_idx != chosen_idx:
+        st.session_state["algorithm"] = chosen_idx
+        st.experimental_rerun()
+    st.experimental_set_query_params(**{"algorithm": algorithm})
 
     exec(f"from Algos.{algorithm.replace(' ', '_')}.run import run;run()")
 
@@ -44,7 +56,7 @@ if __name__ == '__main__':
     try:
         main()
     except Exception as e:
-        print(e)
+        traceback.print_exc()
         st.error("Something went wrong!")
 
     st.sidebar.write("-----")
