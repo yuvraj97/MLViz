@@ -7,8 +7,8 @@ from pandas import DataFrame
 from plotly.graph_objs import Figure
 
 from Algos.K_Means_Clustering.simulation import kMean
-from utils.plots import plot_classification_data
-from utils.utils import get_nD_classification_data
+from Algos.utils.plots import plot_classification_data
+from Algos.utils.utils import get_nD_classification_data
 
 
 def get_all_inputs() -> Dict[str, Union[int, float, List[float]]]:

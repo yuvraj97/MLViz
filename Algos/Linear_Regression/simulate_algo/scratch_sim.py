@@ -1,6 +1,6 @@
 from typing import Union, Dict
 import numpy as np
-from utils.utils import get_MSE_error
+from Algos.utils.utils import get_MSE_error
 
 
 def run(inputs: Dict[str, Union[str, int, float, np.ndarray]]):

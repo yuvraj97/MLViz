@@ -1,7 +1,7 @@
 import time
 import streamlit as st
 from plotly.graph_objs import Figure
-from utils.plots import plotly_plot, mesh3d
+from Algos.utils.plots import plotly_plot, mesh3d
 
 
 def run(f, plt, inputs: dict):
