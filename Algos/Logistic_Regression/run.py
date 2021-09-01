@@ -46,7 +46,7 @@ def get_all_inputs() -> Dict[str, Union[str, int, float, List[float]]]:
         mean: float = float(st_mean.text_input("Mean", "0.0"))
         std: float = float(st_std.text_input("Standard deviation", "1.0"))
 
-    with st.sidebar.beta_expander("Linear Regression Parameters", True):
+    with st.sidebar.beta_expander("Logistic Regression Parameters", True):
 
         st_lr, st_epsilon, st_epochs = st.beta_columns([1, 1, 0.8])
         lr: float = float(st_lr.text_input("Learning Rate", "0.01"))
