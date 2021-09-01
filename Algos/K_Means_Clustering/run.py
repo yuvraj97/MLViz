@@ -17,77 +17,65 @@ def get_all_inputs() -> Dict[str, Union[int, float, List[float]]]:
     :return: Dict[str, Union[str, int, float]]
     """
 
-    seed: int = st.sidebar.number_input("Enter seed (-1 mean seed is disabled)", -1, 1000, 1, 1)
+    with st.sidebar.beta_expander("Generate n dimensional synthetic data", True):
+        st.write("")
+        st_seed, st_n = st.beta_columns([1, 1])
+        seed: int = int(st_seed.text_input("Enter seed (-1 mean seed is disabled)", "1"))
+        n: int = int(st_n.text_input("N (number of training examples)", "100"))
+        st_n_clusters, st_n_features = st.beta_columns([1, 1])
+        n_clusters: int = int(st_n_clusters.text_input("Number of clusters", "2"))
+        n_features: int = int(st_n_features.text_input("Number of features", "2"))
 
-    st.sidebar.write("### Gaussian Noise")
-    st_noise = st.sidebar.empty()
-    st_mean, st_std = st.sidebar.beta_columns([1, 1])
-    mean: float = st_mean.slider("Mean", -100.0, 100.0, 0.0, 10.0)
-    std: float = st_std.slider("Standard deviation", 0.0, 5.0, 1.0, 0.1)
-    st_noise.markdown(f"$\\mathcal{{N}}(\\mu= {mean}, \\sigma^2={std}^2)$")
+        st.write("### Clusters proportions")
+        clusters_proportions = []
+        st_clusters_proportions = [st.beta_columns([1] * 3) for _ in range(n_clusters // 3 + 1)]
 
-    st_n_clusters, st_n_features = st.sidebar.beta_columns([1, 1])
-    n_clusters: int = st_n_clusters.number_input(
-        "Number of Clusters",
-        min_value=2,
-        max_value=100,
-        value=2,
-        step=1)
-
-    n_features: int = st_n_features.number_input(
-        "Number of Features",
-        min_value=2,
-        max_value=100,
-        value=2,
-        step=1)
-
-    st.sidebar.write("### Clusters proportions")
-    clusters_proportions = []
-    st_clusters_proportions = [st.sidebar.beta_columns([1] * 3) for _ in range(n_clusters // 3 + 1)]
-
-    j = 0
-    for j in range(n_clusters // 3):
-        for i in range(3):
+        j = 0
+        for j in range(n_clusters // 3):
+            for i in range(3):
+                clusters_proportions.append(
+                    float(
+                        st_clusters_proportions[j][i].text_input(
+                            f"Cluster: {3 * j + i + 1}",
+                            "{:.3f}".format(1 / n_clusters),
+                            key=f"proportions-{j}-{i}"
+                        )
+                    )
+                )
+        for i in range(n_clusters % 3):
             clusters_proportions.append(
                 float(
-                    st_clusters_proportions[j][i].text_input(
-                        f"Cluster: {3 * j + i + 1}",
-                        "{:.3f}".format(1/n_clusters),
-                        key=f"proportions-{j}-{i}"
+                    st_clusters_proportions[-1][i].text_input(
+                        f"Cluster: {(j + 1) * 3 + i + 1}",
+                        "{:.3f}".format(1 / n_clusters),
+                        key=f"proportions-{-1}-{i}"
                     )
                 )
             )
-    for i in range(n_clusters % 3):
-        clusters_proportions.append(
-            float(
-                st_clusters_proportions[-1][i].text_input(
-                    f"Cluster: {j * 3 + i + 1}",
-                    "{:.3f}".format(1 / n_clusters),
-                    key=f"proportions-{-1}-{i}"
-                )
-            )
-        )
 
-    if not math.isclose(sum(clusters_proportions), 1.0, abs_tol=0.01):
-        st.error("Proportions should sum to $1$")
-        raise ValueError("Algos.Logistic_Regression.run: Proportions should sum to $1$")
+        if not math.isclose(sum(clusters_proportions), 1.0, abs_tol=0.01):
+            st.error("Proportions should sum to $1$")
+            raise ValueError("Algos.Logistic_Regression.run: Proportions should sum to $1$")
 
-    st_n, st_epochs = st.sidebar.beta_columns([1, 1])
-    n: int = st_n.slider("N", 10, 1000, 100, 10)
-    epochs: int = st_epochs.slider("epochs", 1, 100, 50, 10)
-    st_n, st_epochs = st.sidebar.beta_columns([1, 1])
-    st_n.success(f"$N:{n}$")
-    st_epochs.success(f"epochs$:{epochs}$")
+        st_lower_limit, st_upper_limit = st.beta_columns([0.5, 0.5])
+        lower_limit: float = float(st_lower_limit.text_input("Lower Limit", "-10.0"))
+        upper_limit: float = float(st_upper_limit.text_input("Upper Limit", "10.0"))
+
+        st.write("### Gaussian Noise $\\mathcal{N}(\\mu,\\sigma^2)$")
+        st_mean, st_std = st.beta_columns([1, 1])
+        mean: float = float(st_mean.text_input("Mean", "0.0"))
+        std: float = float(st_std.text_input("Standard deviation", "1.0"))
 
     d = {
+        "seed": seed,
+        "n": n,
         "n_clusters": n_clusters,
         "n_features": n_features,
         "clusters_proportions": clusters_proportions,
-        "n": n,
+        "lower_limit": lower_limit,
+        "upper_limit": upper_limit,
         "mean": mean,
         "std": std,
-        "seed": seed,
-        "epochs": epochs,
     }
 
     return d
@@ -110,7 +98,8 @@ def run():
         n=inputs["n"],
         mean=inputs["mean"],
         std=inputs["std"],
-        seed=inputs["seed"]
+        seed=inputs["seed"],
+        coordinates_lim=(inputs["lower_limit"], inputs["upper_limit"])
     )
     n, d = X.shape
 
