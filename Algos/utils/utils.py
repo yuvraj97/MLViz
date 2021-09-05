@@ -43,6 +43,13 @@ def hamburger_correction():
     ul[data-testid=main-menu-list] > div:nth-of-type(2), /* 2nd divider */
     ul[data-testid=main-menu-list] > div:nth-of-type(3) /* 3rd divider */
         {display: none;}
+
+    /* Sidebar */
+    section[data-testid=stSidebar] > div
+    {
+        padding-top: 3.5rem;
+    }
+
     </style>
     """, unsafe_allow_html=True)
 
