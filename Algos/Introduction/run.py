@@ -7,13 +7,14 @@ def run():
 
     intialize(None)
 
-    st.info("""
-    Here you can see **visualization of some ML algorithms**, and some **fun projects**.  
-    You can see the **source code** of each section, and use the **left control panel** to interact with algorithm.
-    """)
-
     st.write("# Machine Learning Algorithms (Visualizations)")
-    st.write("")
+
+    st.markdown("""
+    Here you can see **visualization of some ML algorithms**.  
+    You can see the **source code** of each section, and use the **left control panel** to interact with algorithm.  
+    
+    ---
+    """)
 
     st.success("""
     [$1.$ **Linear Regression:**](https://app.quantml.org/machine-learning/linear-regression/)
