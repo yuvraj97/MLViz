@@ -5,7 +5,7 @@ from pandas import DataFrame
 from plotly.graph_objs import Figure
 import pandas as pd
 from Algos.utils.plots import plot_classification_data
-from Algos.utils.utils import get_nD_classification_data
+from Algos.utils.synthetic_data import get_nD_classification_data
 import math
 
 
