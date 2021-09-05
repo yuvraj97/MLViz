@@ -5,7 +5,7 @@ def intialize(title: str):
     # st.set_page_config(layout='centered', initial_sidebar_state='expanded')
     st.sidebar.markdown(
         f"""
-        <a rel='noreferrer' target='_blank' href="https://www.quantml.org/">
+        <a rel='noreferrer' target='_blank' href="https://app.quantml.org/">
             <img src="https://cdn.quantml.org/img/cover.webp" alt="QuantML" width="100%">
         </a><br><br>""",
         unsafe_allow_html=True
