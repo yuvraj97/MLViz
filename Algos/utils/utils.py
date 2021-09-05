@@ -1,106 +1,89 @@
-import inspect
-from collections import defaultdict
-from typing import List
-import numpy as np
+import streamlit as st
 
 
-def get_nD_regression_data(f,
-                           n=10,
-                           mean=0,
-                           std=1,
-                           coordinates_lim=(-10, 10),
-                           seed=-1):
-    """
-    :param f: function (example: lambda x1, x2: x1 + 2 * x2 + 5)
-    :param n: int (number of data points)
-    :param mean: float (mean of Gaussian noise)
-    :param std: float (standard deviation of Gaussian noise)
-    :param coordinates_lim: Tuple[int, int] (limit of out coordinates)
-    :param seed: int (It specifies the order of random number)
-    :return: np.ndarray (n x d)
-    """
+def intialize(title: str):
+    # st.set_page_config(layout='centered', initial_sidebar_state='expanded')
+    st.sidebar.markdown(
+        f"""
+        <a rel='noreferrer' target='_blank' href="https://app.quantml.org/">
+            <img src="https://cdn.quantml.org/img/cover.webp" alt="QuantML" width="100%">
+        </a><br><br>""",
+        unsafe_allow_html=True
+    )
 
-    if seed != -1:
-        np.random.seed(seed)
-    else:
-        np.random.seed()
+    if title:
+        st_title, st_reset = st.columns([9, 1])
 
-    dim: int = len(inspect.getfullargspec(f).args)
-    X: np.ndarray = np.random.uniform(coordinates_lim[0], coordinates_lim[1], (n, dim))
-    y: np.ndarray = f(*X.T).reshape(n, 1)
-    noise: np.ndarray = np.random.normal(mean, std, (n, 1))
-    return X, y + noise
+        st_title.title(title)
+        if st_reset.button("🔄", help="Reset Variables (Necessary to reset Manually Increment Steps)"):
+            reset_session()
+
+    hamburger_correction()
 
 
-def get_MSE_error(y: np.ndarray, y_pred: np.ndarray):
-    return ((y - y_pred) ** 2).sum() / len(y)
+def hamburger_correction():
+    st.markdown("""
+    <style>
+    /* Set the top padding */
+    .css-hi6a2p {padding-top: 1rem;}
+
+    /* This is to hide Streamlit footer */
+    footer {visibility: hidden;}
+    /*
+    If you did not hide the hamburger menu completely,
+    you can use the following styles to control which items on the menu to hide.
+    */
+    ul[data-testid=main-menu-list] > li:nth-of-type(3), /* Deploy this app */
+    ul[data-testid=main-menu-list] > li:nth-of-type(5), /* Documentation */
+    ul[data-testid=main-menu-list] > li:nth-of-type(6), /* Ask a question */
+    ul[data-testid=main-menu-list] > li:nth-of-type(7), /* Report a bug */
+    ul[data-testid=main-menu-list] > li:nth-of-type(8), /* Streamlit for Teams= */
+    ul[data-testid=main-menu-list] > li:nth-of-type(10), /* About */
+    ul[data-testid=main-menu-list] > div:nth-of-type(1), /* 1st divider */
+    ul[data-testid=main-menu-list] > div:nth-of-type(2), /* 2nd divider */
+    ul[data-testid=main-menu-list] > div:nth-of-type(3) /* 3rd divider */
+        {display: none;}
+
+    /* Sidebar */
+    section[data-testid=stSidebar] > div
+    {
+        padding-top: 3.5rem;
+    }
+
+    </style>
+    """, unsafe_allow_html=True)
 
 
-def get_nD_classification_data(
-        n_classes: int,
-        classes_proportions: List[float],
-        n_features: int,
-        n=100,
-        mean=0,
-        std=1,
-        coordinates_lim=(-10, 10),
-        seed=-1):
+def footer():
+    st.sidebar.write("-----")
+    st.sidebar.write("""
+    If you like this project, <br> then give it a ⭐ on [GitHub](https://github.com/yuvraj97/MLViz)
+    <iframe 
+        src="https://ghbtns.com/github-btn.html?user=yuvraj97&repo=MLViz&type=star&count=true&size=large" 
+        frameborder="0" scrolling="0" width="170" height="30" title="GitHub">
+    </iframe>""", unsafe_allow_html=True)
 
-    """
-    :param n_classes: int (
-            Number of class,
-            example for n_classes: 2 there will be two classes +ve and -ve
-        )
-    :param classes_proportions: List[float] (proportion for each class)
-    :param n_features: int (number of features)
-    :param n: int (number of data points)
-    :param mean: float (mean of Gaussian noise)
-    :param std: float (standard deviation of Gaussian noise)
-    :param coordinates_lim: Tuple[int, int] (limit of out coordinates)
-    :param seed: int (It specifies the order of random number)
-    :return: np.ndarray (n x d)
-    """
+    st.sidebar.markdown("## Connect")
+    st.sidebar.write("""
+    <iframe 
+        src="https://ghbtns.com/github-btn.html?user=yuvraj97&type=follow&count=true&size=large" 
+        frameborder="0" scrolling="0" width="250" height="30" title="GitHub">
+    </iframe>""", unsafe_allow_html=True)
+    st.sidebar.markdown("""
+    [Donate Here if you like this project](http://www.quantml.org/donate)    
+    LinkedIn: [yuvraj97](https://www.linkedin.com/in/yuvraj97/)    
+    Github: [yuvraj97](https://github.com/yuvraj97/)    
+    Email: [yuvraj@quantml.org](mailto:yuvraj@quantml.org)
+    """, unsafe_allow_html=True)
 
-    if seed != -1:
-        np.random.seed(seed)
-    else:
-        np.random.seed()
-
-    n_counts = [int(proportion * n) for proportion in classes_proportions]
-    n = sum(n_counts)
-    l, h = coordinates_lim
-
-    zs = []
-
-    # First let's get the centroids of all classes
-    for class_label in range(n_classes):
-        z_ds = np.random.uniform(low=l, high=h, size=n_features)
-        zs.append(z_ds)
-
-    # Now lt's get coordinated for each dimension
-    zs = np.array(zs).T
-    coordinates, labels = np.zeros((n, n_features)), np.empty(n)
-    for ith_dimension in range(n_features):
-
-        # It will iteratively give coordinates for nth class for ith_dimension
-        for class_label in range(n_classes):
-            coordinates[
-                class_label * n_counts[class_label]: (class_label + 1) * n_counts[class_label], ith_dimension
-            ] = zs[ith_dimension][class_label] + np.random.normal(mean, std, n_counts[class_label])
-
-            labels[
-                class_label * n_counts[class_label]: (class_label + 1) * n_counts[class_label]
-            ] = class_label
-
-    # It will return an array like [0, 1, 2,....., n-1]
-    # np.random.shuffle(idx)
-    return np.array(coordinates), np.array(labels).reshape((n, 1))
+    # with st.sidebar.container():
+    #     st.markdown(
+    #         "![Yuvraj's GitHub stats](https://github-readme-stats.vercel.app/api?username=yuvraj97"
+    #         "&show_icons=true&theme=radical&include_all_commits=true&count_private=true)",
+    #         unsafe_allow_html=True
+    #     )
 
 
-def split_features(features, labels):
-    data = defaultdict(lambda: [])
-    for idx, label in enumerate(labels):
-        data[label.item()].append(features[idx])
-    for label in data:
-        data[label] = np.array(data[label])
-    return data
+def reset_session():
+    for key in st.session_state.keys():
+        del st.session_state[key]

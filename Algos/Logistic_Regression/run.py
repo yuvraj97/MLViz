@@ -5,8 +5,10 @@ from pandas import DataFrame
 from plotly.graph_objs import Figure
 import pandas as pd
 from Algos.utils.plots import plot_classification_data
-from Algos.utils.utils import get_nD_classification_data
+from Algos.utils.synthetic_data import get_nD_classification_data
 import math
+
+from Algos.utils.utils import intialize, footer
 
 
 def get_all_inputs() -> Dict[str, Union[str, int, float, List[float]]]:
@@ -129,6 +131,8 @@ def run() -> None:
     :return: None
     """
 
+    intialize("Logistic Regression")
+
     if "Logistic Regression" not in st.session_state:
         st.session_state["Logistic Regression"] = {}
 
@@ -198,3 +202,5 @@ def run() -> None:
         simulation.run(method.run, plt, inputs)
     if inputs["sim_method"] == "Manually Increment Steps":
         simulation.run(method.run, plt, inputs)
+
+    footer()

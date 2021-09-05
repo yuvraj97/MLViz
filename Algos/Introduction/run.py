@@ -1,25 +1,23 @@
 import streamlit as st
 
+from Algos.utils.utils import intialize, footer
+
 
 def run():
 
-    st.write("---")
+    intialize(None)
 
-    st.markdown(
-        "![Yuvraj's GitHub stats](https://github-readme-stats.vercel.app/api?username=yuvraj97&show_icons=true&theme"
-        "=radical&include_all_commits=true&count_private=true)",
-        unsafe_allow_html=True
-    )
+    st.write("# Machine Learning Algorithms (Visualizations)")
 
-    st.info("""
-    Here you can see **visualization of some ML algorithms**, and some **fun projects**.  
-    You can see the **source code** of each section, and use the **left control panel** to interact with algorithm.
+    st.markdown("""
+    Here you can see **visualization of some ML algorithms**.  
+    You can see the **source code** of each section, and use the **left control panel** to interact with algorithm.  
+    
+    ---
     """)
 
-    st.write("# Algorithms (Visualizations)")
-
     st.success("""
-    **Linear Regression:**
+    [$1.$ **Linear Regression:**](https://app.quantml.org/machine-learning/linear-regression/)
     - **Batch Gradient Descent** (From Scratch / PyTorch)
     - **Mini Batch Gradient Descent** (From Scratch / PyTorch)
     """)
@@ -37,7 +35,7 @@ def run():
         """)
 
     st.success("""
-        **Logistic Regression:**
+        [$2.$ **Logistic Regression:**](https://app.quantml.org/machine-learning/logistic-regression/)
         - **Batch Gradient Ascent ** (From Scratch / PyTorch)
         - **Mini Batch Gradient Descent** (From Scratch / PyTorch)
         """)
@@ -52,7 +50,7 @@ def run():
         """)
 
     st.success("""
-    **K-Means Clustering**
+    [$3.$ **K-Means Clustering**](https://app.quantml.org/machine-learning/k-means-clustering/)
     """)
 
     with st.expander("Read More", False):
@@ -64,3 +62,4 @@ def run():
         Then after clicking on **Begin Clustering !** you can see **K-Means Clustering** in action.
         """)
 
+    footer()
