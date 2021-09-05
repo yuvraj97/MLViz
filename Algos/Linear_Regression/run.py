@@ -10,6 +10,7 @@ import pandas as pd
 from Algos.utils.plots import plotly_plot, mesh3d
 from Algos.utils.preprocess import process_function
 from Algos.utils.synthetic_data import get_nD_regression_data
+from Algos.utils.utils import intialize, footer
 
 
 def get_all_inputs() -> Dict[str, Union[str, int, float]]:
@@ -156,6 +157,8 @@ def run() -> None:
     :return: None
     """
 
+    intialize("Linear Regression")
+
     if "Linear Regression" not in st.session_state:
         st.session_state["Linear Regression"] = {}
 
@@ -289,3 +292,5 @@ def run() -> None:
     st.write("-----")
 
     display_raw_code(inputs["method"])
+
+    footer()

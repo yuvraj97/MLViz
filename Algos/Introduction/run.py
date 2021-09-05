@@ -1,15 +1,11 @@
 import streamlit as st
 
+from Algos.utils.utils import intialize, footer
+
 
 def run():
 
-    st.write("---")
-
-    st.markdown(
-        "![Yuvraj's GitHub stats](https://github-readme-stats.vercel.app/api?username=yuvraj97&show_icons=true&theme"
-        "=radical&include_all_commits=true&count_private=true)",
-        unsafe_allow_html=True
-    )
+    intialize(None)
 
     st.info("""
     Here you can see **visualization of some ML algorithms**, and some **fun projects**.  
@@ -64,3 +60,4 @@ def run():
         Then after clicking on **Begin Clustering !** you can see **K-Means Clustering** in action.
         """)
 
+    footer()
