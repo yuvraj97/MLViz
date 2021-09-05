@@ -12,10 +12,11 @@ def run():
     You can see the **source code** of each section, and use the **left control panel** to interact with algorithm.
     """)
 
-    st.write("# Algorithms (Visualizations)")
+    st.write("# Machine Learning Algorithms (Visualizations)")
+    st.write("")
 
     st.success("""
-    **Linear Regression:**
+    [$1.$ **Linear Regression:**](https://app.quantml.org/machine-learning/linear-regression/)
     - **Batch Gradient Descent** (From Scratch / PyTorch)
     - **Mini Batch Gradient Descent** (From Scratch / PyTorch)
     """)
@@ -33,7 +34,7 @@ def run():
         """)
 
     st.success("""
-        **Logistic Regression:**
+        [$2.$ **Logistic Regression:**](https://app.quantml.org/machine-learning/logistic-regression/)
         - **Batch Gradient Ascent ** (From Scratch / PyTorch)
         - **Mini Batch Gradient Descent** (From Scratch / PyTorch)
         """)
@@ -48,7 +49,7 @@ def run():
         """)
 
     st.success("""
-    **K-Means Clustering**
+    [$3.$ **K-Means Clustering**](https://app.quantml.org/machine-learning/k-means-clustering/)
     """)
 
     with st.expander("Read More", False):
