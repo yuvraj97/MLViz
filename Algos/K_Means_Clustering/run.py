@@ -17,18 +17,18 @@ def get_all_inputs() -> Dict[str, Union[int, float, List[float]]]:
     :return: Dict[str, Union[str, int, float]]
     """
 
-    with st.sidebar.beta_expander("Generate n dimensional synthetic data", True):
+    with st.sidebar.expander("Generate n dimensional synthetic data", True):
         st.write("")
-        st_seed, st_n = st.beta_columns([1, 1])
+        st_seed, st_n = st.columns([1, 1])
         seed: int = int(st_seed.text_input("Enter seed (-1 mean seed is disabled)", "1"))
         n: int = int(st_n.text_input("N (number of training examples)", "100"))
-        st_n_clusters, st_n_features = st.beta_columns([1, 1])
+        st_n_clusters, st_n_features = st.columns([1, 1])
         n_clusters: int = int(st_n_clusters.text_input("Number of clusters", "2"))
         n_features: int = int(st_n_features.text_input("Number of features", "2"))
 
         st.write("### Clusters proportions")
         clusters_proportions = []
-        st_clusters_proportions = [st.beta_columns([1] * 3) for _ in range(n_clusters // 3 + 1)]
+        st_clusters_proportions = [st.columns([1] * 3) for _ in range(n_clusters // 3 + 1)]
 
         j = 0
         for j in range(n_clusters // 3):
@@ -57,12 +57,12 @@ def get_all_inputs() -> Dict[str, Union[int, float, List[float]]]:
             st.error("Proportions should sum to $1$")
             raise ValueError("Algos.Logistic_Regression.run: Proportions should sum to $1$")
 
-        st_lower_limit, st_upper_limit = st.beta_columns([0.5, 0.5])
+        st_lower_limit, st_upper_limit = st.columns([0.5, 0.5])
         lower_limit: float = float(st_lower_limit.text_input("Lower Limit", "-10.0"))
         upper_limit: float = float(st_upper_limit.text_input("Upper Limit", "10.0"))
 
         st.write("### Gaussian Noise $\\mathcal{N}(\\mu,\\sigma^2)$")
-        st_mean, st_std = st.beta_columns([1, 1])
+        st_mean, st_std = st.columns([1, 1])
         mean: float = float(st_mean.text_input("Mean", "0.0"))
         std: float = float(st_std.text_input("Standard deviation", "1.0"))
 
@@ -118,7 +118,7 @@ def run():
         st.plotly_chart(plt)
 
     st.write("# Simulate K-Means Clustering")
-    delay, K = st.beta_columns([1, 1])
+    delay, K = st.columns([1, 1])
     delay = delay.slider("Delay(ms)", 10, 1000, 100, 10)
     K = K.slider("Desired # of clusters",
                  min_value=1,

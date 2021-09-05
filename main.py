@@ -21,7 +21,7 @@ def main():
         "K Means Clustering"
     ]
 
-    st_algo, st_reset = st.beta_columns([9, 1])
+    st_algo, st_reset = st.columns([9, 1])
 
     if st_reset.button("🔄", help="Reset Variables (Necessary to reset Manually Increment Steps)"):
         reset_session()

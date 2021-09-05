@@ -23,21 +23,21 @@ def get_all_inputs() -> Dict[str, Union[str, int, float]]:
         "Mini Batch Gradient Descent"
     ])
 
-    with st.sidebar.beta_expander("Generate n dimensional synthetic data"):
+    with st.sidebar.expander("Generate n dimensional synthetic data"):
         st.write("")
-        st_seed, st_n = st.beta_columns([0.5, 0.5])
+        st_seed, st_n = st.columns([0.5, 0.5])
         seed: int = int(st_seed.text_input("Enter seed (-1 mean seed is disabled)", "0"))
         n: int = int(st_n.text_input("N (number of training examples)", "100"))
 
         st.write("### Features $\\mathbb{X}$")
-        st_lower_limit, st_upper_limit = st.beta_columns([0.5, 0.5])
+        st_lower_limit, st_upper_limit = st.columns([0.5, 0.5])
         lower_limit: float = float(st_lower_limit.text_input("Lower Limit", "-10.0"))
         upper_limit: float = float(st_upper_limit.text_input("Upper Limit", "10.0"))
 
         st.markdown("")
         st.markdown("$\\mathbb{Y} =  h{_\\theta}(\\mathbb{X}) + \\mathcal{N}(\\mu, \\sigma^2)$")
         st.write("### Gaussian Noise")
-        st_mean, st_std = st.beta_columns([1, 1])
+        st_mean, st_std = st.columns([1, 1])
         mean: float = float(st_mean.text_input("Mean", "0.0"))
         std: float = float(st_std.text_input("Standard deviation", "1.0"))
         # st_noise.markdown(f"$\\mathbb{{Y}} =  h{{_\\theta}}(\\mathbb{{X}}) + \\mathcal{{N}}({mean}, {std}^2)$")
@@ -60,9 +60,9 @@ def get_all_inputs() -> Dict[str, Union[str, int, float]]:
             Similarly you can create $n$ dimensional data
             """)
 
-    with st.sidebar.beta_expander("Linear Regression Parameters", True):
+    with st.sidebar.expander("Linear Regression Parameters", True):
 
-        st_lr, st_epsilon, st_epochs = st.beta_columns([1, 1, 0.8])
+        st_lr, st_epsilon, st_epochs = st.columns([1, 1, 0.8])
         lr: float = float(st_lr.text_input("Learning Rate", "0.01"))
         epochs: int = int(st_epochs.text_input("epochs", "50"))
         epsilon: float = float(st_epsilon.text_input("Epsilon", "0.05"))
@@ -109,21 +109,21 @@ def display_raw_code(method):
         code: str = f.read()
         f.close()
 
-        with st.beta_expander("Implementation From Scratch"):
+        with st.expander("Implementation From Scratch"):
             st.code(code)
 
         f: TextIO = open("./Algos/Linear_Regression/code/pytorch_code.py", "r")
         code: str = f.read()
         f.close()
 
-        with st.beta_expander("PyTorch Implementation"):
+        with st.expander("PyTorch Implementation"):
             st.code(code)
 
         f: TextIO = open("./Algos/Linear_Regression/code/pytorch_code_v2.py", "r")
         code: str = f.read()
         f.close()
 
-        with st.beta_expander("PyTorch Implementation using Sequential module"):
+        with st.expander("PyTorch Implementation using Sequential module"):
             st.code(code)
 
     elif method == "Mini Batch Gradient Descent":
@@ -132,14 +132,14 @@ def display_raw_code(method):
         code: str = f.read()
         f.close()
 
-        with st.beta_expander("Implementation from scratch"):
+        with st.expander("Implementation from scratch"):
             st.code(code)
 
         f: TextIO = open("./Algos/Linear_Regression/code/pytorch_code_mini_batch.py", "r")
         code: str = f.read()
         f.close()
 
-        with st.beta_expander("PyTorch Implementation"):
+        with st.expander("PyTorch Implementation"):
             st.code(code)
 
 
@@ -188,7 +188,7 @@ def run() -> None:
     st_incorrect_function = st.empty()
 
     st.write("# Data")
-    st_X, st_y = st.beta_columns([d if d < 4 else 3, 1])
+    st_X, st_y = st.columns([d if d < 4 else 3, 1])
     with st_X:
         df: DataFrame = pd.DataFrame(data=X,
                                      columns=[f"x{i + 1}" for i in range(d)])
