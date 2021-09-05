@@ -18,65 +18,80 @@ def get_all_inputs() -> Dict[str, Union[str, int, float]]:
     :return: Dict[str, Union[str, int, float]]
     """
 
-    method: str = st.selectbox("Which method you want to use", [
+    method: str = st.sidebar.selectbox("Which method you want to use", [
         "Batch Gradient Descent",
         "Mini Batch Gradient Descent"
     ])
 
-    seed: int = st.sidebar.number_input("Enter seed (-1 mean seed is disabled)", -1, 1000, 0, 1)
+    with st.sidebar.beta_expander("Generate n dimensional synthetic data"):
+        st.write("")
+        st_seed, st_n = st.beta_columns([0.5, 0.5])
+        seed: int = int(st_seed.text_input("Enter seed (-1 mean seed is disabled)", "0"))
+        n: int = int(st_n.text_input("N (number of training examples)", "100"))
 
-    st.sidebar.write("### Gaussian Noise")
-    st_noise = st.sidebar.empty()
-    st_mean, st_std = st.sidebar.beta_columns([1, 1])
-    mean: float = st_mean.slider("Mean", -100.0, 100.0, 0.0, 10.0)
-    std: float = st_std.slider("Standard deviation", 0.0, 100.0, 1.0, 1.0)
-    st_noise.markdown(f"$\\mathcal{{N}}(\\mu= {mean}, \\sigma^2={std}^2)$")
+        st.write("### Features $\\mathbb{X}$")
+        st_lower_limit, st_upper_limit = st.beta_columns([0.5, 0.5])
+        lower_limit: float = float(st_lower_limit.text_input("Lower Limit", "-10.0"))
+        upper_limit: float = float(st_upper_limit.text_input("Upper Limit", "10.0"))
 
-    st.sidebar.write("### Linear Regression Parameters")
-    f: str = st.sidebar.text_input("function f(X)", "2*x1 + 1")
-    st_n, st_lr = st.sidebar.beta_columns([1, 1])
+        st.markdown("")
+        st.markdown("$\\mathbb{Y} =  h{_\\theta}(\\mathbb{X}) + \\mathcal{N}(\\mu, \\sigma^2)$")
+        st.write("### Gaussian Noise")
+        st_mean, st_std = st.beta_columns([1, 1])
+        mean: float = float(st_mean.text_input("Mean", "0.0"))
+        std: float = float(st_std.text_input("Standard deviation", "1.0"))
+        # st_noise.markdown(f"$\\mathbb{{Y}} =  h{{_\\theta}}(\\mathbb{{X}}) + \\mathcal{{N}}({mean}, {std}^2)$")
+        # h{_\\theta}(\\mathbb{X}) = \\mathbb{{X}}\\theta + \\theta_0
 
-    # do_normalization = st.sidebar.checkbox("Normalize the Data")
+        st.write("### Underlying truth $h{_\\theta}(\\mathbb{X})$")
+        f: str = st.text_input("h(X)", "2*x1 + 1")
+        st.write("You can also create more complex, multidimensional data")
+        if st.checkbox("See how"):
+            st.success("""
+            Here it support most of the function, like:
+            **sin(x), cos(x), e^(x), log(x), ...**   
+            (If a function is supported by [numpy](https://numpy.org/doc/stable/reference/routines.math.html) you can use it here as well)   
+            You can also create multidimensional data.    
 
-    n: int = st_n.slider("N", 10, 1000, 100, 10)
-    lr: float = st_lr.slider("Learning Rate", 0.0, 0.05, 0.01, 0.005)
-    st_n, st_lr = st.sidebar.beta_columns([1, 1])
-    st_n.success(f"$N:{n}$")
-    st_lr.success(f"$lr:{lr}$")
+            **Examples:**    
+            f(x1) =  x1 + sin(x)  # **1D**    
+            f(x1, x2) = e^(log(x1)) + sin(2$*$pi$*$x2)  # **2D**
 
-    st_epochs, st_epsilon = st.sidebar.beta_columns([1, 1])
-    epochs: int = st_epochs.slider("epochs", 1, 100, 50, 10)
-    epsilon: float = st_epsilon.slider("Epsilon", 0.001, 0.1, 0.05, 0.001)
-    st_epochs, st_epsilon = st.sidebar.beta_columns([1, 1])
-    st_epochs.success(f"epochs$:{epochs}$")
-    st_epsilon.success(f"$\\epsilon:{epsilon}$")
+            Similarly you can create $n$ dimensional data
+            """)
 
-    batch_size = None
-    if method == "Mini Batch Gradient Descent":
-        batch_size = st.sidebar.number_input("Batch size", 1, n, 10, 1)
+    with st.sidebar.beta_expander("Linear Regression Parameters", True):
 
-    st.sidebar.write("-----")
+        st_lr, st_epsilon, st_epochs = st.beta_columns([1, 1, 0.8])
+        lr: float = float(st_lr.text_input("Learning Rate", "0.01"))
+        epochs: int = int(st_epochs.text_input("epochs", "50"))
+        epsilon: float = float(st_epsilon.text_input("Epsilon", "0.05"))
 
-    lr_method: str = st.sidebar.radio("Choose method", ["Implementation From Scratch", "PyTorch Implementation"])
-    sim_method: str = st.sidebar.radio("", ["Simulate", "Manually Increment Steps"], key="Algos-LR-Sim-Step")
+        batch_size = None
+        if method == "Mini Batch Gradient Descent":
+            batch_size = st.number_input("Batch size", 1, n, 10, 1)
 
-    sim_button, step_button = None, None
-    if sim_method == "Simulate":
-        sim_button = st.sidebar.button("Run Simulation")
-    else:
-        step_button = st.sidebar.button("Step")
+        lr_method: str = st.radio("Choose method", ["Implementation From Scratch", "PyTorch Implementation"])
+        sim_method: str = st.radio("", ["Simulate", "Manually Increment Steps"], key="Algos-LR-Sim-Step")
+
+        sim_button, step_button = None, None
+        if sim_method == "Simulate":
+            sim_button = st.button("Run Simulation")
+        else:
+            step_button = st.button("Step")
 
     d = {
         "method": method,
-        "function": f,
-        # "do_normalization": do_normalization,
+        "seed": seed,
         "n": n,
+        "lower_limit": lower_limit,
+        "upper_limit": upper_limit,
         "mean": mean,
         "std": std,
-        "seed": seed,
-        "epochs": epochs,
+        "function": f,
         "lr": lr,
         "epsilon": epsilon,
+        "epochs": epochs,
         "batch_size": batch_size,
         "lr_method": lr_method,
         "sim_method": sim_method,
@@ -85,21 +100,6 @@ def get_all_inputs() -> Dict[str, Union[str, int, float]]:
     }
 
     return d
-
-
-def sidebar_footer():
-    st.sidebar.write("-----")
-    with st.sidebar.beta_expander("How to get (n) dimensional data"):
-        st.write(f"""
-        To get $n$ dimensional data just add more features in the functions,    
-        Example:    
-        (1-D data) $2*x1 + 5$     
-        (2-D data) $x1 ^\\wedge 2 + x2 + 3$ (this will yield in non-linear data)     
-        (3-D data) $x1 + x2 + x3 + 3$      
-        (4-D data) $x1 + x2 + x3 + x4 + 3$     
-        and so on ...
-
-        """)
 
 
 def display_raw_code(method):
@@ -143,6 +143,13 @@ def display_raw_code(method):
             st.code(code)
 
 
+def sessionize_inputs(inputs):
+    inputs_no_button = {key: inputs[key] for key in inputs if "button" not in key}
+    if "inputs" not in st.session_state["Linear Regression"] or \
+            st.session_state["Linear Regression"]["inputs"] != inputs_no_button:
+        st.session_state["Linear Regression"] = {"inputs": inputs_no_button}
+
+
 def run() -> None:
     """
     Here we run the Linear Regression Simulation
@@ -153,6 +160,7 @@ def run() -> None:
         st.session_state["Linear Regression"] = {}
 
     inputs: Dict[str, Union[str, int, float, tuple]] = get_all_inputs()
+    sessionize_inputs(inputs)
     f = process_function(inputs["function"])  # a lambda function
 
     if f is None:
@@ -167,8 +175,17 @@ def run() -> None:
 
     X: ndarray
     y: ndarray
-    X, y = get_nD_regression_data(f, n=inputs["n"], mean=inputs["mean"], std=inputs["std"], seed=inputs["seed"])
+    X, y = get_nD_regression_data(
+        f,
+        n=inputs["n"],
+        mean=inputs["mean"],
+        std=inputs["std"],
+        seed=inputs["seed"],
+        coordinates_lim=[inputs["lower_limit"], inputs["upper_limit"]]
+    )
+
     n, d = X.shape
+    st_incorrect_function = st.empty()
 
     st.write("# Data")
     st_X, st_y = st.beta_columns([d if d < 4 else 3, 1])
@@ -181,12 +198,28 @@ def run() -> None:
 
         # Normalization
         if st.checkbox("Normalize the Data", True):
-            norm_mean, norm_std = y.mean(), y.std()
+            norm_mean, norm_std = np.nanmean(y), np.nanstd(y)
             inputs["normalization_params"] = (norm_mean, norm_std)
             y = (y - norm_mean) / norm_std
 
         st.write(df)
+
     with st_y:
+        y_isnan = np.isnan(y).reshape(np.prod(y.shape))
+        if any(y_isnan):
+            st_incorrect_function.error(f"""
+            The function provided might be is mathematically incorrect.    
+            It is failing for some values of $\\mathbb{{X}}$'s
+            """)
+            df: DataFrame = pd.DataFrame(data=X[y_isnan],
+                                         index=[i for i, _ in enumerate(y_isnan) if _],
+                                         columns=[f"x{i + 1}" for i in range(d)])
+            df.index += 1
+            st.write("$\\text{Features}\\quad \\mathbb{X}$")
+            st.write("Where function $h{_\\theta}(\\mathbb{X})$ is failing")
+            st.write(df)
+            return
+
         if "normalization_params" not in inputs:
             df: DataFrame = pd.DataFrame(data=y, columns=["y"])
         else:
@@ -256,5 +289,3 @@ def run() -> None:
     st.write("-----")
 
     display_raw_code(inputs["method"])
-
-    sidebar_footer()
