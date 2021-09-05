@@ -30,8 +30,6 @@ ADD ./Algos/Chapter-ID /work
 RUN find /work -name '*.py' | xargs sed -i 's/Algos.utils/base.utils/g'
 RUN find /work -name '*.py' | xargs sed -i 's/Algos.Chapter-ID.//g'
 
-RUN ls -a
-
 ENTRYPOINT ["streamlit", "run"]
 
 CMD ["Chapter-Name.py"]
