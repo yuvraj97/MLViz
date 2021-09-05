@@ -24,7 +24,7 @@ def run():
     - **Mini Batch Gradient Descent** (From Scratch / PyTorch)
     """)
 
-    with st.beta_expander("Read More", False):
+    with st.expander("Read More", False):
         st.write("""
         Here you can create synthetic (random) date, you can control the randomness of the data.   
         Using Left control panel, like **seed**, **Gaussian Noise**, you can create **n-dimensional** data.  
@@ -42,7 +42,7 @@ def run():
         - **Mini Batch Gradient Descent** (From Scratch / PyTorch)
         """)
 
-    with st.beta_expander("Read More", False):
+    with st.expander("Read More", False):
         st.write("""
         Here you can create synthetic (random) date, you can control the randomness of the data.   
         Using Left control panel, like **seed**, **Gaussian Noise**, you can create **n-dimensional** data.  
@@ -55,7 +55,7 @@ def run():
     **K-Means Clustering**
     """)
 
-    with st.beta_expander("Read More", False):
+    with st.expander("Read More", False):
         st.write("""
         Here you can create synthetic (random) date, you can control the randomness of the data.   
         Using Left control panel, like **seed**, **Gaussian Noise**, you can create **n-dimensional** data.  

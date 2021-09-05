@@ -20,18 +20,18 @@ def get_all_inputs() -> Dict[str, Union[str, int, float, List[float]]]:
         "Mini Batch Gradient Ascent"
     ])
 
-    with st.sidebar.beta_expander("Generate n dimensional synthetic data"):
+    with st.sidebar.expander("Generate n dimensional synthetic data"):
         st.write("")
-        st_seed, st_n = st.beta_columns([1, 1])
+        st_seed, st_n = st.columns([1, 1])
         seed: int = int(st_seed.text_input("Enter seed (-1 mean seed is disabled)", "0"))
         n: int = int(st_n.text_input("N (number of training examples)", "100"))
         n_features: int = int(st.text_input("Number of features", "2"))
-        st_lower_limit, st_upper_limit = st.beta_columns([0.5, 0.5])
+        st_lower_limit, st_upper_limit = st.columns([0.5, 0.5])
         lower_limit: float = float(st_lower_limit.text_input("Lower Limit", "-10.0"))
         upper_limit: float = float(st_upper_limit.text_input("Upper Limit", "10.0"))
 
         st.write("### Classes proportions")
-        st_prop = st.beta_columns([1, 1])
+        st_prop = st.columns([1, 1])
         classes_proportions = [
             float(st_prop[0].text_input(f"Class: 1", "0.5")),
             float(st_prop[1].text_input(f"Class: 2", "0.5"))
@@ -42,13 +42,13 @@ def get_all_inputs() -> Dict[str, Union[str, int, float, List[float]]]:
             raise ValueError("Algos.Logistic_Regression.run: Proportions should sum to $1$")
 
         st.write("### Gaussian Noise $\\mathcal{N}(\\mu,\\sigma^2)$")
-        st_mean, st_std = st.beta_columns([1, 1])
+        st_mean, st_std = st.columns([1, 1])
         mean: float = float(st_mean.text_input("Mean", "0.0"))
         std: float = float(st_std.text_input("Standard deviation", "1.0"))
 
-    with st.sidebar.beta_expander("Logistic Regression Parameters", True):
+    with st.sidebar.expander("Logistic Regression Parameters", True):
 
-        st_lr, st_epsilon, st_epochs = st.beta_columns([1, 1, 0.8])
+        st_lr, st_epsilon, st_epochs = st.columns([1, 1, 0.8])
         lr: float = float(st_lr.text_input("Learning Rate", "0.01"))
         epochs: int = int(st_epochs.text_input("epochs", "50"))
         epsilon: float = float(st_epsilon.text_input("Epsilon", "0.05"))
@@ -97,14 +97,14 @@ def display_raw_code(method):
         code: str = f.read()
         f.close()
 
-        with st.beta_expander("Implementation From Scratch (Gradient Ascent)"):
+        with st.expander("Implementation From Scratch (Gradient Ascent)"):
             st.code(code)
 
         f: TextIO = open("./Algos/Logistic_Regression/code/pytorch_code.py", "r")
         code: str = f.read()
         f.close()
 
-        with st.beta_expander("PyTorch Implementation (Gradient Descent)"):
+        with st.expander("PyTorch Implementation (Gradient Descent)"):
             st.code(code)
 
     if method == "Mini Batch Gradient Ascent":
@@ -112,14 +112,14 @@ def display_raw_code(method):
         code: str = f.read()
         f.close()
 
-        with st.beta_expander("Implementation From Scratch (Gradient Ascent)"):
+        with st.expander("Implementation From Scratch (Gradient Ascent)"):
             st.code(code)
 
         f: TextIO = open("./Algos/Logistic_Regression/code/pytorch_code_mini_batch.py", "r")
         code: str = f.read()
         f.close()
 
-        with st.beta_expander("PyTorch Implementation (Gradient Descent)"):
+        with st.expander("PyTorch Implementation (Gradient Descent)"):
             st.code(code)
 
 
@@ -152,7 +152,7 @@ def run() -> None:
     n, d = X.shape
 
     st.write("# Data")
-    st_X, st_y = st.beta_columns([d if d < 4 else 3, 1])
+    st_X, st_y = st.columns([d if d < 4 else 3, 1])
     with st_X:
         df: DataFrame = pd.DataFrame(data=X,
                                      columns=[f"x{i + 1}" for i in range(d)])
