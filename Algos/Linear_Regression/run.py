@@ -65,8 +65,12 @@ def get_all_inputs() -> Dict[str, Union[str, int, float]]:
 
         st_lr, st_epsilon, st_epochs = st.columns([1, 1, 0.8])
         lr: float = float(st_lr.text_input("Learning Rate", "0.01"))
-        epochs: int = int(st_epochs.text_input("epochs", "50"))
+        epochs: int = int(st_epochs.text_input("epochs", "10"))
         epsilon: float = float(st_epsilon.text_input("Epsilon", "0.05"))
+
+        if epochs > 30:
+            st.error(f"Epochs shall be in between $0$ and $30$")
+            return
 
         batch_size = None
         if method == "Mini Batch Gradient Descent":
