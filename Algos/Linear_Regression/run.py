@@ -9,6 +9,7 @@ from plotly.graph_objs import Figure
 import pandas as pd
 
 from Algos.Linear_Regression.utils import plot_predition
+from Algos.Linear_Regression.utils import plot_predition, plot_data
 from Algos.utils.plots import plotly_plot, mesh3d
 from Algos.utils.preprocess import process_function
 from Algos.utils.synthetic_data import get_nD_regression_data, display_train_test_data
@@ -237,34 +238,9 @@ def run() -> None:
         display_train_test_data(test_X, test_y, None, "# Test Data")
 
     n, d = X.shape
-    plt: Union[Figure, None]
-    if d == 1:
-        plt = plotly_plot(X.flatten(), y.flatten(), x_title="Feature", y_title="Output", title="Data")
-        st.plotly_chart(plt)
 
-    elif d == 2:
-        description = {
-            "title": {
-                "main": "Data",
-                "x": "Feature 1",
-                "y": "Feature 2",
-                "z": "Output"
-            },
-            "label": {
-                "main": "Data",
-            },
-            "hovertemplate": "(x1, x2): (%{x}, %{y})<br>f(%{x}, %{y}): %{z}",
-            "color": "green"
-        }
-
-        plt = mesh3d(X[:, 0], X[:, 1], y.flatten(),
-                     description,
-                     opacity=0.8)
-        st.plotly_chart(plt)
-
-    else:
-        plt = None
-
+    plt: Union[Figure, None] = plot_data(X, y)
+    st.plotly_chart(plt)
     # st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
 
     st.warning("All controls are in left control panel")
