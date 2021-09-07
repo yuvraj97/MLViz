@@ -7,6 +7,8 @@ from numpy import ndarray
 from pandas import DataFrame
 from plotly.graph_objs import Figure
 import pandas as pd
+
+from Algos.Linear_Regression.utils import plot_predition
 from Algos.utils.plots import plotly_plot, mesh3d
 from Algos.utils.preprocess import process_function
 from Algos.utils.synthetic_data import get_nD_regression_data, display_train_test_data
@@ -270,6 +272,13 @@ def run() -> None:
     if inputs["simulate"]:
         inputs["X"], inputs["y"] = X, y
         run_simulation(inputs, plt)
+    else:
+        from Algos.Linear_Regression.code.scratch_code import run
+        theta = run(
+            np.hstack((np.ones((n, 1)), X)), y,
+            learning_rate=0.01, epsilon=0.05, epochs=10
+        )
+        st.plotly_chart(plot_predition(X, theta, plt))
 
     st.write("-----")
     display_raw_code(inputs["method"])
