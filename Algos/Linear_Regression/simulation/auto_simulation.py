@@ -131,3 +131,5 @@ def run(f, plt, inputs: dict):
 
         st_theta.success(s)
         st_theta_completed.success(s)
+
+    return theta

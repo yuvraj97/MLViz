@@ -148,3 +148,5 @@ def run(f, plt, inputs):
                 title="Error Chart"
             )
         )
+
+        return theta
