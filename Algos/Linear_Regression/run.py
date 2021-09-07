@@ -193,6 +193,30 @@ def run_simulation(inputs, plt):
         return simulation.run(method.run, plt, inputs)
 
 
+def run_scratch(inputs, plt):
+
+    X, y = inputs["X"], inputs["y"]
+    n, d = X.shape
+
+    if inputs["lr_method"] == "Implementation From Scratch":
+        if inputs["method"] == "Batch Gradient Descent":
+            import Algos.Linear_Regression.code.scratch_code as method
+        else:
+            import Algos.Linear_Regression.code.scratch_mini_batch_code as method
+    else:
+        if inputs["method"] == "Batch Gradient Descent":
+            import Algos.Linear_Regression.code.pytorch_code as method
+        else:
+            import Algos.Linear_Regression.code.pytorch_code_mini_batch as method
+
+    theta = method.run(
+        np.hstack((np.ones((n, 1)), X)), y,
+        learning_rate=inputs["lr"], epsilon=inputs["epsilon"], epochs=inputs["epochs"]
+    )
+    st.plotly_chart(plot_predition(X, theta, plt))
+    return theta
+
+
 def run() -> None:
     """
     Here we run the Linear Regression Simulation
@@ -243,18 +267,11 @@ def run() -> None:
     st.plotly_chart(plt)
     # st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
 
-    st.warning("All controls are in left control panel")
-
+    inputs["X"], inputs["y"] = X, y
     if inputs["simulate"]:
-        inputs["X"], inputs["y"] = X, y
-        run_simulation(inputs, plt)
+        theta = run_simulation(inputs, plt)
     else:
-        from Algos.Linear_Regression.code.scratch_code import run
-        theta = run(
-            np.hstack((np.ones((n, 1)), X)), y,
-            learning_rate=0.01, epsilon=0.05, epochs=10
-        )
-        st.plotly_chart(plot_predition(X, theta, plt))
+        theta = run_scratch(inputs, plt)
 
     st.write("-----")
     display_raw_code(inputs["method"])
