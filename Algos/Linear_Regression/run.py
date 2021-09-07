@@ -199,54 +199,15 @@ def run() -> None:
         coordinates_lim=[inputs["lower_limit"], inputs["upper_limit"]]
     )
 
+    n_train = int(len(X) * inputs["training_proportion"])
+    test_X,  test_y  = X[n_train:], y[n_train:]
+    X, y = X[:n_train], y[:n_train]
+    display_train_test_data(X, y, inputs, "# Training Data")
+
+    with st.expander("Test Data"):
+        display_train_test_data(test_X, test_y, None, "# Test Data")
+
     n, d = X.shape
-    st_incorrect_function = st.empty()
-
-    st.write("# Data")
-    st_X, st_y = st.columns([d if d < 4 else 3, 1])
-    with st_X:
-        df: DataFrame = pd.DataFrame(data=X,
-                                     columns=[f"x{i + 1}" for i in range(d)])
-        df.index += 1
-        st.write(f"$\\text{{Features}}\\quad \\mathbb{{X}}_{{{n}\\times{d}}}$")
-        # st.write("$\\quad$")
-
-        # Normalization
-        if st.checkbox("Normalize the Data", True):
-            norm_mean, norm_std = np.nanmean(y), np.nanstd(y)
-            inputs["normalization_params"] = (norm_mean, norm_std)
-            y = (y - norm_mean) / norm_std
-
-        st.write(df)
-
-    with st_y:
-        y_isnan = np.isnan(y).reshape(np.prod(y.shape))
-        if any(y_isnan):
-            st_incorrect_function.error(f"""
-            The function provided might be is mathematically incorrect.    
-            It is failing for some values of $\\mathbb{{X}}$'s
-            """)
-            df: DataFrame = pd.DataFrame(data=X[y_isnan],
-                                         index=[i for i, _ in enumerate(y_isnan) if _],
-                                         columns=[f"x{i + 1}" for i in range(d)])
-            df.index += 1
-            st.write("$\\text{Features}\\quad \\mathbb{X}$")
-            st.write("Where function $h{_\\theta}(\\mathbb{X})$ is failing")
-            st.write(df)
-            return
-
-        if "normalization_params" not in inputs:
-            df: DataFrame = pd.DataFrame(data=y, columns=["y"])
-        else:
-            (norm_mean, norm_std) = inputs["normalization_params"]
-            __y = np.hstack((y * norm_std + norm_mean, y))
-            df: DataFrame = pd.DataFrame(data=__y, columns=["y", "y_normalize"])
-
-        df.index += 1
-        st.write(f"$y={inputs['function']}$")
-        st.write(f"$+ \\mathcal{{N}}({inputs['mean']}, {inputs['std']}^2)$")
-        st.write(df)
-
     plt: Union[Figure, None]
     if d == 1:
         plt = plotly_plot(X.flatten(), y.flatten(), x_title="Feature", y_title="Output", title="Data")
