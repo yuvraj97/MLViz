@@ -199,18 +199,20 @@ def run_scratch(inputs, plt):
     n, d = X.shape
 
     if inputs["lr_method"] == "Implementation From Scratch":
+        is_scratch = True
         if inputs["method"] == "Batch Gradient Descent":
             import Algos.Linear_Regression.code.scratch_code as method
         else:
             import Algos.Linear_Regression.code.scratch_mini_batch_code as method
     else:
+        is_scratch = False
         if inputs["method"] == "Batch Gradient Descent":
             import Algos.Linear_Regression.code.pytorch_code as method
         else:
             import Algos.Linear_Regression.code.pytorch_code_mini_batch as method
 
     theta = method.run(
-        np.hstack((np.ones((n, 1)), X)), y,
+        np.hstack((np.ones((n, 1)), X)) if is_scratch else X, y,
         learning_rate=inputs["lr"], epsilon=inputs["epsilon"], epochs=inputs["epochs"]
     )
     st.plotly_chart(plot_predition(X, theta, plt))
