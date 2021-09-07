@@ -10,18 +10,10 @@ import pandas as pd
 
 from Algos.Linear_Regression.utils import plot_predition, plot_data
 from Algos.utils.plots import plotly_plot, mesh3d
+from Algos.Linear_Regression.utils import plot_predition, plot_data, get_all_inputs, sessionize_inputs, display_raw_code
 from Algos.utils.preprocess import process_function
 from Algos.utils.synthetic_data import get_nD_regression_data, display_train_test_data
 from Algos.utils.utils import intialize, footer
-
-
-
-
-def sessionize_inputs(inputs):
-    inputs_no_button = {key: inputs[key] for key in inputs if "button" not in key}
-    if "inputs" not in st.session_state["Linear Regression"] or \
-            st.session_state["Linear Regression"]["inputs"] != inputs_no_button:
-        st.session_state["Linear Regression"] = {"inputs": inputs_no_button}
 
 
 def run_simulation(inputs, plt):
@@ -110,7 +102,7 @@ def run() -> None:
     )
 
     n_train = int(len(X) * inputs["training_proportion"])
-    test_X,  test_y  = X[n_train:], y[n_train:]
+    test_X, test_y = X[n_train:], y[n_train:]
     X, y = X[:n_train], y[:n_train]
     display_train_test_data(X, y, inputs, "# Training Data")
 

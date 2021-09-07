@@ -149,6 +149,15 @@ def display_raw_code(method):
 
         with st.expander("PyTorch Implementation"):
             st.code(code)
+
+
+def sessionize_inputs(inputs):
+    inputs_no_button = {key: inputs[key] for key in inputs if "button" not in key}
+    if "inputs" not in st.session_state["Linear Regression"] or \
+            st.session_state["Linear Regression"]["inputs"] != inputs_no_button:
+        st.session_state["Linear Regression"] = {"inputs": inputs_no_button}
+
+
 def plot_predition(X, theta, fig):
 
     n, d = X.shape
