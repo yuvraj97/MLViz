@@ -85,10 +85,11 @@ def get_all_inputs() -> Dict[str, Union[str, int, float]]:
         if method == "Mini Batch Gradient Descent":
             batch_size = st.number_input("Batch size", 1, n, 10, 1)
 
-        lr_method, sim_method, sim_button, step_button = None, None, None, None
+        lr_method: str = st.radio("Choose method", ["Implementation From Scratch", "PyTorch Implementation"])
+
+        sim_method, sim_button, step_button = None, None, None
         simulate = st.checkbox("Use Animation", True)
         if simulate:
-            lr_method: str = st.radio("Choose method", ["Implementation From Scratch", "PyTorch Implementation"])
             sim_method: str = st.radio("", ["Simulate", "Manually Increment Steps"], key="Algos-LR-Sim-Step")
 
             sim_button, step_button = None, None
