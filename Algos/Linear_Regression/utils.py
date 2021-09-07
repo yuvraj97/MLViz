@@ -108,6 +108,47 @@ def get_all_inputs() -> Dict[str, Union[str, int, float]]:
     }
 
     return d
+
+
+def display_raw_code(method):
+
+    if method == "Batch Gradient Descent":
+        f: TextIO = open("./Algos/Linear_Regression/code/scratch_code.py", "r")
+        code: str = f.read()
+        f.close()
+
+        with st.expander("Implementation From Scratch"):
+            st.code(code)
+
+        f: TextIO = open("./Algos/Linear_Regression/code/pytorch_code.py", "r")
+        code: str = f.read()
+        f.close()
+
+        with st.expander("PyTorch Implementation"):
+            st.code(code)
+
+        f: TextIO = open("./Algos/Linear_Regression/code/pytorch_code_v2.py", "r")
+        code: str = f.read()
+        f.close()
+
+        with st.expander("PyTorch Implementation using Sequential module"):
+            st.code(code)
+
+    elif method == "Mini Batch Gradient Descent":
+
+        f: TextIO = open("./Algos/Linear_Regression/code/scratch_mini_batch_code.py", "r")
+        code: str = f.read()
+        f.close()
+
+        with st.expander("Implementation from scratch"):
+            st.code(code)
+
+        f: TextIO = open("./Algos/Linear_Regression/code/pytorch_code_mini_batch.py", "r")
+        code: str = f.read()
+        f.close()
+
+        with st.expander("PyTorch Implementation"):
+            st.code(code)
 def plot_predition(X, theta, fig):
 
     n, d = X.shape

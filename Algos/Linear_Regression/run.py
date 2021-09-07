@@ -17,47 +17,6 @@ from Algos.utils.utils import intialize, footer
 
 
 
-def display_raw_code(method):
-
-    if method == "Batch Gradient Descent":
-        f: TextIO = open("./Algos/Linear_Regression/code/scratch_code.py", "r")
-        code: str = f.read()
-        f.close()
-
-        with st.expander("Implementation From Scratch"):
-            st.code(code)
-
-        f: TextIO = open("./Algos/Linear_Regression/code/pytorch_code.py", "r")
-        code: str = f.read()
-        f.close()
-
-        with st.expander("PyTorch Implementation"):
-            st.code(code)
-
-        f: TextIO = open("./Algos/Linear_Regression/code/pytorch_code_v2.py", "r")
-        code: str = f.read()
-        f.close()
-
-        with st.expander("PyTorch Implementation using Sequential module"):
-            st.code(code)
-
-    elif method == "Mini Batch Gradient Descent":
-
-        f: TextIO = open("./Algos/Linear_Regression/code/scratch_mini_batch_code.py", "r")
-        code: str = f.read()
-        f.close()
-
-        with st.expander("Implementation from scratch"):
-            st.code(code)
-
-        f: TextIO = open("./Algos/Linear_Regression/code/pytorch_code_mini_batch.py", "r")
-        code: str = f.read()
-        f.close()
-
-        with st.expander("PyTorch Implementation"):
-            st.code(code)
-
-
 def sessionize_inputs(inputs):
     inputs_no_button = {key: inputs[key] for key in inputs if "button" not in key}
     if "inputs" not in st.session_state["Linear Regression"] or \
