@@ -9,7 +9,7 @@ from plotly.graph_objs import Figure
 import pandas as pd
 from Algos.utils.plots import plotly_plot, mesh3d
 from Algos.utils.preprocess import process_function
-from Algos.utils.synthetic_data import get_nD_regression_data
+from Algos.utils.synthetic_data import get_nD_regression_data, display_train_test_data
 from Algos.utils.utils import intialize, footer
 
 
@@ -61,6 +61,13 @@ def get_all_inputs() -> Dict[str, Union[str, int, float]]:
             Similarly you can create $n$ dimensional data
             """)
 
+    with st.sidebar.expander("Training Parameters"):
+        training_proportion = float(st.text_input("Training data (%)", "80"))
+        if training_proportion <= 0 or training_proportion >= 100:
+            st.error(f"Training data (%) should be in between $0$ and $100$")
+            return
+        training_proportion /= 100
+
     with st.sidebar.expander("Linear Regression Parameters", True):
 
         st_lr, st_epsilon, st_epochs = st.columns([1, 1, 0.8])
@@ -94,6 +101,7 @@ def get_all_inputs() -> Dict[str, Union[str, int, float]]:
         "mean": mean,
         "std": std,
         "function": f,
+        "training_proportion": training_proportion,
         "lr": lr,
         "epsilon": epsilon,
         "epochs": epochs,
