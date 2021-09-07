@@ -83,14 +83,17 @@ def get_all_inputs() -> Dict[str, Union[str, int, float]]:
         if method == "Mini Batch Gradient Descent":
             batch_size = st.number_input("Batch size", 1, n, 10, 1)
 
-        lr_method: str = st.radio("Choose method", ["Implementation From Scratch", "PyTorch Implementation"])
-        sim_method: str = st.radio("", ["Simulate", "Manually Increment Steps"], key="Algos-LR-Sim-Step")
+        lr_method, sim_method, sim_button, step_button = None, None, None, None
+        simulate = st.checkbox("Use Animation", True)
+        if simulate:
+            lr_method: str = st.radio("Choose method", ["Implementation From Scratch", "PyTorch Implementation"])
+            sim_method: str = st.radio("", ["Simulate", "Manually Increment Steps"], key="Algos-LR-Sim-Step")
 
-        sim_button, step_button = None, None
-        if sim_method == "Simulate":
-            sim_button = st.button("Run Simulation")
-        else:
-            step_button = st.button("Step")
+            sim_button, step_button = None, None
+            if sim_method == "Simulate":
+                sim_button = st.button("Run Simulation")
+            else:
+                step_button = st.button("Step")
 
     d = {
         "method": method,
@@ -106,6 +109,7 @@ def get_all_inputs() -> Dict[str, Union[str, int, float]]:
         "epsilon": epsilon,
         "epochs": epochs,
         "batch_size": batch_size,
+        "simulate": simulate,
         "lr_method": lr_method,
         "sim_method": sim_method,
         "sim_button": sim_button,
@@ -161,6 +165,29 @@ def sessionize_inputs(inputs):
     if "inputs" not in st.session_state["Linear Regression"] or \
             st.session_state["Linear Regression"]["inputs"] != inputs_no_button:
         st.session_state["Linear Regression"] = {"inputs": inputs_no_button}
+
+
+def run_simulation(inputs, plt):
+    if inputs["lr_method"] == "Implementation From Scratch":
+        if inputs["method"] == "Batch Gradient Descent":
+            import Algos.Linear_Regression.simulate_algo.scratch_sim as method
+        else:
+            import Algos.Linear_Regression.simulate_algo.scratch_sim_mini_batch as method
+    else:
+        if inputs["method"] == "Batch Gradient Descent":
+            import Algos.Linear_Regression.simulate_algo.pytorch_sim as method
+        else:
+            import Algos.Linear_Regression.simulate_algo.pytorch_sim_mini_batch as method
+
+    if inputs["sim_method"] == "Simulate":
+        import Algos.Linear_Regression.simulation.auto_simulation as simulation
+    else:
+        import Algos.Linear_Regression.simulation.iterative_simulation as simulation
+
+    if inputs["sim_method"] == "Simulate" and inputs["sim_button"]:
+        return simulation.run(method.run, plt, inputs)
+    if inputs["sim_method"] == "Manually Increment Steps":
+        return simulation.run(method.run, plt, inputs)
 
 
 def run() -> None:
@@ -240,30 +267,10 @@ def run() -> None:
 
     st.warning("All controls are in left control panel")
 
-    inputs["X"], inputs["y"] = X, y
-    if inputs["lr_method"] == "Implementation From Scratch":
-        if inputs["method"] == "Batch Gradient Descent":
-            import Algos.Linear_Regression.simulate_algo.scratch_sim as method
-        else:
-            import Algos.Linear_Regression.simulate_algo.scratch_sim_mini_batch as method
-    else:
-        if inputs["method"] == "Batch Gradient Descent":
-            import Algos.Linear_Regression.simulate_algo.pytorch_sim as method
-        else:
-            import Algos.Linear_Regression.simulate_algo.pytorch_sim_mini_batch as method
-
-    if inputs["sim_method"] == "Simulate":
-        import Algos.Linear_Regression.simulation.auto_simulation as simulation
-    else:
-        import Algos.Linear_Regression.simulation.iterative_simulation as simulation
-
-    if inputs["sim_method"] == "Simulate" and inputs["sim_button"]:
-        simulation.run(method.run, plt, inputs)
-    if inputs["sim_method"] == "Manually Increment Steps":
-        simulation.run(method.run, plt, inputs)
+    if inputs["simulate"]:
+        inputs["X"], inputs["y"] = X, y
+        run_simulation(inputs, plt)
 
     st.write("-----")
-
     display_raw_code(inputs["method"])
-
     footer()
