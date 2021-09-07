@@ -8,7 +8,6 @@ from pandas import DataFrame
 from plotly.graph_objs import Figure
 import pandas as pd
 
-from Algos.Linear_Regression.utils import plot_predition
 from Algos.Linear_Regression.utils import plot_predition, plot_data
 from Algos.utils.plots import plotly_plot, mesh3d
 from Algos.utils.preprocess import process_function
