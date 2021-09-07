@@ -51,3 +51,34 @@ def plot_predition(X, theta, fig):
             opacity=0.9
         )
         return new_fig
+
+
+def plot_data(X, y):
+
+    n, d = X.shape
+
+    if d == 1:
+        return plotly_plot(
+            X.flatten(), y.flatten(),
+            x_title="Feature", y_title="Output", title="Data"
+        )
+
+    elif d == 2:
+        description = {
+            "title": {
+                "main": "Data",
+                "x": "Feature 1",
+                "y": "Feature 2",
+                "z": "Output"
+            },
+            "label": {
+                "main": "Data",
+            },
+            "hovertemplate": "(x1, x2): (%{x}, %{y})<br>f(%{x}, %{y}): %{z}",
+            "color": "green"
+        }
+
+        return mesh3d(
+            X[:, 0], X[:, 1], y.flatten(),
+            description, opacity=0.8
+        )
