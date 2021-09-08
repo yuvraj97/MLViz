@@ -100,7 +100,7 @@ def run() -> None:
     n_train = int(len(X) * inputs["training_proportion"])
     test_X, test_y = X[n_train:], y[n_train:]
     X, y = X[:n_train], y[:n_train]
-    status, y = display_train_test_data(X, y, inputs, "# Training Data")
+    status, y_norm = display_train_test_data(X, y, inputs, "# Training Data")
 
     with st.expander("Test Data"):
         display_train_test_data(test_X, test_y, None, "# Test Data")
@@ -111,7 +111,7 @@ def run() -> None:
     st.plotly_chart(plt)
     # st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
 
-    inputs["X"], inputs["y"] = X, y
+    inputs["X"], inputs["y"] = X, y_norm
     if inputs["simulate"]:
         theta = run_simulation(inputs, plt)
     else:
