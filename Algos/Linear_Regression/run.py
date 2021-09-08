@@ -57,7 +57,7 @@ def run_scratch(inputs, plt):
         np.hstack((np.ones((n, 1)), X)) if is_scratch else X, y,
         learning_rate=inputs["lr"], epsilon=inputs["epsilon"], epochs=inputs["epochs"]
     )
-    st.plotly_chart(plot_predition(X, theta, plt))
+    st.plotly_chart(plot_predition(X, theta, plt, inputs))
     return theta
 
 

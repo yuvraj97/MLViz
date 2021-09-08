@@ -161,30 +161,34 @@ def sessionize_inputs(inputs):
         st.session_state["Linear Regression"] = {"inputs": inputs_no_button}
 
 
-def plot_predition(X, theta, fig):
+def plot_predition(X, theta, fig, inputs):
 
     n, d = X.shape
 
     min_X, max_X = X[:, 0].min(), X[:, 0].max()
+    if "normalization_params" in inputs:
+        norm_mean, norm_std = inputs["normalization_params"]
+    else:
+        norm_mean, norm_std = 0, 1
 
     if d == 1:
         new_fig: Figure = plotly_plot(
             [min_X, max_X],
             [
-                theta[0][0] + theta[1][0] * min_X,
-                theta[0][0] + theta[1][0] * max_X
+                (theta[0][0] + theta[1][0] * min_X) * norm_std + norm_mean,
+                (theta[0][0] + theta[1][0] * max_X) * norm_std + norm_mean
             ],
             fig=fig,
             mode="lines",
             color="blue",
             do_not_change_fig=True,
-            title=f"Linear Regression"
+            title=f"Prediction (Linear Regression)"
         )
         return new_fig
     elif d == 2:
         description = {
             "title": {
-                "main": f"Linear Regression",
+                "main": f"Prediction (Linear Regression)",
                 "x": "x1",
                 "y": "x2",
                 "z": "y"
