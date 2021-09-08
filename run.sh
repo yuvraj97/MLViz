@@ -5,7 +5,7 @@ function run() {
   id=$1
   port=$2
   name=$(echo $id | sed -e "s/_/-/g")
-  echo "from run import run;run()" > $name.py
+  printf "import streamlit as st\\nfrom run import run;\\ntry:\\n\\trun()\\nexcept:\\n\\tst.error('Something went wrong!')" > $name.py
   cat Dockerfile > Dockerfile.$id
   sed -i "s/Chapter-ID/$id/g" Dockerfile.$id
   sed -i "s/Chapter-Name/$name/g" Dockerfile.$id
