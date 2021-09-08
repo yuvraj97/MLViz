@@ -211,6 +211,30 @@ def plot_predition(X, theta, fig):
         return new_fig
 
 
+def prediction_msg_to_display(inputs, theta):
+    if "normalization_params" not in inputs:
+        msg = f"""
+        $\\hat{{y}}={' + '.join(
+            ['{:.2f}'.format(theta_i[0]) + f'x_{i}' for i, theta_i in enumerate(theta)]
+        ).replace('x_0', '')}$
+        """
+    else:
+        norm_mean, norm_std = inputs["normalization_params"]
+        msg = f"""
+        **For Normalized Data:**    
+        $\\hat{{y}}={' + '.join(
+            ['{:.2f}'.format(theta_i[0]) + f'x_{i}' for i, theta_i in enumerate(theta)]
+        ).replace('x_0', '')}$    
+        **For Non Normalized Data:**    
+        $\\hat{{y}}={' + '.join(
+            ['{:.2f}'.format(
+                theta_i[0] * norm_std if i != 0 else theta_i[0] * norm_std + norm_mean
+            ) + f'x_{i}' for i, theta_i in enumerate(theta)]
+        ).replace('x_0', '')}$            
+        """
+    return msg
+
+
 def plot_data(X, y):
 
     n, d = X.shape
