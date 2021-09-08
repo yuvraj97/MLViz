@@ -11,6 +11,7 @@ from Algos.Linear_Regression.utils import plot_predition, plot_data, get_all_inp
     display_raw_code, prediction_msg_to_display
 from Algos.utils.plots import plotly_plot
 from Algos.utils.preprocess import process_function
+from Algos.utils.stats import f_test, rmse, r2
 from Algos.utils.synthetic_data import get_nD_regression_data, display_train_test_data
 from Algos.utils.utils import intialize, footer
 
@@ -144,35 +145,37 @@ def run() -> None:
         theta = run_scratch(inputs, plt)
         msg = prediction_msg_to_display(inputs, theta)
 
+    n_test, d_test = test_X.shape
+
     X_pad = np.hstack((np.ones((n, 1)), X))
     y_hat = X_pad@theta
+    X_pad_test = np.hstack((np.ones((n_test, 1)), test_X))
+    y_hat_test = X_pad_test@theta
 
     if "normalization_params" in inputs:
         norm_mean, norm_std = inputs["normalization_params"]
     else:
         norm_mean, norm_std = 0, 1
     y_hat = y_hat * norm_std + norm_mean
+    y_hat_test = y_hat_test * norm_std + norm_mean
 
-    rmse = np.sqrt(((y_hat - y) ** 2).mean())
-    sse_mean = np.sum((y - np.mean(y))**2)  # variation (sum of squared error) around the mean
-    sse_fit = np.sum((y_hat - y)**2)  # variation (sum of squared error) around the fit
-    r2 = (sse_mean - sse_fit)/sse_mean
+    r_2 = r2(y, y_hat)
+    f_value, p_value = f_test(y, y_hat, d, n - (d + 1))
 
-    var_explain_by_extra_param = (sse_mean - sse_fit)/d
-    var_not_explain_by_extra_param = sse_fit/(n - (d + 1))
-    f_value = var_explain_by_extra_param/var_not_explain_by_extra_param
+    r_2_test = r2(test_y, y_hat_test)
+    f_value_test, p_value_test = f_test(test_y, y_hat_test, d_test, n_test - (d_test + 1))
 
-    p_value = 1 - scipy.stats.f.cdf(f_value*(d/(n-d-1)), d, n - (d + 1))
-
-    st_left, st_right = st.columns([1, 1])
+    st_left, st_middle, st_right = st.columns([1, 1, 1])
     st_left.markdown(f"""
         ## Prediction
         {msg}
         """)
-    st_right.markdown(f"""
-        ## Performance $_{{\\text{{Testing data}}}}$
-        $\\text{{RMSE}}\\ :$ `{rmse:.3f}`  
-        $R^2\\quad\\quad:$ `{r2:.3}`  
+    st_middle.markdown(f"""
+        ## Performance   
+        `Training data`    
+        
+        $\\text{{RMSE}}\\ :$ `{rmse(y, y_hat):.3f}`  
+        $R^2\\quad\\quad:$ `{r_2:.3}`  
         $\\text{{F-value}}:$ `{f_value:.2f}`  
         $\\text{{p-value}}:$ `{p_value:.5f}`          
         """)
