@@ -111,6 +111,13 @@ def run() -> None:
     st.plotly_chart(plt)
     # st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
 
+    st.markdown(f"""
+    ## Estimated Parameters for Target Variable ($y$):
+      - **Mean** $(\\hat{{\\mu}}_y) = {np.nanmean(y):.3f}$
+      - **Variance** $(\\sigma^2_y)={np.nanvar(y):.3f}$
+      - **Standard Deviation** $(\\sigma_y)={np.nanstd(y):.3f}$
+    """)
+
     inputs["X"], inputs["y"] = X, y_norm
     if inputs["simulate"]:
         theta_msg = run_simulation(inputs, plt)
