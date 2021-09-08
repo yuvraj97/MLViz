@@ -141,6 +141,40 @@ def run() -> None:
         theta, msg = theta_msg
     else:
         theta = run_scratch(inputs, plt)
+        msg = prediction_msg_to_display(inputs, theta)
+
+    X_pad = np.hstack((np.ones((n, 1)), X))
+    y_hat = X_pad@theta
+
+    if "normalization_params" in inputs:
+        norm_mean, norm_std = inputs["normalization_params"]
+    else:
+        norm_mean, norm_std = 0, 1
+    y_hat = y_hat * norm_std + norm_mean
+
+    rmse = np.sqrt(((y_hat - y) ** 2).mean())
+    sse_mean = np.sum((y - np.mean(y))**2)  # variation (sum of squared error) around the mean
+    sse_fit = np.sum((y_hat - y)**2)  # variation (sum of squared error) around the fit
+    r2 = (sse_mean - sse_fit)/sse_mean
+
+    st_left, st_right = st.columns([1, 1])
+    st_left.markdown(f"""
+        ## Prediction
+        {msg}
+        """)
+    st_right.markdown(f"""
+        ## Performance
+        $\\text{{RMSE}}\\ :$ `{rmse:.3f}`  
+        $R^2\\quad\\quad:$ `{r2:.3}`
+        """)
+
+    st.markdown(f"""
+    $\\text{{RMSE}}$: Root mean squared error.    
+    $R^2$ tells us how much of variation in **Target Variable** can be explained usind **Input Variables**  
+    Now in our example $R^2$ is `{r2:.3}` that mean (using current ML algorithm) we can say:
+      - `{r2*100:.2f}%` of **Target Variable** can be explained if we using our **Input Variables**.  
+      - There is `{r2*100:.2f}%` reduction in variance of **Target Variable** using our **Input Variables**.  
+    """)
 
     st.write("-----")
     display_raw_code(inputs["method"])
