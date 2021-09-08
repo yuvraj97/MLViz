@@ -180,7 +180,17 @@ def run() -> None:
         $\\text{{p-value}}:$ `{p_value:.5f}`          
         """)
 
-    if p_value < 0.01:
+    st_right.markdown(f"""
+        ## Performance  
+        `Testing data`    
+        
+        $\\text{{RMSE}}\\ :$ `{rmse(test_y, y_hat_test):.3f}`  
+        $R^2\\quad\\quad:$ `{r_2_test:.3}`  
+        $\\text{{F-value}}:$ `{f_value_test:.2f}`  
+        $\\text{{p-value}}:$ `{p_value_test:.5f}`          
+        """)
+
+    if p_value_test < 0.01:
         st.success(f"""
         Congratulations our **features** are `statistically significant` to predict **Target variable**.
         """)
