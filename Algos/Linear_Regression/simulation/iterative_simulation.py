@@ -42,7 +42,7 @@ def run(f, plt, inputs):
             st.session_state["Linear Regression"]["errors"].append(error)
             st.session_state["Linear Regression"]["epochs"].append(epoch)
             msg = prediction_msg_to_display(inputs, theta)
-            st_theta.info()
+            st_theta.info(msg)
         else:
             msg = prediction_msg_to_display(inputs, theta)
             st_theta.success("        ## Algo Completed 😊    " + msg)
