@@ -57,7 +57,8 @@ def run_scratch(inputs, plt):
         np.hstack((np.ones((n, 1)), X)) if is_scratch else X, y,
         learning_rate=inputs["lr"], epsilon=inputs["epsilon"], epochs=inputs["epochs"]
     )
-    st.plotly_chart(plot_predition(X, theta, plt, inputs))
+    if d in [1, 2]:
+        st.plotly_chart(plot_predition(X, theta, plt, inputs))
     return theta
 
 
@@ -107,8 +108,11 @@ def run() -> None:
 
     n, d = X.shape
 
-    plt: Union[Figure, None] = plot_data(X, y)
-    st.plotly_chart(plt)
+    if d in [1, 2]:
+        plt: Union[Figure, None] = plot_data(X, y)
+        st.plotly_chart(plt)
+    else:
+        plt = None
     # st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
 
     st.markdown(f"""

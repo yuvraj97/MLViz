@@ -15,6 +15,7 @@ def run(f, plt, inputs):
     """
 
     st_theta, st_error, st_plot = st.sidebar.empty(), st.empty(), st.empty()
+    n, d = inputs["X"].shape
 
     if "errors" not in st.session_state["Linear Regression"]:
         st.session_state["Linear Regression"]["errors"] = []
@@ -33,7 +34,8 @@ def run(f, plt, inputs):
 
         epoch = len(st.session_state["Linear Regression"]["epochs"]) + 1
 
-        st_plot.plotly_chart(plot_predition(inputs["X"], theta, plt))
+        if d in [1, 2]:
+            st_plot.plotly_chart(plot_predition(inputs["X"], theta, plt))
 
         if st.session_state["Linear Regression"]["step_i"] < len(st.session_state["Linear Regression"]["steps"]) - 1:
             st.session_state["Linear Regression"]["step_i"] += 1

@@ -16,13 +16,15 @@ def run(f, plt, inputs: dict):
     """
 
     st_theta, st_error, st_plot = st.sidebar.empty(), st.empty(), st.empty()
-    st_theta_completed = st.empty()
+    n, d = inputs["X"].shape
 
     errors = []
     epochs = []
     for epoch, (theta, error) in enumerate(f(inputs)):
         st_theta.info(prediction_msg_to_display(inputs, theta))
-        st_plot.plotly_chart(plot_predition(inputs["X"], theta, plt))
+
+        if d in [1, 2]:
+            st_plot.plotly_chart(plot_predition(inputs["X"], theta, plt, inputs))
 
         errors.append(error)
         epochs.append(epoch)
