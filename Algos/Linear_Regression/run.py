@@ -6,7 +6,9 @@ import streamlit as st
 from numpy import ndarray
 from plotly.graph_objs import Figure
 
-from Algos.Linear_Regression.utils import plot_predition, plot_data, get_all_inputs, sessionize_inputs, display_raw_code
+from Algos.Linear_Regression.utils import plot_predition, plot_data, get_all_inputs, sessionize_inputs, \
+    display_raw_code, prediction_msg_to_display
+from Algos.utils.plots import plotly_plot
 from Algos.utils.preprocess import process_function
 from Algos.utils.synthetic_data import get_nD_regression_data, display_train_test_data
 from Algos.utils.utils import intialize, footer
@@ -41,22 +43,31 @@ def run_scratch(inputs, plt):
     n, d = X.shape
 
     if inputs["lr_method"] == "Implementation From Scratch":
-        is_scratch = True
         if inputs["method"] == "Batch Gradient Descent":
-            import Algos.Linear_Regression.code.scratch_code as method
+            import Algos.Linear_Regression.simulate_algo.scratch_sim as method
         else:
-            import Algos.Linear_Regression.code.scratch_mini_batch_code as method
+            import Algos.Linear_Regression.simulate_algo.scratch_sim_mini_batch as method
     else:
-        is_scratch = False
         if inputs["method"] == "Batch Gradient Descent":
-            import Algos.Linear_Regression.code.pytorch_code as method
+            import Algos.Linear_Regression.simulate_algo.pytorch_sim as method
         else:
-            import Algos.Linear_Regression.code.pytorch_code_mini_batch as method
+            import Algos.Linear_Regression.simulate_algo.pytorch_sim_mini_batch as method
 
-    theta = method.run(
-        np.hstack((np.ones((n, 1)), X)) if is_scratch else X, y,
-        learning_rate=inputs["lr"], epsilon=inputs["epsilon"], epochs=inputs["epochs"]
+    epochs, errors = [], []
+    for epoch, (theta, error) in enumerate(method.run(inputs)):
+        epochs.append(epoch)
+        errors.append(error)
+
+    st.plotly_chart(
+        plotly_plot(
+            epochs, errors,
+            mode="lines+markers",
+            x_title="epochs",
+            y_title="error",
+            title="Error Chart"
+        )
     )
+
     if d in [1, 2]:
         st.plotly_chart(plot_predition(X, theta, plt, inputs))
     return theta
