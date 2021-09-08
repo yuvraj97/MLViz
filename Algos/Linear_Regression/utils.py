@@ -79,7 +79,7 @@ def get_all_inputs() -> Dict[str, Union[str, int, float]]:
         lr_method: str = st.radio("Choose method", ["Implementation From Scratch", "PyTorch Implementation"])
 
         sim_method, sim_button, step_button = None, None, None
-        simulate = st.checkbox("Use Animation", True)
+        simulate = st.checkbox("Use Animation", False)
         if simulate:
             sim_method: Union[str, None] = st.radio("", ["Simulate", "Manually Increment Steps"], key="Algos-LR-Sim-Step")
 
