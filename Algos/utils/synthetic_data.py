@@ -165,4 +165,4 @@ def display_train_test_data(X, y, inputs, title="# Data"):
 
         st.write(df)
 
-    return True
+    return True, y

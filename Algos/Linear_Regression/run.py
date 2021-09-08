@@ -100,7 +100,7 @@ def run() -> None:
     n_train = int(len(X) * inputs["training_proportion"])
     test_X, test_y = X[n_train:], y[n_train:]
     X, y = X[:n_train], y[:n_train]
-    display_train_test_data(X, y, inputs, "# Training Data")
+    status, y = display_train_test_data(X, y, inputs, "# Training Data")
 
     with st.expander("Test Data"):
         display_train_test_data(test_X, test_y, None, "# Test Data")
