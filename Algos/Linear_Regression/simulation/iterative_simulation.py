@@ -15,7 +15,6 @@ def run(f, plt, inputs):
     """
 
     st_theta, st_error, st_plot = st.sidebar.empty(), st.empty(), st.empty()
-    st_theta_completed = st.empty()
 
     if "errors" not in st.session_state["Linear Regression"]:
         st.session_state["Linear Regression"]["errors"] = []
@@ -40,11 +39,11 @@ def run(f, plt, inputs):
             st.session_state["Linear Regression"]["step_i"] += 1
             st.session_state["Linear Regression"]["errors"].append(error)
             st.session_state["Linear Regression"]["epochs"].append(epoch)
-            st_theta.info(prediction_msg_to_display(inputs, theta))
+            msg = prediction_msg_to_display(inputs, theta)
+            st_theta.info()
         else:
-            msg = "Algo Completed 😊    " + prediction_msg_to_display(inputs, theta)
-            st_theta.success(msg)
-            st_theta_completed.success(msg)
+            msg = prediction_msg_to_display(inputs, theta)
+            st_theta.success("        ## Algo Completed 😊    " + msg)
 
         st_error.plotly_chart(
             plotly_plot(
@@ -57,4 +56,4 @@ def run(f, plt, inputs):
             )
         )
 
-        return theta
+        return theta, msg
