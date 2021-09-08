@@ -203,11 +203,35 @@ def run() -> None:
 
     st.markdown(f"""
         
-    ### $\\text{{R}}^2$
+    ## $\\text{{R}}^2$
     $R^2$ tells us how much of variation in **Target Variable** can be explained usind **Input Variables**  
-    Now in our example $R^2$ is `{r2:.3}` that mean (using current ML algorithm) we can say:
-      - `{r2*100:.2f}%` of **Target Variable** can be explained if we using our **Input Variables**.  
-      - There is `{r2*100:.2f}%` reduction in variance of **Target Variable** using our **Input Variables**.  
+    Now in our example $R^2$ is `{r_2:.3}` that mean (using current ML algorithm) we can say:
+      - `{r_2*100:.2f}%` of **Target Variable** can be explained if we using our **Input Variables**.  
+      - There is `{r_2*100:.2f}%` reduction in variance of **Target Variable** using our **Input Variables**.
+    
+    We can say that  
+     
+    $$\\text{{R}}^2 = \\frac{{\\text{{The variation in Target variable explained by the Input variables}}}}
+    {{\\text{{The variation in Target variable without taking Input variables into account}}}}$$
+    
+    We got our $R^2$ value, **great**, but is the value we got `statistically significant`?  
+    That's where `p-value` came into play.
+      
+    ## $\\text{{p-value}}$
+    Here `F-distribution` will help us getting the p-value, for that we first need to find the `F-value`.  
+    
+    $$\\text{{F-value}} = \\frac{{\\text{{The variation in Target variable explained by the Input variables}}}}
+    {{\\text{{The variation in Target variable not explained by Input variables}}}}$$
+    you can learn more about it [HERE](https://youtu.be/nk2CQITm_eo)   
+    $\\text{{p-value}}=1-\\text{{cdf}}_\\text{{F-distribution}}\\text{{(F-value, df1, df2)}}$
+    $\\text{{df1}}$ and $\\text{{df2}}$ are degree of freedom.  
+    
+    Say,
+    `n`: number of data points, and
+    `d`: number of features, so    
+      - $\\text{{df1}}$: `d`
+      - $\\text{{df2}}$: `n - (d + 1)`
+      
     """)
 
     st.write("-----")
