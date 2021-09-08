@@ -1,7 +1,7 @@
 import time
 import streamlit as st
 
-from Algos.Linear_Regression.utils import plot_predition
+from Algos.Linear_Regression.utils import plot_predition, prediction_msg_to_display
 from Algos.utils.plots import plotly_plot
 
 
@@ -21,28 +21,8 @@ def run(f, plt, inputs: dict):
     errors = []
     epochs = []
     for epoch, (theta, error) in enumerate(f(inputs)):
-        if "normalization_params" not in inputs:
-            st_theta.info(f"""
-            $\\hat{{y}}={' + '.join(
-                ['{:.2f}'.format(theta_i[0]) + f'x_{i}' for i, theta_i in enumerate(theta)]
-            ).replace('x_0', '')}$
-            """)
-        else:
-            norm_mean, norm_std = inputs["normalization_params"]
-            st_theta.info(f"""
-            **For Normalized Data:**    
-            $\\hat{{y}}={' + '.join(
-                ['{:.2f}'.format(theta_i[0]) + f'x_{i}' for i, theta_i in enumerate(theta)]
-            ).replace('x_0', '')}$    
-            **For Non Normalized Data:**    
-            $\\hat{{y}}={' + '.join(
-                ['{:.2f}'.format(
-                    theta_i[0] * norm_std if i != 0 else theta_i[0] * norm_std + norm_mean
-                ) + f'x_{i}' for i, theta_i in enumerate(theta)]
-            ).replace('x_0', '')}$            
-            """)
-
-            st_plot.plotly_chart(plot_predition(inputs["X"], theta, plt))
+        st_theta.info(prediction_msg_to_display(inputs, theta))
+        st_plot.plotly_chart(plot_predition(inputs["X"], theta, plt))
 
         errors.append(error)
         epochs.append(epoch)
@@ -57,36 +37,8 @@ def run(f, plt, inputs: dict):
         )
         time.sleep(1 / 4)
 
-    if "normalization_params" not in inputs:
-
-        s = f"""
-        Algo Completed 😊    
-        $\\hat{{y}}={' + '.join(
-            ['{:.2f}'.format(theta_i[0]) + f'x_{i}' for i, theta_i in enumerate(theta)]
-        ).replace('x_0', '')}$
-        """
-
-        st_theta.success(s)
-        st_theta_completed.success(s)
-
-    else:
-        norm_mean, norm_std = inputs["normalization_params"]
-
-        s = f"""
-        Algo Completed 😊    
-        **For Normalized Data:**    
-        $\\hat{{y}}={' + '.join(
-            ['{:.2f}'.format(theta_i[0]) + f'x_{i}' for i, theta_i in enumerate(theta)]
-        ).replace('x_0', '')}$    
-        **For Non Normalized Data:**    
-        $\\hat{{y}}={' + '.join(
-            ['{:.2f}'.format(
-                theta_i[0] * norm_std if i != 0 else theta_i[0] * norm_std + norm_mean
-            ) + f'x_{i}' for i, theta_i in enumerate(theta)]
-        ).replace('x_0', '')}$            
-        """
-
-        st_theta.success(s)
-        st_theta_completed.success(s)
+    msg = "Algo Completed 😊    " + prediction_msg_to_display(inputs, theta)
+    st_theta.success(msg)
+    st_theta_completed.success(msg)
 
     return theta
