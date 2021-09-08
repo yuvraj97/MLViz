@@ -2,6 +2,7 @@ import inspect
 from typing import Dict, Union
 
 import numpy as np
+import scipy.stats
 import streamlit as st
 from numpy import ndarray
 from plotly.graph_objs import Figure
@@ -157,19 +158,39 @@ def run() -> None:
     sse_fit = np.sum((y_hat - y)**2)  # variation (sum of squared error) around the fit
     r2 = (sse_mean - sse_fit)/sse_mean
 
+    var_explain_by_extra_param = (sse_mean - sse_fit)/d
+    var_not_explain_by_extra_param = sse_fit/(n - (d + 1))
+    f_value = var_explain_by_extra_param/var_not_explain_by_extra_param
+
+    p_value = 1 - scipy.stats.f.cdf(f_value*(d/(n-d-1)), d, n - (d + 1))
+
     st_left, st_right = st.columns([1, 1])
     st_left.markdown(f"""
         ## Prediction
         {msg}
         """)
     st_right.markdown(f"""
-        ## Performance
+        ## Performance $_{{\\text{{Testing data}}}}$
         $\\text{{RMSE}}\\ :$ `{rmse:.3f}`  
-        $R^2\\quad\\quad:$ `{r2:.3}`
+        $R^2\\quad\\quad:$ `{r2:.3}`  
+        $\\text{{F-value}}:$ `{f_value:.2f}`  
+        $\\text{{p-value}}:$ `{p_value:.5f}`          
         """)
 
+    if p_value < 0.01:
+        st.success(f"""
+        Congratulations our **features** are `statistically significant` to predict **Target variable**.
+        """)
+    else:
+        st.warning(f"""
+        Our **features** doesn't seems to be `statistically significant` to predict **Target variable**.
+        """)
+
+    st.write("---")
+
     st.markdown(f"""
-    $\\text{{RMSE}}$: Root mean squared error.    
+        
+    ### $\\text{{R}}^2$
     $R^2$ tells us how much of variation in **Target Variable** can be explained usind **Input Variables**  
     Now in our example $R^2$ is `{r2:.3}` that mean (using current ML algorithm) we can say:
       - `{r2*100:.2f}%` of **Target Variable** can be explained if we using our **Input Variables**.  
