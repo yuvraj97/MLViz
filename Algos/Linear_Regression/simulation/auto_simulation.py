@@ -37,8 +37,7 @@ def run(f, plt, inputs: dict):
         )
         time.sleep(1 / 4)
 
-    msg = "Algo Completed 😊    " + prediction_msg_to_display(inputs, theta)
-    st_theta.success(msg)
-    st_theta_completed.success(msg)
+    msg = prediction_msg_to_display(inputs, theta)
+    st_theta.success("        ## Algo Completed 😊    " + msg)
 
-    return theta
+    return theta, msg
