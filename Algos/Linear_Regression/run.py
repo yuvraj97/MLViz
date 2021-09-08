@@ -113,7 +113,10 @@ def run() -> None:
 
     inputs["X"], inputs["y"] = X, y_norm
     if inputs["simulate"]:
-        theta = run_simulation(inputs, plt)
+        theta_msg = run_simulation(inputs, plt)
+        if theta_msg is None:
+            return
+        theta, msg = theta_msg
     else:
         theta = run_scratch(inputs, plt)
 
