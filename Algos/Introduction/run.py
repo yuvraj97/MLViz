@@ -16,8 +16,9 @@ def run():
     ---
     """)
 
+    #     [$1.$ **Linear Regression:**](https://app.quantml.org/machine-learning/linear-regression/)
     st.success("""
-    [$1.$ **Linear Regression:**](https://app.quantml.org/machine-learning/linear-regression/)
+    $1.$ **Linear Regression:**
     - **Batch Gradient Descent** (From Scratch / PyTorch)
     - **Mini Batch Gradient Descent** (From Scratch / PyTorch)
     """)
@@ -34,8 +35,9 @@ def run():
         There are much more features like **Normalization**, **Simulation**, **iterative steps** you should explore them.
         """)
 
+    #         [$2.$ **Logistic Regression:**](https://app.quantml.org/machine-learning/logistic-regression/)
     st.success("""
-        [$2.$ **Logistic Regression:**](https://app.quantml.org/machine-learning/logistic-regression/)
+        $2.$ **Logistic Regression:**
         - **Batch Gradient Ascent ** (From Scratch / PyTorch)
         - **Mini Batch Gradient Descent** (From Scratch / PyTorch)
         """)
@@ -49,8 +51,9 @@ def run():
         There are much more features like **Simulation**, **iterative steps**, **Regression parameters** you should explore them.
         """)
 
+    #     [$3.$ **K-Means Clustering**](https://app.quantml.org/machine-learning/k-means-clustering/)
     st.success("""
-    [$3.$ **K-Means Clustering**](https://app.quantml.org/machine-learning/k-means-clustering/)
+    $3.$ **K-Means Clustering**
     """)
 
     with st.expander("Read More", False):

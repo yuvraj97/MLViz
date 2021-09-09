@@ -22,16 +22,15 @@ def main():
         params = st.experimental_get_query_params()
         prev_idx = algorithms.index(params["algorithm"][0]) if "algorithm" in params else 0
 
-    algorithm = algorithms[prev_idx]
-    exec(f"from Algos.{algorithm.replace(' ', '_')}.run import run;run()")
-
-    st.sidebar.write("-----")
-    algorithm: str = st.sidebar.selectbox("Choose Algorithm", algorithms, index=prev_idx)
+    algorithm: str = st.selectbox("Choose Algorithm", algorithms, index=prev_idx)
     chosen_idx = algorithms.index(algorithm)
     if prev_idx != chosen_idx:
         st.session_state["algorithm"] = chosen_idx
         st.experimental_rerun()
     st.experimental_set_query_params(**{"algorithm": algorithm})
+
+    algorithm = algorithms[prev_idx]
+    exec(f"from Algos.{algorithm.replace(' ', '_')}.run import run;run()")
 
 
 if __name__ == '__main__':
