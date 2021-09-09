@@ -59,4 +59,9 @@ def run(X: np.ndarray,
 
     with torch.no_grad():
         params = model.state_dict()
-        return np.vstack((params["linear.weight"].cpu().numpy(), params["linear.bias"].cpu().numpy()))
+        return np.vstack(
+            (
+                params["linear.bias"].cpu().numpy(),
+                params["linear.weight"].cpu().numpy().reshape(d, 1)
+            )
+        )

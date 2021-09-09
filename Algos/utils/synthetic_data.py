@@ -2,6 +2,8 @@ import inspect
 from collections import defaultdict
 from typing import List
 import numpy as np
+import streamlit as st
+from pandas import DataFrame
 
 
 def get_nD_regression_data(f,
@@ -104,3 +106,63 @@ def split_features(features, labels):
     for label in data:
         data[label] = np.array(data[label])
     return data
+
+
+def display_train_test_data(X, y, inputs, title="# Data"):
+    n, d = X.shape
+    st_incorrect_function = st.empty()
+
+    st.write(title)
+    st_X, st_y = st.columns([d if d < 4 else 3, 1])
+    with st_X:
+        df: DataFrame = DataFrame(
+            data=X,
+            columns=[f"x{i + 1}" for i in range(d)]
+        )
+        df.index += 1
+        st.write(f"$\\text{{Features}}\\quad \\mathbb{{X}}_{{{n}\\times{d}}}$")
+        # st.write("$\\quad$")
+
+        # Normalization
+        if inputs and st.checkbox("Normalize the Data", True, key=f"norm_data{title}"):
+            norm_mean, norm_std = np.nanmean(y), np.nanstd(y)
+            inputs["normalization_params"] = (norm_mean, norm_std)
+            y = (y - norm_mean) / norm_std
+
+        st.write(df)
+
+    with st_y:
+        y_isnan = np.isnan(y).reshape(np.prod(y.shape))
+        if any(y_isnan):
+            st_incorrect_function.error(f"""
+                The function provided might be is mathematically incorrect.    
+                It is failing for some values of $\\mathbb{{X}}$'s
+                """)
+            df: DataFrame = DataFrame(
+                data=X[y_isnan],
+                index=[i for i, _ in enumerate(y_isnan) if _],
+                columns=[f"x{i + 1}" for i in range(d)]
+            )
+            df.index += 1
+            st.write("$\\text{Features}\\quad \\mathbb{X}$")
+            st.write("Where function $h{_\\theta}(\\mathbb{X})$ is failing")
+            st.write(df)
+            return
+
+        if inputs is None or "normalization_params" not in inputs:
+            df: DataFrame = DataFrame(data=y, columns=["y"])
+        else:
+            (norm_mean, norm_std) = inputs["normalization_params"]
+            __y = np.hstack((y * norm_std + norm_mean, y))
+            df: DataFrame = DataFrame(data=__y, columns=["y", "y_normalize"])
+
+        df.index += 1
+        if inputs:
+            st.write(f"$y={inputs['function']}$")
+            st.write(f"$+ \\mathcal{{N}}({inputs['mean']}, {inputs['std']}^2)$")
+        else:
+            st.write(f"Target Features $y$")
+
+        st.write(df)
+
+    return True, y

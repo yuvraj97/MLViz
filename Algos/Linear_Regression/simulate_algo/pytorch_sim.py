@@ -44,7 +44,13 @@ def run(inputs: Dict[str, Union[str, int, float, np.ndarray]]):
 
             params = model.state_dict()
             keys = list(params.keys())
-            theta = np.vstack((params[keys[1]].cpu().numpy(), params[keys[0]].cpu().numpy()))
+            if "weight" in keys[0]:
+                weight = params[keys[0]].cpu().numpy().reshape(d, 1)
+                bias = params[keys[1]].cpu().numpy().reshape(1, 1)
+            else:
+                weight = params[keys[1]].cpu().numpy().reshape(d, 1)
+                bias = params[keys[2]].cpu().numpy().reshape(1, 1)
+            theta = np.vstack((bias, weight))
 
             if 0 <= prev_loss - loss.item() <= inputs["epsilon"]:
                 break
@@ -54,5 +60,10 @@ def run(inputs: Dict[str, Union[str, int, float, np.ndarray]]):
     with torch.no_grad():
         params = model.state_dict()
         keys = list(params.keys())
-        theta = np.vstack((params[keys[1]].cpu().numpy(), params[keys[0]].cpu().numpy()))
-        return theta
+        if "weight" in keys[0]:
+            weight = params[keys[0]].cpu().numpy().reshape(d, 1)
+            bias = params[keys[1]].cpu().numpy().reshape(1, 1)
+        else:
+            weight = params[keys[1]].cpu().numpy().reshape(d, 1)
+            bias = params[keys[2]].cpu().numpy().reshape(1, 1)
+        return np.vstack((bias, weight))
