@@ -15,9 +15,9 @@ def get_nn_def():
         # st.write(layer)
         with st_layers[li]:
             for ui in range(len(layer)):
-                st.write(f"$z_{{{ui + 1}}}^{{[{li + 1}]}}$ {'✅' if layer[ui] else '❌'}")
+                st.write(f"$z_{{{ui + 1}}}^{{[{li + 1}]}}$ {'✅' if layer[ui] else '⛔'}")
                 if st.button(
-                        f"{'✅' if not layer[ui] else '❌'}",
+                        f"{'✅' if not layer[ui] else '⛔'}",
                         key=f"Remove layers for l{li}-{ui}",
                         help=f"""
                         Currently this node `{ui + 1}` of layer `{li + 1}` is `{'Activate' if layer[ui] else 'Deactivated'}`      
@@ -28,7 +28,7 @@ def get_nn_def():
                     st.experimental_rerun()
                 st.write("  ")
                 st.write("  ")
-            if st.button("+", key=f"add more layers for l{li}"):
+            if st.button("➕", key=f"add more layers for l{li}", help=f"Add more neuron in layer `{li + 1}`"):
                 layer.append(True)
                 st.experimental_rerun()
     with st_layers[-1]:
