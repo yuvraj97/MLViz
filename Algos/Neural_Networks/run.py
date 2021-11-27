@@ -9,7 +9,7 @@ def get_nn_def():
 
     st.write(st.session_state["Neural Networks"])
     layers = [1 for _ in range(st.session_state["Neural Networks"]["nn_def"]["n_hidden_layers"])]
-    st_layers = st.columns(layers + [1])
+    st_layers = st.columns(layers + [0.1])
     for li in range(len(layers)):
         layer = st.session_state["Neural Networks"]["nn_def"]["hidden_units_per_layer"][li]
         # st.write(layer)
@@ -31,10 +31,22 @@ def get_nn_def():
             if st.button("+", key=f"add more layers for l{li}"):
                 layer.append(True)
                 st.experimental_rerun()
-    if st_layers[-1].button("+", key="add more layers"):
-        st.session_state["Neural Networks"]["nn_def"]["n_hidden_layers"] += 1
-        st.session_state["Neural Networks"]["nn_def"]["hidden_units_per_layer"].append([True])
-        st.experimental_rerun()
+    with st_layers[-1]:
+
+        if st.button("➕", key="add more layers", help="Add one more layer"):
+            st.session_state["Neural Networks"]["nn_def"]["n_hidden_layers"] += 1
+            st.session_state["Neural Networks"]["nn_def"]["hidden_units_per_layer"].append([True])
+            st.experimental_rerun()
+        # st.write("")
+        if st.button("❌", key="Remove Deactivated layers", help="Remove All Deactivated Neurons"):
+            for li in range(len(layers)):
+                st.session_state["Neural Networks"]["nn_def"]["hidden_units_per_layer"][li] = \
+                    [_ for _ in st.session_state["Neural Networks"]["nn_def"]["hidden_units_per_layer"][li] if _]
+            st.session_state["Neural Networks"]["nn_def"]["hidden_units_per_layer"] = \
+            [_ for _ in st.session_state["Neural Networks"]["nn_def"]["hidden_units_per_layer"] if _]
+            st.session_state["Neural Networks"]["nn_def"]["n_hidden_layers"] = \
+            len(st.session_state["Neural Networks"]["nn_def"]["hidden_units_per_layer"])
+            st.experimental_rerun()
 
 
 def run():
