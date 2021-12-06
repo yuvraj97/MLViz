@@ -13,7 +13,7 @@ from Algos.utils.plots import plotly_plot
 from Algos.utils.preprocess import process_function
 from Algos.utils.stats import f_test, rmse, r2
 from Algos.utils.synthetic_data import get_nD_regression_data, display_train_test_data
-from Algos.utils.utils import intialize, footer
+from Algos.utils.utils import footer
 
 
 def run_simulation(inputs, plt):
@@ -80,8 +80,6 @@ def run() -> None:
     Here we run the Linear Regression Simulation
     :return: None
     """
-
-    intialize("Linear Regression")
 
     if "Linear Regression" not in st.session_state:
         st.session_state["Linear Regression"] = {}
