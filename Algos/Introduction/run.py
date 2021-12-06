@@ -1,11 +1,9 @@
 import streamlit as st
 
-from Algos.utils.utils import intialize, footer
+from Algos.utils.utils import footer
 
 
 def run():
-
-    intialize(None)
 
     st.write("# Machine Learning Algorithms (Visualizations)")
 
