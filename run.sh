@@ -1,6 +1,8 @@
 #!/bin/bash
 
 # This script run a docker container for specified "Algo" on specified "PORT"
+# But we can ignore this files, it came in handy in production but this require a lot of compute.
+
 function run() {
   id=$1
   port=$2
