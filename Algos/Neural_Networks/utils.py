@@ -112,7 +112,7 @@ class Canvas:
             initial_drawing=initial_drawing
         )
 
-        if canvas_result.json_data is None: return None, None, None, None
+        if canvas_result.json_data is None or len(canvas_result.json_data["objects"]) == 0: return None, None, None, None
 
         classes, classes_labels, classes_labels_mapping, norm_params = Canvas.get_refined_data(canvas_result.json_data["objects"])
         return classes, classes_labels, classes_labels_mapping, norm_params
