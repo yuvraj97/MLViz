@@ -9,7 +9,7 @@ from plotly.graph_objs import Figure
 from Algos.K_Means_Clustering.simulation import kMean
 from Algos.utils.plots import plot_classification_data
 from Algos.utils.synthetic_data import get_nD_classification_data
-from Algos.utils.utils import intialize, footer
+from Algos.utils.utils import footer
 
 
 def get_all_inputs() -> Dict[str, Union[int, float, List[float]]]:
@@ -83,8 +83,6 @@ def get_all_inputs() -> Dict[str, Union[int, float, List[float]]]:
 
 
 def run():
-
-    intialize("K Means Clustering")
 
     inputs: Dict[str, Union[int, float, List[float]]] = get_all_inputs()
 
