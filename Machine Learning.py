@@ -2,12 +2,16 @@ import traceback
 from typing import List
 import streamlit as st
 
+from Algos.utils.utils import intialize
+
 
 def main():
     """
     We will never use it in production it will came handy in development
     :return: None
     """
+
+    intialize("Machine Learning Visualization")
 
     algorithms: List[str] = [
         "Introduction",
