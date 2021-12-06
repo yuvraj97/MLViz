@@ -4,8 +4,8 @@ import streamlit as st
 def intialize(title: str):
     st.set_page_config(
         page_title=title,
-        page_icon="♾️",
         layout="wide",  # centered
+        page_icon="https://www.quantml.org/data/img/app.webp",
         initial_sidebar_state="expanded",
     )
     st.sidebar.markdown(
