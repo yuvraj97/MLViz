@@ -8,7 +8,7 @@ from Algos.utils.plots import plot_classification_data
 from Algos.utils.synthetic_data import get_nD_classification_data
 import math
 
-from Algos.utils.utils import intialize, footer
+from Algos.utils.utils import footer
 
 
 def get_all_inputs() -> Dict[str, Union[str, int, float, List[float]]]:
@@ -130,8 +130,6 @@ def run() -> None:
     Here we run the Logistic Regression Simulation
     :return: None
     """
-
-    intialize("Logistic Regression")
 
     if "Logistic Regression" not in st.session_state:
         st.session_state["Logistic Regression"] = {}
