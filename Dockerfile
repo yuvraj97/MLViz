@@ -1,3 +1,6 @@
+# It 's a template Dockerfile that is used by run.sh to create multiple docker instances per chapter.
+# But we can ignore these 2 files as they aren't used because these multiple docker instances require a lot of compute.
+
 FROM ubuntu
 
 ARG CACHEBUST=19
