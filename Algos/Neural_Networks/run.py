@@ -1,6 +1,3 @@
-import math
-from typing import Union, Dict, List
-
 import streamlit as st
 import pandas as pd
 from pandas import DataFrame
@@ -60,3 +57,6 @@ def run():
     st.write("---")
     DrawNN.draw_nn()
     st.write("---")
+
+    if st.button("Submit"):
+        pass
