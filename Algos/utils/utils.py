@@ -7,6 +7,10 @@ def intialize(title: str):
         page_icon="https://www.quantml.org/data/img/app.webp",
         layout="centered",
         initial_sidebar_state="expanded",
+        menu_items={
+            "Get help": None,
+            "Report a Bug": None,
+        }
     )
     st.sidebar.markdown(
         f"""
