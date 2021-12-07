@@ -2,7 +2,7 @@ import traceback
 from typing import List
 import streamlit as st
 
-from Algos.utils.utils import intialize
+from Algos.utils.utils import intialize, reset_session, footer
 
 
 def main():
@@ -26,7 +26,12 @@ def main():
         params = st.experimental_get_query_params()
         prev_idx = algorithms.index(params["algorithm"][0]) if "algorithm" in params else 0
 
-    algorithm: str = st.selectbox("Choose Algorithm", algorithms, index=prev_idx)
+    st_algo, st_reset = st.columns([9, 1])
+
+    if st_reset.button("🔄", help="Reset Variables (Necessary to reset Manually Increment Steps)"):
+        reset_session()
+
+    algorithm: str = st_algo.selectbox("Choose Algorithm", algorithms, index=prev_idx)
     chosen_idx = algorithms.index(algorithm)
     if prev_idx != chosen_idx:
         st.session_state["algorithm"] = chosen_idx
@@ -35,6 +40,7 @@ def main():
 
     algorithm = algorithms[prev_idx]
     exec(f"from Algos.{algorithm.replace(' ', '_')}.run import run;run()")
+    footer()
 
 
 if __name__ == '__main__':
@@ -42,5 +48,4 @@ if __name__ == '__main__':
     try:
         main()
     except Exception as e:
-        traceback.print_exc()
         st.error("Something went wrong!")
