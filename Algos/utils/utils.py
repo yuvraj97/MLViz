@@ -4,8 +4,8 @@ import streamlit as st
 def intialize(title: str):
     st.set_page_config(
         page_title=title,
-        layout="wide",  # centered
         page_icon="https://www.quantml.org/data/img/app.webp",
+        layout="centered",
         initial_sidebar_state="expanded",
     )
     st.sidebar.markdown(
@@ -15,13 +15,6 @@ def intialize(title: str):
         </a><br><br>""",
         unsafe_allow_html=True
     )
-
-    if title:
-        st_title, st_reset = st.columns([9, 1])
-
-        st_title.title(title)
-        if st_reset.button("🔄", help="Reset Variables (Necessary to reset Manually Increment Steps)"):
-            reset_session()
 
     hamburger_correction()
 
@@ -41,11 +34,7 @@ def hamburger_correction():
     If you did not hide the hamburger menu completely,
     you can use the following styles to control which items on the menu to hide.
     */
-    ul[data-testid=main-menu-list] > li:nth-of-type(4), /* Documentation */
-    ul[data-testid=main-menu-list] > li:nth-of-type(5), /* Ask a question */
-    ul[data-testid=main-menu-list] > li:nth-of-type(6), /* Report a bug */
-    ul[data-testid=main-menu-list] > li:nth-of-type(7), /* Streamlit for Teams= */
-    ul[data-testid=main-menu-list] > li:nth-of-type(9), /* About */
+    ul[data-testid=main-menu-list] > ul:nth-of-type(4), /* About */
     ul[data-testid=main-menu-list] > div:nth-of-type(1), /* 1st divider */
     ul[data-testid=main-menu-list] > div:nth-of-type(2), /* 2nd divider */
     ul[data-testid=main-menu-list] > div:nth-of-type(3) /* 3rd divider */
