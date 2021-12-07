@@ -13,7 +13,6 @@ from Algos.utils.plots import plotly_plot
 from Algos.utils.preprocess import process_function
 from Algos.utils.stats import f_test, rmse, r2
 from Algos.utils.synthetic_data import get_nD_regression_data, display_train_test_data
-from Algos.utils.utils import footer
 
 
 def run_simulation(inputs, plt):
@@ -234,4 +233,3 @@ def run() -> None:
 
     st.write("-----")
     display_raw_code(inputs["method"])
-    footer()

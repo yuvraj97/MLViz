@@ -9,7 +9,6 @@ from plotly.graph_objs import Figure
 from Algos.K_Means_Clustering.simulation import kMean
 from Algos.utils.plots import plot_classification_data
 from Algos.utils.synthetic_data import get_nD_classification_data
-from Algos.utils.utils import footer
 
 
 def get_all_inputs() -> Dict[str, Union[int, float, List[float]]]:
@@ -24,7 +23,7 @@ def get_all_inputs() -> Dict[str, Union[int, float, List[float]]]:
         seed: int = int(st_seed.text_input("Enter seed (-1 mean seed is disabled)", "1"))
         n: int = int(st_n.text_input("N (number of training examples)", "100"))
         st_n_clusters, st_n_features = st.columns([1, 1])
-        n_clusters: int = int(st_n_clusters.text_input("Number of clusters", "2"))
+        n_clusters: int = int(st_n_clusters.text_input("Number of clusters", "3"))
         n_features: int = int(st_n_features.text_input("Number of features", "2"))
 
         st.write("### Clusters proportions")
@@ -155,5 +154,3 @@ def run():
 
     st.write("## Code")
     st.code(code)
-
-    footer()

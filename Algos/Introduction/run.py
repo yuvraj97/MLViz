@@ -1,7 +1,5 @@
 import streamlit as st
 
-from Algos.utils.utils import footer
-
 
 def run():
 
@@ -62,5 +60,3 @@ def run():
         
         Then after clicking on **Begin Clustering !** you can see **K-Means Clustering** in action.
         """)
-
-    footer()
